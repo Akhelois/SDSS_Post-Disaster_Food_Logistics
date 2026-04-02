@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "img_name": "idn_8s_114e_20260330_post_disaster.png",
+    "geotransform": [
+      113.0,
+      0.001953125,
+      0,
+      -7.0,
+      0,
+      -0.001953125
+    ],
+    "capture_date": "2026-03-30",
+    "source": "Sentinel-2 via GEE",
+    "lng_lat": [
+      114.0,
+      -8.0
+    ]
+  },
+  "features": {
+    "lng_lat": []
+  }
+}

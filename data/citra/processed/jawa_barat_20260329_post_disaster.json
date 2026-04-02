@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "img_name": "jawa_barat_20260329_post_disaster.png",
+    "geotransform": [
+      106.5,
+      0.001953125,
+      0,
+      -6.0,
+      0,
+      -0.00146484375
+    ],
+    "capture_date": "2026-03-29",
+    "source": "Sentinel-2 via GEE",
+    "lng_lat": [
+      107.5,
+      -6.75
+    ]
+  },
+  "features": {
+    "lng_lat": []
+  }
+}
