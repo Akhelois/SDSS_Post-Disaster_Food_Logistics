@@ -1,0 +1,20 @@
+import React from 'react';
+import { LuRadar } from 'react-icons/lu';
+import '../styles/LoadingOverlay.css';
+
+export default function LoadingOverlay() {
+  return (
+    <div className="loading-overlay">
+      <div className="loading-content">
+        <div className="loading-icon">
+          <LuRadar />
+        </div>
+        <div className="loader"></div>
+        <div className="loading-text">
+          <strong>Menganalisis Citra Satelit</strong>
+          Menghitung rute distribusi bantuan...
+        </div>
+      </div>
+    </div>
+  );
+}

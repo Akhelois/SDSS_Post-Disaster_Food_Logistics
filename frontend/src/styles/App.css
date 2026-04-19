@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap');
+
+:root {
+  --bg-dark: #050505;
+  --glass-bg: rgba(20, 20, 25, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-color: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.5);
+  --red-zone: #ef4444;
+  --hub-zone: #22c55e;
+}
+
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.map-container {
+  flex-grow: 1;
+  position: relative;
+  background: var(--bg-dark);
+  height: 100vh;
+  min-width: 0;
+}
+
+.sidebar {
+  width: 420px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-left: 1px solid var(--glass-border);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 10;
+  overflow-y: auto;
+  box-shadow: -15px 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
