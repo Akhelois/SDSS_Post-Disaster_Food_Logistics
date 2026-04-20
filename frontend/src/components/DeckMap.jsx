@@ -14,10 +14,19 @@ export default function DeckMap({ viewState, setViewState, layers }) {
       getTooltip={({object}) => {
         if (!object) return null;
         if (object.count !== undefined) {
-          const type = object.disaster_type || 'Zona Kerusakan';
-          return `${type}\nDesa: ${object.desa || 'Tidak Diketahui'}\nEstimasi Kerusakan: ${object.count} unit`;
+          const type = object.disaster_type || 'Bencana Alam';
+          const desa = object.desa || 'Tidak Diketahui';
+          let text = `${type.toUpperCase()}\n\nDesa: ${desa}\nKerusakan: ${object.count} unit\nEst. Terdampak: ${object.count * 4} jiwa`;
+          if (object.logistics) {
+            text += `\n\nKebutuhan Logistik`;
+            text += `\nBeras: ${object.logistics.beras} kg`;
+            text += `\nAir: ${object.logistics.air} L`;
+            text += `\nMie: ${object.logistics.mie} dus`;
+            text += `\nLauk: ${object.logistics.lauk} pkt`;
+          }
+          return text;
         }
-        return object.desa ? `Rute: ${object.desa}` : null;
+        return null;
       }}
     >
       <Map mapStyle={{

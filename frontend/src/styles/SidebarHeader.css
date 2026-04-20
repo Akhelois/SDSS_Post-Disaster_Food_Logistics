@@ -1,12 +1,8 @@
 .header {
-  position: sticky;
-  top: 0;
-  background: #0b0f19;
-  padding: 20px 30px;
-  margin: -30px -30px 20px -30px;
-  z-index: 20;
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  background: rgba(11, 15, 25, 0.6);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
 }
 
 .header-content {

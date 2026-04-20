@@ -4,7 +4,7 @@ import sys
 import os
 from datetime import datetime
 
-INTERVAL_JAM = 6
+INTERVAL_JAM = 2
 
 
 def has_new_input():

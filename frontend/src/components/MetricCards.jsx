@@ -1,5 +1,5 @@
 import React from 'react';
-import { LuMap, LuTriangleAlert, LuUsers, LuWarehouse } from 'react-icons/lu';
+import { LuMap, LuTriangleAlert, LuUsers } from 'react-icons/lu';
 import '../styles/MetricCards.css';
 
 export default function MetricCards({ metrics }) {
@@ -31,15 +31,6 @@ export default function MetricCards({ metrics }) {
           <div className="metric-info">
             <span className="metric-title">Est. Terdampak</span>
             <span className="metric-value">{metrics?.estimated_impacts || 0} Jiwa</span>
-          </div>
-        </div>
-        <div className="metric">
-          <div className="metric-icon success">
-            <LuWarehouse />
-          </div>
-          <div className="metric-info">
-            <span className="metric-title">Posko Hub Aktif</span>
-            <span className="metric-value success">{metrics?.total_hubs || 0} Unit</span>
           </div>
         </div>
       </div>

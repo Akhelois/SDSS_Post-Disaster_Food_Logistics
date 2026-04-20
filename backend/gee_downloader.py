@@ -17,10 +17,10 @@ os.makedirs("output", exist_ok=True)
 
 GEE_PROJECT      = "sdss-bencana"
 CLOUD_THRESHOLD  = 30
-CHANGE_THRESHOLD = 0.05
-DAYS_LOOKBACK    = 14
+CHANGE_THRESHOLD = 0.03
+DAYS_LOOKBACK    = 3
 IMG_SIZE         = (256, 256)
-GRID_DEG         = 2.0
+GRID_DEG         = 1.5
 
 INDONESIA_LON_MIN = 95.0
 INDONESIA_LON_MAX = 141.0
@@ -53,6 +53,15 @@ def load_manifest():
         except Exception:
             pass
     return set()
+
+
+def save_manifest(scenes):
+    """Simpan daftar scene yang sudah diproses."""
+    try:
+        with open(PROCESSED_MANIFEST, 'w') as f:
+            json.dump(list(scenes), f)
+    except Exception:
+        pass
 
 
 def is_land_area(lon_min, lat_min, lon_max, lat_max):
@@ -208,6 +217,8 @@ def process_region(region_info):
             return False
 
         create_label_json(bbox, scene_id, image_date)
+        PROCESSED_SCENES.add(scene_id)
+        save_manifest(PROCESSED_SCENES)
         print(f"  [{name}] Tersimpan: {filename}")
         return True
 
