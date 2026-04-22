@@ -1,6 +1,14 @@
-import React from 'react';
-import { LuList, LuMapPin, LuTriangleAlert, LuPackage, LuDroplet, LuBox, LuArchive } from 'react-icons/lu';
-import '../styles/LogisticsTable.css';
+import React from "react";
+import {
+  LuList,
+  LuMapPin,
+  LuTriangleAlert,
+  LuPackage,
+  LuDroplet,
+  LuBox,
+  LuArchive,
+} from "react-icons/lu";
+import "../styles/LogisticsTable.css";
 
 export default function LogisticsTable({ data, onRowClick }) {
   const redZones = data?.map_data?.red_zones || [];
@@ -9,7 +17,9 @@ export default function LogisticsTable({ data, onRowClick }) {
     return (
       <div className="logistics-card">
         <div className="logistics-header">
-          <span className="logistics-header-icon"><LuList /></span>
+          <span className="logistics-header-icon">
+            <LuList />
+          </span>
           <h3>Daftar Area Terdampak</h3>
         </div>
         <p className="table-empty">Menunggu data backend...</p>
@@ -17,25 +27,43 @@ export default function LogisticsTable({ data, onRowClick }) {
     );
   }
 
+  // Sort zones by damage count (highest first)
+  const sortedZones = [...redZones].sort(
+    (a, b) => (b.count || 0) - (a.count || 0),
+  );
+
+  const getCriticalityClass = (count) => {
+    if (count > 10) return "damage-critical";
+    return "";
+  };
+
   return (
     <div className="logistics-card">
       <div className="logistics-header">
-        <span className="logistics-header-icon"><LuList /></span>
+        <span className="logistics-header-icon">
+          <LuList />
+        </span>
         <h3>Daftar Area Terdampak</h3>
       </div>
       <div className="table-container">
-        {redZones.map((zone, i) => (
-          <div className="table-row" key={i} onClick={() => onRowClick(zone)}>
+        {sortedZones.map((zone, i) => (
+          <div
+            className={`table-row ${getCriticalityClass(zone.count)}`}
+            key={i}
+            onClick={() => onRowClick(zone)}
+          >
             <div className="row-header">
               <span className="row-title">{zone.desa}</span>
               <span className="row-badge">{zone.count} Kerusakan</span>
             </div>
             <div className="row-details">
               <span className="row-detail-item">
-                <LuTriangleAlert size={14} /> {zone.disaster_type || 'Bencana Alam'}
+                <LuTriangleAlert size={14} />{" "}
+                {zone.disaster_type || "Bencana Alam"}
               </span>
               <span className="row-detail-item">
-                <LuMapPin size={14} /> {zone.lon.toFixed(4)}, {zone.lat.toFixed(4)}
+                <LuMapPin size={14} /> {zone.lon.toFixed(4)},{" "}
+                {zone.lat.toFixed(4)}
               </span>
             </div>
             {zone.logistics && (

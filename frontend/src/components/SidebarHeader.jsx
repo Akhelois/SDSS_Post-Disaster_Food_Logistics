@@ -1,13 +1,13 @@
-import React from 'react';
-import { LuRadar, LuTriangleAlert } from 'react-icons/lu';
-import '../styles/SidebarHeader.css';
+import React from "react";
+import { LuRadar, LuTriangleAlert } from "react-icons/lu";
+import "../styles/SidebarHeader.css";
 
 export default function SidebarHeader({ disasterInfo }) {
   return (
     <div className="header">
       <div className="header-content">
         <div className="header-icon">
-          <LuRadar />
+          <LuRadar className="radar-icon" />
         </div>
         <div className="header-text">
           <h1>SDSS Logistik Bencana</h1>
@@ -16,7 +16,7 @@ export default function SidebarHeader({ disasterInfo }) {
       </div>
       {disasterInfo && disasterInfo.summary && (
         <div className="disaster-badge">
-          <LuTriangleAlert size={14} />
+          <LuTriangleAlert size={14} className="alert-icon" />
           <span>{disasterInfo.summary}</span>
         </div>
       )}
