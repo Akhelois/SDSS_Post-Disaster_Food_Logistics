@@ -148,6 +148,9 @@ def bce_dice_loss(y_true, y_pred):
     dice = 1 - (2. * intersection + 1.0) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + 1.0)
     return bce + dice
 
+def weighted_bce_dice_loss(y_true, y_pred):
+    # Alias untuk kompatibilitas model lama
+    return bce_dice_loss(y_true, y_pred)
 
 def dice_coef(y_true, y_pred):
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
@@ -165,8 +168,10 @@ def load_model():
         try:
             model = tf.keras.models.load_model(
                 MODEL_PATH,
+                compile=False,
                 custom_objects={
                     'bce_dice_loss': bce_dice_loss,
+                    'weighted_bce_dice_loss': weighted_bce_dice_loss,
                     'dice_coef': dice_coef
                 }
             )
@@ -181,7 +186,7 @@ def load_model():
     model = build_resnet_unet()
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=INCREMENTAL_LR),
-        loss=bce_dice_loss, 
+        loss=weighted_bce_dice_loss,
         metrics=['accuracy', dice_coef]
     )
     model.save(MODEL_PATH)

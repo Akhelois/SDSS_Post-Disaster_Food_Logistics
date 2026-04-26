@@ -1,85 +1,46 @@
-import React from "react";
-import {
-  LuList,
-  LuMapPin,
-  LuTriangleAlert,
-  LuPackage,
-  LuDroplet,
-  LuBox,
-  LuArchive,
-} from "react-icons/lu";
-import "../styles/LogisticsTable.css";
+import React from 'react';
+import { LuList, LuMapPin, LuTriangleAlert, LuPackage, LuDroplet, LuBox, LuArchive } from 'react-icons/lu';
+import '../styles/LogisticsTable.css';
 
 export default function LogisticsTable({ data, onRowClick }) {
   const redZones = data?.map_data?.red_zones || [];
 
   if (!redZones.length) {
     return (
-      <div className="logistics-card">
+      <div className="logistics-panel">
         <div className="logistics-header">
-          <span className="logistics-header-icon">
-            <LuList />
-          </span>
-          <h3>Daftar Area Terdampak</h3>
+          <LuList size={15} />
+          <h3>Area Terdampak</h3>
         </div>
-        <p className="table-empty">Menunggu data backend...</p>
+        <p className="table-empty">Menunggu data...</p>
       </div>
     );
   }
 
-  // Sort zones by damage count (highest first)
-  const sortedZones = [...redZones].sort(
-    (a, b) => (b.count || 0) - (a.count || 0),
-  );
-
-  const getCriticalityClass = (count) => {
-    if (count > 10) return "damage-critical";
-    return "";
-  };
-
   return (
-    <div className="logistics-card">
+    <div className="logistics-panel">
       <div className="logistics-header">
-        <span className="logistics-header-icon">
-          <LuList />
-        </span>
-        <h3>Daftar Area Terdampak</h3>
+        <LuList size={15} />
+        <h3>Area Terdampak</h3>
+        <span className="logistics-count">{redZones.length}</span>
       </div>
-      <div className="table-container">
-        {sortedZones.map((zone, i) => (
-          <div
-            className={`table-row ${getCriticalityClass(zone.count)}`}
-            key={i}
-            onClick={() => onRowClick(zone)}
-          >
-            <div className="row-header">
-              <span className="row-title">{zone.desa}</span>
-              <span className="row-badge">{zone.count} Kerusakan</span>
+      <div className="logistics-list">
+        {redZones.map((zone, i) => (
+          <div className="zone-item" key={i} onClick={() => onRowClick(zone)}>
+            <div className="zone-top">
+              <span className="zone-name">{zone.desa}</span>
+              <span className="zone-badge">{zone.count}</span>
             </div>
-            <div className="row-details">
-              <span className="row-detail-item">
-                <LuTriangleAlert size={14} />{" "}
-                {zone.disaster_type || "Bencana Alam"}
-              </span>
-              <span className="row-detail-item">
-                <LuMapPin size={14} /> {zone.lon.toFixed(4)},{" "}
-                {zone.lat.toFixed(4)}
-              </span>
+            <div className="zone-info">
+              <span><LuTriangleAlert size={12} /> {zone.disaster_type || 'Bencana Alam'}</span>
+              <span><LuMapPin size={12} /> {zone.lon.toFixed(3)}, {zone.lat.toFixed(3)}</span>
             </div>
             {zone.logistics && (
-              <div className="row-logistics">
-                <span className="logistics-item">
-                  <LuPackage size={13} /> Beras: {zone.logistics.beras} kg
-                </span>
-                <span className="logistics-item">
-                  <LuDroplet size={13} /> Air: {zone.logistics.air} L
-                </span>
-                <span className="logistics-item">
-                  <LuBox size={13} /> Mie: {zone.logistics.mie} dus
-                </span>
-                <span className="logistics-item">
-                  <LuArchive size={13} /> Lauk: {zone.logistics.lauk} pkt
-                </span>
+              <div className="zone-logistics">
+                <span><LuPackage size={11} /> {zone.logistics.beras} kg</span>
+                <span><LuDroplet size={11} /> {zone.logistics.air} L</span>
+                <span><LuBox size={11} /> {zone.logistics.mie} dus</span>
+                <span><LuArchive size={11} /> {zone.logistics.lauk} pkt</span>
               </div>
             )}
           </div>

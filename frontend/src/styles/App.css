@@ -1,216 +1,51 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-dark: #0a0e27;
-  --bg-darker: #050510;
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(148, 163, 184, 0.12);
-  --glass-border-light: rgba(255, 255, 255, 0.08);
-  --text-main: #f1f5f9;
-  --text-muted: #94a3b8;
-  --text-dimmed: #64748b;
-  --accent-color: #3b82f6;
-  --accent-color-light: #60a5fa;
-  --accent-glow: rgba(59, 130, 246, 0.3);
-  --accent-glow-bright: rgba(96, 165, 250, 0.4);
-  --red-zone: #ef4444;
-  --red-glow: rgba(239, 68, 68, 0.3);
-  --hub-zone: #10b981;
-  --purple-accent: #a855f7;
-  --cyan-accent: #06b6d4;
-  --gradient-1: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  --gradient-2: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-  --gradient-3: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-#root {
-  height: 100%;
-  width: 100%;
+  --bg-primary: #0c0e14;
+  --bg-card: #13151d;
+  --bg-card-hover: #1a1d28;
+  --border: #1f222e;
+  --border-hover: #2a2e3d;
+  --text-primary: #e2e4e9;
+  --text-secondary: #7a7d89;
+  --accent: #4f8ff7;
+  --danger: #e05252;
+  --warning: #e8a73e;
+  --success: #4caf7d;
 }
 
 .dashboard-layout {
   display: flex;
-  flex-direction: column;
   height: 100vh;
   width: 100vw;
-  position: relative;
-  background: var(--bg-darker);
-  overflow: hidden;
 }
 
-/* Top Navigation Bar */
-/* Styles handled in TopNavBar.css */
-
-/* Main Dashboard Content */
-.dashboard-main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/* Left Sidebar */
-/* Styles handled in LeftSidebar.css */
-
-/* Map Section */
-.map-section {
+.map-container {
   flex: 1;
   position: relative;
-  background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1729 100%);
-  height: 100%;
+  background: var(--bg-primary);
   min-width: 0;
-  overflow: hidden;
 }
 
-.map-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    ellipse at 20% 50%,
-    rgba(59, 130, 246, 0.05) 0%,
-    transparent 50%
-  );
-  pointer-events: none;
-  z-index: 1;
+.sidebar {
+  width: 400px;
+  flex-shrink: 0;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
 }
 
-.map-section > div {
-  width: 100%;
-  height: 100%;
+.sidebar::-webkit-scrollbar {
+  width: 4px;
 }
-
-/* Right Panel */
-/* Styles handled in RightPanel.css */
-
-/* Bottom Timeline */
-/* Styles handled in BottomTimeline.css */
-
-/* Global Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(96, 165, 250, 0.2);
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
   border-radius: 4px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(96, 165, 250, 0.4);
-}
-
-/* Global Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 1280px) {
-  .dashboard-main {
-    gap: 0;
-  }
-}
-
-@media (max-width: 1024px) {
-  .dashboard-layout {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 768px) {
-  .dashboard-main {
-    flex-direction: column;
-  }
-
-  .map-section {
-    order: 2;
-    min-height: 0;
-  }
-
-  .left-sidebar {
-    order: 1;
-    position: absolute;
-    left: 0;
-    top: 60px;
-    z-index: 50;
-    height: calc(100vh - 60px);
-    width: 280px;
-  }
-
-  .left-sidebar.closed {
-    transform: translateX(-100%);
-  }
-
-  .right-panel {
-    order: 3;
-  }
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
 }

@@ -1,313 +1,101 @@
-.logistics-card {
-  background: linear-gradient(
-    135deg,
-    rgba(30, 41, 59, 0.6) 0%,
-    rgba(15, 23, 42, 0.6) 100%
-  );
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.logistics-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(96, 165, 250, 0.05) 0%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.logistics-card:hover::before {
-  opacity: 1;
+.logistics-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
 }
 
 .logistics-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
+  gap: 8px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
 }
-
-.logistics-header-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.2),
-    rgba(96, 165, 250, 0.1)
-  );
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  border-radius: 10px;
-  color: var(--accent-color-light);
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
-}
-
-.logistics-header:hover .logistics-header-icon {
-  transform: scale(1.1) rotate(-5deg);
-  box-shadow: 0 8px 20px rgba(96, 165, 250, 0.25);
-  background: linear-gradient(
-    135deg,
-    rgba(96, 165, 250, 0.25),
-    rgba(96, 165, 250, 0.15)
-  );
-}
-
 .logistics-header h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--text-main);
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex: 1;
 }
-
-.table-container {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-  z-index: 1;
-  max-height: 520px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.table-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    to bottom,
-    rgba(96, 165, 250, 0.4),
-    rgba(168, 85, 247, 0.3)
-  );
+.logistics-count {
+  background: var(--border);
+  color: var(--text-secondary);
+  padding: 2px 8px;
   border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 600;
 }
 
-.table-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.table-row {
-  background: linear-gradient(
-    135deg,
-    rgba(51, 65, 85, 0.4) 0%,
-    rgba(30, 41, 59, 0.3) 100%
-  );
-  border: 1.5px solid rgba(96, 165, 250, 0.15);
-  border-radius: 12px;
-  padding: 16px;
+.logistics-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
+}
+
+.zone-item {
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid transparent;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.zone-item:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
 }
 
-.table-row::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  transition: left 0.5s ease;
-  pointer-events: none;
-}
-
-.table-row:hover::before {
-  left: 100%;
-}
-
-.table-row:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.15) 0%,
-    rgba(37, 99, 235, 0.1) 100%
-  );
-  border-color: rgba(96, 165, 250, 0.4);
-  transform: translateY(-3px);
-  box-shadow:
-    0 12px 30px rgba(59, 130, 246, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.table-row.damage-critical {
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.table-row.damage-critical:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.1) 0%,
-    rgba(239, 68, 68, 0.05) 100%
-  );
-  border-color: rgba(239, 68, 68, 0.5);
-  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.15);
-}
-
-.row-header {
+.zone-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  margin-bottom: 6px;
 }
-
-.row-title {
+.zone-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+.zone-badge {
+  background: rgba(224, 82, 82, 0.15);
+  color: var(--danger);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.68rem;
   font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--text-main);
-  letter-spacing: -0.3px;
-  flex: 1;
-  transition: color 0.2s ease;
 }
 
-.table-row:hover .row-title {
-  color: #60a5fa;
-}
-
-.row-badge {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.25) 0%,
-    rgba(252, 165, 165, 0.15) 100%
-  );
-  color: #fca5a5;
-  padding: 6px 12px;
-  border-radius: 8px;
+.zone-info {
+  display: flex;
+  gap: 14px;
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
-  flex-shrink: 0;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
-
-.table-row:hover .row-badge {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.35) 0%,
-    rgba(252, 165, 165, 0.25) 100%
-  );
-  border-color: rgba(239, 68, 68, 0.4);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-  transform: scale(1.05);
-}
-
-.row-details {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding-bottom: 12px;
-  transition: color 0.2s ease;
-}
-
-.table-row:hover .row-details {
-  color: var(--text-muted);
-}
-
-.row-detail-item {
+.zone-info span {
   display: flex;
   align-items: center;
+  gap: 4px;
+}
+
+.zone-logistics {
+  display: flex;
   gap: 10px;
-  transition: all 0.2s ease;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
-
-.row-detail-item svg {
-  flex-shrink: 0;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
-  color: rgba(96, 165, 250, 0.7);
-}
-
-.table-row:hover .row-detail-item svg {
-  opacity: 1;
-  color: rgba(96, 165, 250, 1);
-  transform: translateX(2px);
-}
-
-.row-logistics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.logistics-item {
+.zone-logistics span {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  padding: 8px 10px;
-  background: rgba(96, 165, 250, 0.08);
-  border-radius: 8px;
-  border: 1px solid rgba(96, 165, 250, 0.1);
-  transition: all 0.2s ease;
-}
-
-.logistics-item:hover {
-  background: rgba(96, 165, 250, 0.15);
-  border-color: rgba(96, 165, 250, 0.25);
-  color: var(--text-main);
-}
-
-.logistics-item svg {
-  flex-shrink: 0;
-  opacity: 0.7;
-  transition: all 0.2s ease;
-}
-
-.logistics-item:hover svg {
-  opacity: 1;
-  transform: scale(1.2);
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
 }
 
 .table-empty {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
   text-align: center;
-  padding: 40px 20px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.logistics-card:hover .table-empty {
-  opacity: 0.9;
+  padding: 20px;
 }
