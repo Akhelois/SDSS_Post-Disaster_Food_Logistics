@@ -1,6 +1,0 @@
-/venv/
-/.vscode/
-/__pycache__/
-/training/
-/backend/__pycache__/
-/backend/model/checkpoints_copy/
