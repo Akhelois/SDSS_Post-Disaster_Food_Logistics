@@ -1,0 +1,49 @@
+.metrics-row {
+  display: flex;
+  gap: 10px;
+}
+
+.metric-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.metric-icon {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.metric-box > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.metric-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.metric-blue .metric-icon { color: var(--accent); }
+.metric-blue .metric-val { color: var(--accent); }
+
+.metric-red .metric-icon { color: var(--danger); }
+.metric-red .metric-val { color: var(--danger); }
+
+.metric-gray .metric-icon { color: var(--text-secondary); }
