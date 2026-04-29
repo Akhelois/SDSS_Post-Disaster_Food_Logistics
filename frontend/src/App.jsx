@@ -70,15 +70,15 @@ export default function App() {
     <div className="dashboard-layout">
       {loading && <LoadingOverlay />}
 
-      <div className="map-container">
-        <DeckMap viewState={viewState} setViewState={setViewState} layers={layers} />
-      </div>
-
       <div className="sidebar">
         <SidebarHeader disasterInfo={data?.disaster_info} />
         <MetricCards metrics={data?.metrics} />
         <NewsPanel />
         <LogisticsTable data={data} onRowClick={handleRowClick} />
+      </div>
+
+      <div className="map-container">
+        <DeckMap viewState={viewState} setViewState={setViewState} layers={layers} />
       </div>
     </div>
   );
