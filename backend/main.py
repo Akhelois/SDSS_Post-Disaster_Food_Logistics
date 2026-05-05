@@ -4,8 +4,9 @@ import uvicorn
 import pandas as pd
 import numpy as np
 import services
-from shapely.geometry import Point
+from shapely.geometry import Point, box
 import geopandas as gpd
+import os
 
 app = FastAPI(title="SDSS Logistik Bencana API", version="1.0.0")
 
@@ -55,6 +56,10 @@ def desa_to_polygon(geom, simplify_tol=0.002):
 
 print("Loading geodata boundaries...")
 gdf_desa = services.load_desa_boundaries()
+if gdf_desa is not None and not gdf_desa.empty:
+    print(f"  Shapefile loaded: {len(gdf_desa)} desa polygons")
+else:
+    print("  ⚠ Shapefile batas desa TIDAK DITEMUKAN — menggunakan fallback mode")
 
 @app.get("/")
 def get_dashboard_data():
@@ -114,7 +119,8 @@ def get_dashboard_data():
 
     # === Bangun zona kerusakan per desa (tanpa clustering/hub) ===
     rz_data = []
-    if gdf_desa is not None and '_desa_idx' in df_raw.columns:
+    if gdf_desa is not None and not gdf_desa.empty and '_desa_idx' in df_raw.columns:
+        # === MODE NORMAL: Gunakan polygon dari shapefile ===
         desa_damage = df_raw.groupby('_desa_idx').agg(
             count=('lat', 'count'),
             desa=(desa_col, 'first'),
@@ -154,6 +160,62 @@ def get_dashboard_data():
                 })
             except Exception:
                 continue
+    else:
+        # === FALLBACK MODE: Shapefile tidak ada, bangun zona dari data geojson ===
+        # Gunakan kolom ADM yang sudah tertanam di sdss_result.geojson
+        print("  [Fallback] Membangun zona kerusakan tanpa shapefile...")
+        desa_damage = df_raw.groupby(desa_col).agg(
+            count=('lat', 'count'),
+            island=('island', 'first'),
+            avg_lon=('lon', 'mean'),
+            avg_lat=('lat', 'mean'),
+            min_lon=('lon', 'min'),
+            max_lon=('lon', 'max'),
+            min_lat=('lat', 'min'),
+            max_lat=('lat', 'max'),
+        ).reset_index()
+
+        for _, row in desa_damage.iterrows():
+            try:
+                damage_count = int(row['count'])
+                island = row['island']
+                disaster_type = DISASTER_BY_ISLAND.get(island, 'Bencana Alam')
+
+                # Buat polygon bounding box dari titik-titik kerusakan per desa
+                # Tambahkan padding kecil agar polygon tidak terlalu kecil
+                pad = 0.005  # ~500m padding
+                lon_min = row['min_lon'] - pad
+                lon_max = row['max_lon'] + pad
+                lat_min = row['min_lat'] - pad
+                lat_max = row['max_lat'] + pad
+                polygon = [
+                    [round(lon_min, 6), round(lat_min, 6)],
+                    [round(lon_max, 6), round(lat_min, 6)],
+                    [round(lon_max, 6), round(lat_max, 6)],
+                    [round(lon_min, 6), round(lat_max, 6)],
+                    [round(lon_min, 6), round(lat_min, 6)],  # close ring
+                ]
+
+                logistics = {
+                    "beras": damage_count * services.LOGISTIK_PER_KK['Beras (kg)'],
+                    "air": damage_count * services.LOGISTIK_PER_KK['Air Minum (liter)'],
+                    "mie": damage_count * services.LOGISTIK_PER_KK['Mie Instan (Dus)'],
+                    "minyak": damage_count * services.LOGISTIK_PER_KK['Minyak Goreng (liter)'],
+                    "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
+                }
+
+                rz_data.append({
+                    "polygon": polygon,
+                    "desa": str(row[desa_col]),
+                    "count": damage_count,
+                    "disaster_type": disaster_type,
+                    "logistics": logistics,
+                    "lon": float(row['avg_lon']),
+                    "lat": float(row['avg_lat']),
+                })
+            except Exception:
+                continue
+        print(f"  [Fallback] {len(rz_data)} zona berhasil dibangun")
 
     # Kumpulkan jenis bencana unik
     disaster_types = list(set(r['disaster_type'] for r in rz_data if 'disaster_type' in r))

@@ -120,7 +120,7 @@ def detect_change(pre_image, post_image, region):
                .filterBounds(region) \
                .select('built') \
                .mean()
-        built_mask = dw.gt(0.20)
+        built_mask = dw.gt(0.30)
         
         # Hitung persentase permukiman di cell ini
         built_stats = built_mask.reduceRegion(
@@ -132,8 +132,8 @@ def detect_change(pre_image, post_image, region):
         )
         built_ratio = built_stats.getInfo().get('built', 0)
         
-        # Jika area permukiman sangat kecil (< 1%), langsung skip cell ini
-        if built_ratio is None or built_ratio < 0.01:
+        # Jika area permukiman sangat kecil (< 3%), langsung skip cell ini
+        if built_ratio is None or built_ratio < 0.03:
             return 0
             
     except Exception:

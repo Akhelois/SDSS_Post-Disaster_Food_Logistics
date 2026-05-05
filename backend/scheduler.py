@@ -17,9 +17,10 @@ from datetime import datetime
 from gee_downloader import scan_disaster_area
 
 BMKG_URL = "https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json"
-CHECK_INTERVAL_MINUTES = 5
+CHECK_INTERVAL_MINUTES = 2  # Lebih responsif: cek setiap 2 menit
 MIN_MAGNITUDE = 5.0
 PROCESSED_EVENTS_FILE = "output/processed_events.json"
+NEW_EVENT_FLAG = "output/new_event.flag"  # Signal file untuk frontend auto-refresh
 
 os.makedirs("output", exist_ok=True)
 
@@ -50,6 +51,17 @@ def run_pipeline():
     else:
         print(f"[{now()}] Pipeline selesai dengan sukses")
 
+def write_event_flag(event_info):
+    """Tulis signal file agar frontend tahu ada event baru (auto-refresh)."""
+    try:
+        with open(NEW_EVENT_FLAG, 'w') as f:
+            json.dump({
+                "timestamp": now(),
+                "event": event_info
+            }, f)
+    except Exception:
+        pass
+
 def check_bmkg_and_trigger():
     print(f"[{now()}] Mengecek data gempa BMKG terkini...")
     processed_events = load_processed_events()
@@ -78,6 +90,13 @@ def check_bmkg_and_trigger():
                     
                     if magnitude >= MIN_MAGNITUDE:
                         print(f"\n[{now()}] 🚨 GEMPA BARU M{magnitude} terdeteksi di {wilayah}!")
+                        # Tulis signal untuk frontend auto-refresh
+                        write_event_flag({
+                            "magnitude": magnitude,
+                            "wilayah": wilayah,
+                            "lat": lat,
+                            "lon": lon
+                        })
                         # Trigger GEE Downloader spesifik ke episenter
                         download_count = scan_disaster_area(lat, lon, magnitude, event_id, wilayah)
                         

@@ -70,10 +70,40 @@ def save_manifest(scene_ids):
 
 
 def is_on_land(lon, lat):
+    """Cek apakah titik berada di daratan Indonesia (bukan laut)."""
     for lon_min, lat_min, lon_max, lat_max in INDONESIA_LAND:
         if lon_min <= lon <= lon_max and lat_min <= lat <= lat_max:
             return True
     return False
+
+
+def is_residential_cluster(points, min_points=2, max_spread_deg=0.15):
+    """
+    Post-filter: pastikan titik-titik kerusakan membentuk cluster permukiman.
+    Titik tunggal yang terisolasi di tengah hutan/laut = kemungkinan false positive.
+    
+    Args:
+        points: list of {'lon', 'lat', 'confidence'} dicts
+        min_points: minimum titik dalam radius untuk dianggap valid
+        max_spread_deg: radius pencarian tetangga (~16 km)
+    """
+    if len(points) <= 1:
+        return points  # Tidak bisa filter jika hanya 1 titik
+    
+    filtered = []
+    for p in points:
+        # Hitung jumlah tetangga dalam radius
+        neighbors = sum(
+            1 for q in points
+            if q is not p
+            and abs(p['lon'] - q['lon']) < max_spread_deg
+            and abs(p['lat'] - q['lat']) < max_spread_deg
+        )
+        # Titik dianggap valid jika punya minimal 1 tetangga (ada cluster permukiman)
+        if neighbors >= min_points - 1:
+            filtered.append(p)
+    
+    return filtered if filtered else points  # Jangan return kosong
 
 
 def is_in_indonesia(buildings, bbox):
@@ -387,6 +417,12 @@ def run_pipeline(model):
             pts  = mask_to_points(mask, buildings, bbox)
 
             print(f"    {len(pts)} titik kerusakan terdeteksi (conf >= {CONF_THRESHOLD})")
+
+            # Post-filter: pastikan hanya cluster permukiman yang lolos
+            pts_before = len(pts)
+            pts = is_residential_cluster(pts)
+            if len(pts) < pts_before:
+                print(f"    Post-filter: {pts_before} → {len(pts)} titik (removed isolated non-residential)")
 
             # Kumpulkan data untuk fine-tuning
             img_for_train = cv2.imread(img_path)
