@@ -8,7 +8,7 @@ export default function SidebarHeader({ disasterInfo }) {
       <div className="header-top">
         <LuRadar className="header-logo" />
         <div>
-          <h1>SDSS Logistik Bencana</h1>
+          <h1>Dasahbaord Logistik Bencana</h1>
           <p>Damage Assessment & Logistics Estimation</p>
         </div>
       </div>

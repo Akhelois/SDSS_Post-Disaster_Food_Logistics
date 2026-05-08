@@ -142,8 +142,8 @@ def merge_nearby_hubs(cc, min_dist_m):
         })
     return pd.DataFrame(merged).reset_index().rename(columns={'index': 'hub_id'})
 
-@lru_cache(maxsize=1)
 def load_geodata(path):
+    """Load geojson data — tanpa cache agar data baru langsung terbaca."""
     try:
         gdf = gpd.read_file(path).to_crs(epsg=4326)
         if 'status' in gdf.columns:

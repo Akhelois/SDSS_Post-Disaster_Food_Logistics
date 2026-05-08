@@ -7,6 +7,7 @@ import services
 from shapely.geometry import Point, box
 import geopandas as gpd
 import os
+import threading
 
 app = FastAPI(title="SDSS Logistik Bencana API", version="1.0.0")
 
@@ -18,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === Jenis Bencana Per Wilayah ===
+# === Jenis Bencana: Fallback per Pulau (jika tidak ada data event BMKG) ===
 DISASTER_BY_ISLAND = {
     'sumatera': 'Gempa Bumi',
     'jawa': 'Gempa Bumi',
@@ -38,6 +39,31 @@ DISASTER_BY_ISLAND = {
     'batu': 'Gempa Bumi',
     'other': 'Bencana Alam',
 }
+
+def get_current_disaster_type(island_fallback='other', lat=None, lon=None):
+    """
+    Ambil jenis bencana. Logika:
+    1. Jika ada event BMKG terbaru DAN titik kerusakan dekat dengan event → pakai tipe event
+    2. Jika tidak → fallback ke mapping per pulau
+    """
+    import json
+    flag_path = "output/new_event.flag"
+    try:
+        if os.path.exists(flag_path) and lat is not None and lon is not None:
+            with open(flag_path) as f:
+                event = json.load(f)
+            event_data = event.get("event", {})
+            event_type = event_data.get("type", "")
+            event_lat = event_data.get("lat")
+            event_lon = event_data.get("lon")
+            # Cek apakah titik kerusakan dekat dengan lokasi event (< 2 derajat ≈ 220km)
+            if event_type and event_lat is not None and event_lon is not None:
+                dist = ((lat - event_lat)**2 + (lon - event_lon)**2)**0.5
+                if dist < 2.0:
+                    return event_type
+    except Exception:
+        pass
+    return DISASTER_BY_ISLAND.get(island_fallback, 'Bencana Alam')
 
 def desa_to_polygon(geom, simplify_tol=0.002):
     """Convert desa geometry to simplified polygon coordinates for frontend."""
@@ -67,15 +93,26 @@ def get_dashboard_data():
     if df_raw is None or df_raw.empty:
         return {"error": "standby"}
 
-    # Filter: hanya titik yang ada di daratan desa
+    # Filter: hanya titik dari satelit yang harus di dalam desa
+    # Titik dari BMKG (sumber event) tidak di-filter karena koordinat episenter bisa di laut
     if gdf_desa is not None and not gdf_desa.empty:
-        gdf_points = gpd.GeoDataFrame(
-            df_raw,
-            geometry=[Point(lon, lat) for lon, lat in zip(df_raw['lon'], df_raw['lat'])],
-            crs="EPSG:4326"
-        )
-        joined = gpd.sjoin(gdf_points, gdf_desa[['geometry']], how='inner', predicate='within')
-        df_raw = df_raw.loc[df_raw.index.isin(joined.index.unique())].copy()
+        # Pisahkan data BMKG dan data satelit
+        is_bmkg = df_raw.get('source', pd.Series(dtype=str)).fillna('') == 'BMKG'
+        df_bmkg = df_raw[is_bmkg].copy()
+        df_satelit = df_raw[~is_bmkg].copy()
+
+        # Filter hanya data satelit yang di dalam polygon desa
+        if not df_satelit.empty:
+            gdf_points = gpd.GeoDataFrame(
+                df_satelit,
+                geometry=[Point(lon, lat) for lon, lat in zip(df_satelit['lon'], df_satelit['lat'])],
+                crs="EPSG:4326"
+            )
+            joined = gpd.sjoin(gdf_points, gdf_desa[['geometry']], how='inner', predicate='within')
+            df_satelit = df_satelit.loc[df_satelit.index.isin(joined.index.unique())].copy()
+
+        # Gabungkan kembali
+        df_raw = pd.concat([df_bmkg, df_satelit], ignore_index=True)
 
     if df_raw.empty:
         return {"error": "no_land_points"}
@@ -110,8 +147,12 @@ def get_dashboard_data():
             )
 
     if not desa_col:
-        df_raw['_desa'] = 'Tidak Diketahui'
-        desa_col = '_desa'
+        # Gunakan kolom 'wilayah' dari BMKG jika ada
+        if 'wilayah' in df_raw.columns and df_raw['wilayah'].notna().any():
+            desa_col = 'wilayah'
+        else:
+            df_raw['_desa'] = 'Tidak Diketahui'
+            desa_col = '_desa'
     else:
         df_raw[desa_col] = df_raw[desa_col].fillna('Tidak Diketahui')
 
@@ -137,7 +178,7 @@ def get_dashboard_data():
                 if polygon is None:
                     continue
                 island = row['island']
-                disaster_type = DISASTER_BY_ISLAND.get(island, 'Bencana Alam')
+                disaster_type = get_current_disaster_type(island, float(row['avg_lat']), float(row['avg_lon']))
                 damage_count = int(row['count'])
 
                 # Estimasi logistik pangan per desa berdasarkan jumlah kerusakan
@@ -179,7 +220,7 @@ def get_dashboard_data():
             try:
                 damage_count = int(row['count'])
                 island = row['island']
-                disaster_type = DISASTER_BY_ISLAND.get(island, 'Bencana Alam')
+                disaster_type = get_current_disaster_type(island, float(row['avg_lat']), float(row['avg_lon']))
 
                 # Buat polygon bounding box dari titik-titik kerusakan per desa
                 # Tambahkan padding kecil agar polygon tidak terlalu kecil
@@ -246,6 +287,58 @@ def get_dashboard_data():
             "red_zones": rz_data,
         }
     }
+
+
+# === Endpoint: status scheduler ===
+@app.get("/status")
+def get_status():
+    """Cek apakah scheduler sedang berjalan."""
+    flag_path = "output/new_event.flag"
+    last_event = None
+    if os.path.exists(flag_path):
+        try:
+            import json
+            with open(flag_path) as f:
+                last_event = json.load(f)
+        except Exception:
+            pass
+    return {
+        "scheduler": "running",
+        "last_event": last_event
+    }
+
+
+# === Background Scheduler ===
+def start_scheduler_background():
+    """Jalankan multi-hazard scheduler sebagai background thread."""
+    try:
+        from scheduler import check_all_sources, CHECK_INTERVAL_MINUTES
+        import time
+        from datetime import datetime
+
+        def scheduler_loop():
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Background scheduler started")
+            print(f"  Interval: {CHECK_INTERVAL_MINUTES} menit")
+            # Cek pertama saat startup
+            check_all_sources()
+            # Loop periodik
+            while True:
+                time.sleep(CHECK_INTERVAL_MINUTES * 60)
+                check_all_sources()
+
+        t = threading.Thread(target=scheduler_loop, daemon=True)
+        t.start()
+        print("✅ Multi-Hazard Scheduler aktif (background thread)")
+    except Exception as e:
+        print(f"⚠ Scheduler gagal start: {e}")
+        print("  Backend tetap berjalan tanpa realtime monitoring")
+
+
+@app.on_event("startup")
+async def on_startup():
+    """Jalankan scheduler saat FastAPI startup."""
+    start_scheduler_background()
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

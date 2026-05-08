@@ -34,13 +34,23 @@ CLOUD_THRESHOLD = 30
 CHANGE_THRESHOLD = 0.03
 IMG_SIZE = (256, 256)
 
-# Radius scan di sekitar episenter berdasarkan magnitude
+# Radius scan di sekitar episenter berdasarkan magnitude (GEMPA)
 MAG_RADIUS = {
     5.0: 0.5,   # M5.0 → scan 0.5 derajat (~55 km)
     5.5: 0.8,
     6.0: 1.2,   # M6.0 → scan 1.2 derajat (~133 km)
     6.5: 1.8,
     7.0: 2.5,   # M7.0 → scan 2.5 derajat (~278 km)
+}
+
+# Radius scan untuk bencana NON-GEMPA (lebih lokal)
+WEATHER_RADIUS = {
+    'Banjir': 0.5,          # ~55 km
+    'Hujan Lebat': 0.5,     # ~55 km
+    'Tanah Longsor': 0.3,   # ~33 km (sangat lokal)
+    'Angin Kencang': 0.5,   # ~55 km
+    'Tsunami': 1.0,         # ~111 km (pantai luas)
+    'Cuaca Ekstrem': 0.5,   # ~55 km default
 }
 
 INDONESIA_LAND = [
@@ -275,32 +285,38 @@ def process_cell(cell_info, days_before=7):
         return False
 
 
-def scan_disaster_area(lat, lon, magnitude, event_id, wilayah=""):
+def scan_disaster_area(lat, lon, magnitude, event_id, wilayah="", disaster_type="Gempa Bumi"):
     """
     FUNGSI UTAMA — Dipanggil oleh scheduler saat ada event bencana.
 
     Args:
-        lat: Latitude episenter
-        lon: Longitude episenter
-        magnitude: Magnitude gempa
+        lat: Latitude episenter / centroid area bencana
+        lon: Longitude episenter / centroid area bencana
+        magnitude: Magnitude gempa (atau pseudo-magnitude untuk non-gempa)
         event_id: ID unik event (untuk tracking duplikasi)
         wilayah: Deskripsi wilayah dari BMKG
+        disaster_type: Jenis bencana (Gempa Bumi, Banjir, Hujan Lebat, dll)
     """
     print(f"\n[{now()}] === EVENT-DRIVEN SCAN ===")
+    print(f"  Jenis: {disaster_type}")
     print(f"  Event: {event_id}")
-    print(f"  Lokasi: {lat:.4f}, {lon:.4f} (M{magnitude})")
+    print(f"  Lokasi: {lat:.4f}, {lon:.4f}")
     print(f"  Wilayah: {wilayah}")
 
     if not init_gee():
         return 0
 
-    radius = get_scan_radius(magnitude)
+    # Pilih radius berdasarkan jenis bencana
+    if disaster_type == "Gempa Bumi":
+        radius = get_scan_radius(magnitude)
+        days_before = 7 if magnitude < 6.0 else 14
+    else:
+        radius = WEATHER_RADIUS.get(disaster_type, 0.5)
+        days_before = 7  # Lookback 7 hari untuk bencana cuaca
+
     grids = generate_event_grid(lat, lon, radius)
     print(f"  Radius scan: {radius:.1f} deg (~{radius * 111:.0f} km)")
     print(f"  Grid cells: {len(grids)}")
-
-    # Lookback days lebih panjang untuk gempa besar
-    days_before = 7 if magnitude < 6.0 else 14
 
     downloaded = 0
     for cell in grids:
