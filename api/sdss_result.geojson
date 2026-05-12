@@ -1,0 +1,772 @@
+{
+  "type": "FeatureCollection",
+  "name": "sdss_result",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-15T02:10:43+00:00",
+        "processed_at": "2026-05-06 12:10:59",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "122 km TimurLaut PULAUSARINGI-NTB",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.14,
+          -7.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-17T22:19:22+00:00",
+        "processed_at": "2026-05-06 12:11:01",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "164 km BaratDaya MALUKUTENGGARA",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.32,
+          -6.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-17T23:21:27+00:00",
+        "processed_at": "2026-05-06 12:11:05",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "53 km BaratDaya BOLAANGUKI-BOLSEL-SULUT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.9,
+          -0.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-18T20:06:49+00:00",
+        "processed_at": "2026-05-06 12:11:34",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "48 km BaratDaya NIASUTARA-SUMUT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.04,
+          1.14
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-20T05:19:37+00:00",
+        "processed_at": "2026-05-06 12:12:21",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "36 km BaratLaut ALOR-NTT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.38,
+          -8.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-20T18:47:06+00:00",
+        "processed_at": "2026-05-06 12:12:42",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "57 km Tenggara SARMI-PAPUA",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.25,
+          -2.03
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-21T03:17:08+00:00",
+        "processed_at": "2026-05-06 12:12:45",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "67 km BaratLaut TIMORTENGAHUT-NTT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.2,
+          -8.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-23T22:13:25+00:00",
+        "processed_at": "2026-05-06 12:15:01",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "184 km TimurLaut MALUKUBRTDAYA",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.28,
+          -7.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-24T04:45:19+00:00",
+        "processed_at": "2026-05-06 12:15:28",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "114 km BaratLaut TERNATE-MALUT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.42,
+          1.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-04-25T09:07:07+00:00",
+        "processed_at": "2026-05-06 12:15:32",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "205 km Tenggara SERAMBAGIANTIMUR-MALUKU",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.63,
+          -4.95
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-05-01T09:24:24+00:00",
+        "processed_at": "2026-05-06 12:15:43",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "33 km TimurLaut RANSIKI-PAPUABRT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.4,
+          -1.31
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-05-01T18:52:47+00:00",
+        "processed_at": "2026-05-06 12:15:47",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "107 km TimurLaut MALUKUBRTDAYA",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.53,
+          -7.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-05-02T10:27:11+00:00",
+        "processed_at": "2026-05-06 12:15:47",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "201 km BaratLaut MALUKUTENGGARA",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.92,
+          -5.64
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-05-05T02:38:50+00:00",
+        "processed_at": "2026-05-06 12:16:12",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "210 km BaratLaut TANIMBAR",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.23,
+          -6.41
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-05-05T06:44:50+00:00",
+        "processed_at": "2026-05-06 12:16:21",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "37 km BaratDaya WANOKAKA-NTT",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.3,
+          -10.11
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.76.001",
+        "processed_at": "2026-05-06 12:16:32",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Barat",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.946613,
+          -2.718806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.14.002",
+        "processed_at": "2026-05-06 12:16:34",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Riau",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.800256,
+          0.216189
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.18.002",
+        "processed_at": "2026-05-06 12:16:36",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Lampung",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.735951,
+          -4.827691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.75.003",
+        "processed_at": "2026-05-06 12:16:41",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Gorontalo",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.203447,
+          0.929835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.13.001",
+        "processed_at": "2026-05-06 12:16:47",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.6091,
+          -2.148914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.19.002",
+        "processed_at": "2026-05-06 12:16:49",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Bangka Belitung",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.303984,
+          -2.474806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.74.004",
+        "processed_at": "2026-05-06 12:16:49",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tenggara",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.835525,
+          -4.194949
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.63.002",
+        "processed_at": "2026-05-06 12:16:52",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Selatan",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.569795,
+          -3.391877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.71.001",
+        "processed_at": "2026-05-06 12:16:54",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Utara",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          125.103375,
+          1.493917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.62.002",
+        "processed_at": "2026-05-06 12:16:57",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.595364,
+          -2.350127
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.15.002",
+        "processed_at": "2026-05-06 12:16:59",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Jambi",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.654123,
+          -1.660456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.72.002",
+        "processed_at": "2026-05-06 12:17:03",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.651328,
+          -0.944746
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.73.002",
+        "processed_at": "2026-05-06 12:17:05",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Selatan",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.630956,
+          -2.585885
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.81.002",
+        "processed_at": "2026-05-06 12:17:07",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Maluku",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.405104,
+          -3.634179
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.64.002",
+        "processed_at": "2026-05-06 12:19:13",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Timur",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.9305,
+          -1.691094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.62.003",
+        "processed_at": "2026-05-06 12:19:15",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.584719,
+          -1.761906
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.75.004",
+        "processed_at": "2026-05-06 12:19:19",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Gorontalo",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.204,
+          0.787706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.74.005",
+        "processed_at": "2026-05-06 12:19:33",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tenggara",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.183913,
+          -4.465825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.21.003",
+        "processed_at": "2026-05-06 12:20:28",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Riau",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.579184,
+          0.136122
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.82.002",
+        "processed_at": "2026-05-06 12:20:31",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Maluku Utara",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.261939,
+          0.611214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.17.001",
+        "processed_at": "2026-05-06 12:34:56",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Bengkulu",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.87742,
+          -4.106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.72.003",
+        "processed_at": "2026-05-06 12:35:01",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.336558,
+          -3.222115
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.63.003",
+        "processed_at": "2026-05-06 12:35:04",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Selatan",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.076554,
+          -2.567027
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.19.003",
+        "processed_at": "2026-05-06 12:35:08",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Bangka Belitung",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.009868,
+          -2.396074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.05.06.05.16.001",
+        "processed_at": "2026-05-06 12:35:09",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Selatan",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.581977,
+          -3.865652
+        ]
+      }
+    }
+  ]
+}
