@@ -23,9 +23,10 @@ export default function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+  const API_BASE = import.meta.env.VITE_API_URL || '/api/';
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/')
+    axios.get(API_BASE)
       .then(res => {
         setData(res.data);
         setLoading(false);
