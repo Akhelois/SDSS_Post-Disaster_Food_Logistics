@@ -1,14 +1,14 @@
 {
-    "installCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
-    "buildCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
-    "outputDirectory": ".",
-    "env": { "PYTHONUNBUFFERED": "1" },
-    "builds": [
-        { "src": "api/**/.py", "use": "@vercel/python" },
-        { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
-    ],
-    "routes": [
-        { "src": "/api/(.)", "dest": "/api/$1" },
-        { "src": "/(.*)", "dest": "/frontend/$1" }
-    ]
+  "installCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
+  "buildCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
+  "outputDirectory": ".",
+  "env": { "PYTHONUNBUFFERED": "1" },
+  "builds": [
+    { "src": "api/**/*.py", "use": "@vercel/python" },
+    { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/index.py" },
+    { "src": "/(.*)", "dest": "/frontend/$1" }
+  ]
 }
