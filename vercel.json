@@ -1,19 +1,7 @@
 {
   "buildCommand": "pip install -r requirements.txt",
-  "functions": {
-    "backend/main.py": {
-      "runtime": "python3.12",
-      "maxDuration": 60
-    }
-  },
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "backend/main.py"
-    }
-  ],
+  "outputDirectory": ".",
   "env": {
-    "PYTHONUNBUFFERED": "1",
-    "PYTHONPATH": "/var/task/backend"
+    "PYTHONUNBUFFERED": "1"
   }
 }
