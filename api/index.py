@@ -6,8 +6,8 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 BASE = os.path.join(os.path.dirname(__file__), "data")
-GEOJSON_PATH = os.path.join(BASE, "sdss_result.geojson")
-# GEOJSON_PATH = os.path.join(BASE, "../backend/output/sdss_result.geojson")
+# GEOJSON_PATH = os.path.join(BASE, "sdss_result.geojson")
+GEOJSON_PATH = os.path.join(BASE, "../backend/output/sdss_result.geojson")
 
 def point_to_bbox_polygon(lon, lat, pad=0.01):
     return [
