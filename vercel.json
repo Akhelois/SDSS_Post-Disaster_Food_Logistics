@@ -1,6 +1,6 @@
 {
-    "installCommand": "pip install -r requirements-vercel.txt",
-    "buildCommand": "pip install -r requirements-vercel.txt",
+    "installCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
+    "buildCommand": "python -m pip install --break-system-packages -r requirements-vercel.txt",
     "outputDirectory": ".",
     "env": { "PYTHONUNBUFFERED": "1" }
 }
