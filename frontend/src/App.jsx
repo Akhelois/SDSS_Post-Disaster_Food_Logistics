@@ -74,7 +74,7 @@ export default function App() {
       <div className="sidebar">
         <SidebarHeader disasterInfo={data?.disaster_info} />
         <MetricCards metrics={data?.metrics} />
-        <NewsPanel />
+        {/* <NewsPanel /> */}
         <LogisticsTable data={data} onRowClick={handleRowClick} />
       </div>
 
