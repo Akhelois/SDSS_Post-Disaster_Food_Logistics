@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdss-logistik-bencana"
+version = "1.0.0"
+description = "Post-Disaster Food Logistics System"
+requires-python = ">=3.9"
+
+[tool.vercel]
+entrypoint = "backend/main.py"
