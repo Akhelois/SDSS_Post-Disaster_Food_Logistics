@@ -23,8 +23,8 @@ PROCESSED_MANIFEST = "output/processed_scenes.json"
 IMG_SIZE           = (256, 256)
 CONF_THRESHOLD     = 0.2
 GRID_SIZE          = 16
-INCREMENTAL_EPOCHS = 3    # Epoch fine-tune per batch baru
-INCREMENTAL_LR     = 1e-5 # Learning rate kecil agar tidak merusak bobot lama
+INCREMENTAL_EPOCHS = 3
+INCREMENTAL_LR     = 1e-5
 
 INDONESIA_BBOX = (95.0, -11.0, 141.0, 6.0)
 
@@ -50,7 +50,6 @@ def now():
 
 
 def load_manifest():
-    """Muat daftar scene_id yang sudah pernah diproses."""
     if os.path.exists(PROCESSED_MANIFEST):
         try:
             with open(PROCESSED_MANIFEST, 'r') as f:
@@ -61,7 +60,6 @@ def load_manifest():
 
 
 def save_manifest(scene_ids):
-    """Simpan daftar scene_id yang sudah diproses."""
     try:
         with open(PROCESSED_MANIFEST, 'w') as f:
             json.dump(list(scene_ids), f)
@@ -70,7 +68,6 @@ def save_manifest(scene_ids):
 
 
 def is_on_land(lon, lat):
-    """Cek apakah titik berada di daratan Indonesia (bukan laut)."""
     for lon_min, lat_min, lon_max, lat_max in INDONESIA_LAND:
         if lon_min <= lon <= lon_max and lat_min <= lat <= lat_max:
             return True
@@ -78,32 +75,21 @@ def is_on_land(lon, lat):
 
 
 def is_residential_cluster(points, min_points=2, max_spread_deg=0.15):
-    """
-    Post-filter: pastikan titik-titik kerusakan membentuk cluster permukiman.
-    Titik tunggal yang terisolasi di tengah hutan/laut = kemungkinan false positive.
-    
-    Args:
-        points: list of {'lon', 'lat', 'confidence'} dicts
-        min_points: minimum titik dalam radius untuk dianggap valid
-        max_spread_deg: radius pencarian tetangga (~16 km)
-    """
     if len(points) <= 1:
-        return points  # Tidak bisa filter jika hanya 1 titik
-    
+        return points
+
     filtered = []
     for p in points:
-        # Hitung jumlah tetangga dalam radius
         neighbors = sum(
             1 for q in points
             if q is not p
             and abs(p['lon'] - q['lon']) < max_spread_deg
             and abs(p['lat'] - q['lat']) < max_spread_deg
         )
-        # Titik dianggap valid jika punya minimal 1 tetangga (ada cluster permukiman)
         if neighbors >= min_points - 1:
             filtered.append(p)
-    
-    return filtered if filtered else points  # Jangan return kosong
+
+    return filtered if filtered else points
 
 
 def is_in_indonesia(buildings, bbox):
@@ -119,14 +105,14 @@ def is_in_indonesia(buildings, bbox):
     return lon_min <= lon <= lon_max and lat_min <= lat <= lat_max
 
 
-# ==================== ARSITEKTUR BARU: ResNet50-UNet ====================
+# ==================== ARSITEKTUR: ResNet50-UNet ====================
 def build_resnet_unet(input_shape=(256, 256, 3)):
     """
     ResNet50-UNet: Encoder pretrained ImageNet + Decoder U-Net.
     Menggantikan U-Net polos yang hanya menghasilkan confidence 20-37%.
     """
     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
-    
+
     s1 = base_model.get_layer('conv1_relu').output       # 128x128
     s2 = base_model.get_layer('conv2_block3_out').output  # 64x64
     s3 = base_model.get_layer('conv3_block4_out').output  # 32x32
@@ -179,8 +165,23 @@ def bce_dice_loss(y_true, y_pred):
     return bce + dice
 
 def weighted_bce_dice_loss(y_true, y_pred):
-    # Alias untuk kompatibilitas model lama
-    return bce_dice_loss(y_true, y_pred)
+    """
+    Weighted Binary Cross-Entropy + Dice Loss (sesuai thesis).
+    pos_weight=15: penalti 15x lebih besar pada false negative.
+    """
+    y_pred_clipped = tf.clip_by_value(y_pred, 1e-7, 1 - 1e-7)
+    logits = tf.math.log(y_pred_clipped / (1 - y_pred_clipped))
+    bce = tf.nn.weighted_cross_entropy_with_logits(
+        labels=tf.cast(y_true, tf.float32),
+        logits=logits,
+        pos_weight=15.0
+    )
+    bce = tf.reduce_mean(bce)
+    y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
+    y_pred_f = tf.reshape(y_pred, [-1])
+    intersection = tf.reduce_sum(y_true_f * y_pred_f)
+    dice = 1 - (2. * intersection + 1.0) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + 1.0)
+    return bce + dice
 
 def dice_coef(y_true, y_pred):
     y_true_f = tf.cast(tf.reshape(y_true, [-1]), tf.float32)
@@ -193,7 +194,7 @@ def dice_coef(y_true, y_pred):
 def load_model():
     """Load model dari .h5 file, atau bangun dari awal jika belum ada."""
     print(f"[{now()}] Loading model dari {MODEL_PATH}...")
-    
+
     if os.path.exists(MODEL_PATH):
         try:
             model = tf.keras.models.load_model(
@@ -209,8 +210,7 @@ def load_model():
             return model
         except Exception as e:
             print(f"[{now()}] Gagal load model: {e}")
-    
-    # Jika .h5 belum ada, bangun arsitektur baru dan simpan
+
     print(f"[{now()}] Model .h5 tidak ditemukan. Membangun ResNet50-UNet baru...")
     print(f"[{now()}] PERINGATAN: Jalankan 'python train_model.py' untuk training yang optimal!")
     model = build_resnet_unet()
@@ -234,8 +234,7 @@ def backup_model():
     try:
         shutil.copy2(MODEL_PATH, backup_path)
         print(f"[{now()}] Backup model: {backup_path}")
-        
-        # Hapus backup lama (simpan maks 5 terakhir)
+
         backups = sorted(
             [f for f in os.listdir(MODEL_BACKUP_DIR) if f.endswith('.h5')],
             reverse=True
@@ -249,39 +248,33 @@ def backup_model():
 def incremental_train(model, processed_images, processed_masks):
     """
     CONTINUAL LEARNING: Fine-tune model dari data yang baru saja diproses.
-    
-    - Learning rate sangat kecil agar tidak merusak pengetahuan lama
-    - Hanya 2-3 epoch per batch (bukan training ulang dari nol)
-    - Model disimpan kembali ke .h5 yang sama → makin pintar seiring waktu
+    Learning rate sangat kecil agar tidak merusak pengetahuan lama.
+    Hanya 2-3 epoch per batch (bukan training ulang dari nol).
+    Model disimpan kembali ke .h5 yang sama.
     """
     if not processed_images or len(processed_images) == 0:
         return
-    
+
     print(f"[{now()}] === Incremental Learning: {len(processed_images)} citra baru ===")
-    
-    # Backup model lama sebelum fine-tune
+
     backup_model()
-    
-    # Siapkan data
+
     X = np.array(processed_images, dtype=np.float32)
     Y = np.expand_dims(np.array(processed_masks, dtype=np.float32), axis=-1)
-    
-    # Re-compile agar LR kecil
+
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=INCREMENTAL_LR),
         loss=bce_dice_loss,
         metrics=['accuracy', dice_coef]
     )
-    
-    # Fine-tune
+
     history = model.fit(
         X, Y,
         epochs=INCREMENTAL_EPOCHS,
         batch_size=min(4, len(X)),
         verbose=1
     )
-    
-    # Simpan model yang sudah belajar
+
     model.save(MODEL_PATH)
     final_loss = history.history['loss'][-1]
     final_dice = history.history['dice_coef'][-1]
@@ -387,8 +380,7 @@ def run_pipeline(model):
     print(f"[{now()}] {len(png_files)} citra baru ditemukan...")
     existing    = load_existing()
     new_records = []
-    
-    # Kumpulkan data untuk incremental learning
+
     train_images = []
     train_masks  = []
 
@@ -418,19 +410,16 @@ def run_pipeline(model):
 
             print(f"    {len(pts)} titik kerusakan terdeteksi (conf >= {CONF_THRESHOLD})")
 
-            # Post-filter: pastikan hanya cluster permukiman yang lolos
             pts_before = len(pts)
             pts = is_residential_cluster(pts)
             if len(pts) < pts_before:
-                print(f"    Post-filter: {pts_before} → {len(pts)} titik (removed isolated non-residential)")
+                print(f"    Post-filter: {pts_before} -> {len(pts)} titik (removed isolated non-residential)")
 
-            # Kumpulkan data untuk fine-tuning
             img_for_train = cv2.imread(img_path)
             if img_for_train is not None:
                 img_for_train = cv2.cvtColor(img_for_train, cv2.COLOR_BGR2RGB)
                 img_for_train = cv2.resize(img_for_train, IMG_SIZE).astype(np.float32) / 255.0
                 train_images.append(img_for_train)
-                # Gunakan mask prediksi sebagai pseudo-label untuk self-training
                 mask_binary = (mask > 0.5).astype(np.float32)
                 train_masks.append(mask_binary)
 
@@ -443,12 +432,10 @@ def run_pipeline(model):
                     'status':       'active'
                 })
 
-            # Hapus file input setelah diproses
             os.remove(img_path)
             os.remove(label_path)
             print(f"    File {fname} dihapus setelah diproses.")
 
-            # Catat scene_id ke manifest
             manifest = load_manifest()
             manifest.add(scene_id)
             save_manifest(manifest)
@@ -478,11 +465,9 @@ def run_pipeline(model):
     combined.to_file(OUTPUT_GEOJSON, driver='GeoJSON')
     print(f"[{now()}] Output diupdate: {OUTPUT_GEOJSON} ({len(combined)} titik aktif)")
 
-    # === CONTINUAL LEARNING: Model terus belajar dari data baru ===
     if train_images:
         incremental_train(model, train_images, train_masks)
 
-    # Bersihkan PROCESSED_DIR dari file lama (> 7 hari)
     cutoff = time.time() - 7 * 86400
     cleaned = 0
     for f in os.listdir(PROCESSED_DIR):

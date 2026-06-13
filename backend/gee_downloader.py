@@ -1,17 +1,3 @@
-"""
-GEE Downloader — Event-Driven
-=============================
-Tidak lagi melakukan grid scan seluruh Indonesia.
-Hanya scan area spesifik saat dipicu oleh event bencana (dari BMKG).
-
-Flow:
-  1. Scheduler mendeteksi gempa baru dari BMKG API
-  2. Scheduler memanggil scan_disaster_area(lat, lon, magnitude, event_id)
-  3. Downloader membuat grid kecil di sekitar episenter
-  4. Cek NDVI change + built area filter via GEE
-  5. Jika ada perubahan signifikan → download citra → pipeline prediksi
-"""
-
 import ee
 import os
 import json
@@ -34,23 +20,21 @@ CLOUD_THRESHOLD = 30
 CHANGE_THRESHOLD = 0.03
 IMG_SIZE = (256, 256)
 
-# Radius scan di sekitar episenter berdasarkan magnitude (GEMPA)
 MAG_RADIUS = {
-    5.0: 0.5,   # M5.0 → scan 0.5 derajat (~55 km)
+    5.0: 0.5,
     5.5: 0.8,
-    6.0: 1.2,   # M6.0 → scan 1.2 derajat (~133 km)
+    6.0: 1.2,
     6.5: 1.8,
-    7.0: 2.5,   # M7.0 → scan 2.5 derajat (~278 km)
+    7.0: 2.5,
 }
 
-# Radius scan untuk bencana NON-GEMPA (lebih lokal)
 WEATHER_RADIUS = {
-    'Banjir': 0.5,          # ~55 km
-    'Hujan Lebat': 0.5,     # ~55 km
-    'Tanah Longsor': 0.3,   # ~33 km (sangat lokal)
-    'Angin Kencang': 0.5,   # ~55 km
-    'Tsunami': 1.0,         # ~111 km (pantai luas)
-    'Cuaca Ekstrem': 0.5,   # ~55 km default
+    'Banjir': 0.5,
+    'Hujan Lebat': 0.5,
+    'Tanah Longsor': 0.3,
+    'Angin Kencang': 0.5,
+    'Tsunami': 1.0,
+    'Cuaca Ekstrem': 0.5,
 }
 
 INDONESIA_LAND = [
@@ -123,16 +107,13 @@ def get_sentinel2(bbox, date_start, date_end):
 
 
 def detect_change(pre_image, post_image, region):
-    """Deteksi perubahan NDVI hanya di area permukiman (built area)."""
-    # 1. Cek rasio permukiman via Google Dynamic World
     try:
         dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1') \
                .filterBounds(region) \
                .select('built') \
                .mean()
         built_mask = dw.gt(0.30)
-        
-        # Hitung persentase permukiman di cell ini
+
         built_stats = built_mask.reduceRegion(
             reducer=ee.Reducer.mean(),
             geometry=region,
@@ -141,20 +122,17 @@ def detect_change(pre_image, post_image, region):
             maxPixels=1e9
         )
         built_ratio = built_stats.getInfo().get('built', 0)
-        
-        # Jika area permukiman sangat kecil (< 3%), langsung skip cell ini
+
         if built_ratio is None or built_ratio < 0.03:
             return 0
-            
+
     except Exception:
         built_mask = None
 
-    # 2. Hitung perubahan NDVI
     pre_ndvi = pre_image.normalizedDifference(['B8', 'B4'])
     post_ndvi = post_image.normalizedDifference(['B8', 'B4'])
     diff = pre_ndvi.subtract(post_ndvi).abs()
 
-    # Aplikasikan mask permukiman jika berhasil didapatkan
     if built_mask is not None:
         diff = diff.updateMask(built_mask)
 
@@ -206,16 +184,14 @@ def create_label_json(bbox, scene_id, image_date):
 
 
 def get_scan_radius(magnitude):
-    """Tentukan radius scan berdasarkan magnitude gempa."""
     for mag_threshold in sorted(MAG_RADIUS.keys(), reverse=True):
         if magnitude >= mag_threshold:
             return MAG_RADIUS[mag_threshold]
-    return 0.5  # default minimum
+    return 0.5
 
 
 def generate_event_grid(center_lat, center_lon, radius_deg):
-    """Buat grid scan di sekitar episenter bencana."""
-    cell_size = 0.5  # ~55 km per cell
+    cell_size = 0.5
     grids = []
     lon = center_lon - radius_deg
     while lon < center_lon + radius_deg:
@@ -232,7 +208,6 @@ def generate_event_grid(center_lat, center_lon, radius_deg):
 
 
 def process_cell(cell_info, days_before=7):
-    """Proses satu cell: cek perubahan NDVI, download jika ada anomali."""
     name = cell_info["name"]
     bbox = cell_info["bbox"]
     processed_scenes = load_manifest()
@@ -252,10 +227,10 @@ def process_cell(cell_info, days_before=7):
         mean_change = detect_change(pre_col.first(), post_col.first(), region_geom)
 
         if mean_change < CHANGE_THRESHOLD:
-            print(f"    [{name}] NDVI change: {mean_change:.4f} — tidak signifikan, skip")
+            print(f"    [{name}] NDVI change: {mean_change:.4f} - tidak signifikan, skip")
             return False
 
-        print(f"    [{name}] NDVI change: {mean_change:.4f} — TERDETEKSI! Downloading...")
+        print(f"    [{name}] NDVI change: {mean_change:.4f} - TERDETEKSI! Downloading...")
 
         image_date = post_col.first().date().format('YYYY-MM-dd').getInfo()
         if not image_date:
@@ -286,17 +261,6 @@ def process_cell(cell_info, days_before=7):
 
 
 def scan_disaster_area(lat, lon, magnitude, event_id, wilayah="", disaster_type="Gempa Bumi"):
-    """
-    FUNGSI UTAMA — Dipanggil oleh scheduler saat ada event bencana.
-
-    Args:
-        lat: Latitude episenter / centroid area bencana
-        lon: Longitude episenter / centroid area bencana
-        magnitude: Magnitude gempa (atau pseudo-magnitude untuk non-gempa)
-        event_id: ID unik event (untuk tracking duplikasi)
-        wilayah: Deskripsi wilayah dari BMKG
-        disaster_type: Jenis bencana (Gempa Bumi, Banjir, Hujan Lebat, dll)
-    """
     print(f"\n[{now()}] === EVENT-DRIVEN SCAN ===")
     print(f"  Jenis: {disaster_type}")
     print(f"  Event: {event_id}")
@@ -306,13 +270,12 @@ def scan_disaster_area(lat, lon, magnitude, event_id, wilayah="", disaster_type=
     if not init_gee():
         return 0
 
-    # Pilih radius berdasarkan jenis bencana
     if disaster_type == "Gempa Bumi":
         radius = get_scan_radius(magnitude)
         days_before = 7 if magnitude < 6.0 else 14
     else:
         radius = WEATHER_RADIUS.get(disaster_type, 0.5)
-        days_before = 7  # Lookback 7 hari untuk bencana cuaca
+        days_before = 7
 
     grids = generate_event_grid(lat, lon, radius)
     print(f"  Radius scan: {radius:.1f} deg (~{radius * 111:.0f} km)")
@@ -323,12 +286,11 @@ def scan_disaster_area(lat, lon, magnitude, event_id, wilayah="", disaster_type=
         if process_cell(cell, days_before):
             downloaded += 1
 
-    print(f"\n[{now()}] Scan selesai — {downloaded} citra baru dari {len(grids)} cell")
+    print(f"\n[{now()}] Scan selesai - {downloaded} citra baru dari {len(grids)} cell")
     return downloaded
 
 
 if __name__ == "__main__":
-    # Test: simulasi scan di sekitar Palu (gempa M7.5)
     scan_disaster_area(
         lat=-0.18,
         lon=119.84,

@@ -21,6 +21,22 @@ LOGISTIK_PER_KK = {
     'Lauk Kaleng (paket)': 4,
 }
 
+DATA_TTL_HOURS = 2
+
+GUDANG_BNPB = [
+    {"nama": "Gudang BNPB Jakarta",       "lat": -6.1751, "lon": 106.8650},
+    {"nama": "Gudang BPBD Jawa Barat",    "lat": -6.9175, "lon": 107.6191},
+    {"nama": "Gudang BPBD Jawa Tengah",   "lat": -7.0051, "lon": 110.4381},
+    {"nama": "Gudang BPBD Jawa Timur",    "lat": -7.2575, "lon": 112.7521},
+    {"nama": "Gudang BPBD Sumatera Utara","lat":  3.5952, "lon":  98.6722},
+    {"nama": "Gudang BPBD Sulawesi Sel.",  "lat": -5.1477, "lon": 119.4327},
+    {"nama": "Gudang BPBD Bali",           "lat": -8.6705, "lon": 115.2126},
+    {"nama": "Gudang BPBD NTT",            "lat":-10.1772, "lon": 123.6070},
+    {"nama": "Gudang BPBD Kalimantan Sel.","lat": -3.3194, "lon": 114.5908},
+    {"nama": "Gudang BPBD Maluku",         "lat": -3.6554, "lon": 128.1903},
+    {"nama": "Gudang BPBD Papua",          "lat": -2.5337, "lon": 140.7183},
+]
+
 ISLANDS = {
     'nias': (97.0, 0.4, 98.2, 1.6),
     'simeulue': (95.7, 2.2, 96.6, 3.1),
@@ -136,24 +152,64 @@ def merge_nearby_hubs(cc, min_dist_m):
             'safe_lon': best_hub['safe_lon'],
             'desa_list': ', '.join(sorted(all_desa)) if all_desa else '',
             'jumlah_red': int(rows['jumlah_red'].sum()),
-            'avg_confidence': float(rows['avg_confidence'].max()), # <-- INI PERUBAHANNYA: Mean menjadi Max
+            'avg_confidence': float(rows['avg_confidence'].max()),
             'island': str(rows['island'].iloc[0]),
             'cluster_ids': list(rows['cluster_id'])
         })
     return pd.DataFrame(merged).reset_index().rename(columns={'index': 'hub_id'})
 
 def load_geodata(path):
-    """Load geojson data — tanpa cache agar data baru langsung terbaca."""
+    import re
+    import datetime
+    
+    def extract_event_date(scene_id, processed_at):
+        if pd.notna(processed_at):
+            try:
+                return pd.to_datetime(processed_at).replace(tzinfo=None)
+            except:
+                pass
+        scene_id = str(scene_id)
+        if 'T' in scene_id and '-' in scene_id:
+            try:
+                return pd.to_datetime(scene_id).replace(tzinfo=None)
+            except:
+                pass
+        match = re.search(r'(\d{8})$', scene_id)
+        if match:
+            try:
+                return datetime.datetime.strptime(match.group(1), '%Y%m%d')
+            except:
+                pass
+        match = re.search(r'(\d{4}\.\d{2}\.\d{2})', scene_id)
+        if match:
+            try:
+                return datetime.datetime.strptime(match.group(1), '%Y.%m.%d')
+            except:
+                pass
+        return datetime.datetime.now()
+
     try:
         gdf = gpd.read_file(path).to_crs(epsg=4326)
         if 'status' in gdf.columns:
             gdf = gdf[gdf['status'] == 'active'].copy()
+            
+        now = datetime.datetime.now()
+        if 'scene_id' in gdf.columns:
+            gdf['event_date'] = gdf.apply(lambda r: extract_event_date(r['scene_id'], r.get('processed_at')), axis=1)
+            gdf['age_days'] = (now - gdf['event_date']).dt.total_seconds() / 86400.0
+            gdf = gdf[(gdf['age_days'] >= 1.0) & (gdf['age_days'] <= 5.0)].copy()
+
+        if gdf.empty:
+            return gdf
+
         gdf['lat'] = gdf.geometry.centroid.y
         gdf['lon'] = gdf.geometry.centroid.x
         if 'confidence' not in gdf.columns:
             gdf['confidence'] = 0.5
         return gdf
-    except Exception: return None
+    except Exception as e:
+        print(f"Error loading geodata: {e}")
+        return None
 
 @lru_cache(maxsize=1)
 def load_desa_boundaries():
@@ -162,3 +218,77 @@ def load_desa_boundaries():
         except Exception: pass
     return None
 
+
+def nearest_gudang_distance_km(lat, lon):
+    min_dist = float('inf')
+    nearest_name = ""
+    nearest_coords = None
+    for g in GUDANG_BNPB:
+        dist = haversine_distance_m(lat, lon, g['lat'], g['lon']) / 1000.0
+        if dist < min_dist:
+            min_dist = dist
+            nearest_name = g['nama']
+            nearest_coords = [g['lon'], g['lat']]
+    return min_dist, nearest_name, nearest_coords
+
+
+def calculate_priority_scores(zones):
+    if not zones:
+        return zones
+
+    densities = []
+    populations = []
+    distances = []
+    gudang_names = []
+    gudang_coords_list = []
+
+    for z in zones:
+        count = z.get('count', 0)
+        densities.append(count)
+        populations.append(count * 4)
+        dist_km, g_name, g_coords = nearest_gudang_distance_km(z['lat'], z['lon'])
+        distances.append(dist_km)
+        gudang_names.append(g_name)
+        gudang_coords_list.append(g_coords)
+
+    def normalize(values):
+        min_v = min(values)
+        max_v = max(values)
+        if max_v == min_v:
+            return [0.5] * len(values)
+        return [(v - min_v) / (max_v - min_v) for v in values]
+
+    d_norm = normalize(densities)
+    p_norm = normalize(populations)
+    dist_norm = normalize(distances)
+
+    W_DENSITY = 0.4
+    W_POPULATION = 0.3
+    W_PROXIMITY = 0.3
+
+    for i, z in enumerate(zones):
+        proximity = 1.0 - dist_norm[i]
+
+        score = (W_DENSITY * d_norm[i] +
+                 W_POPULATION * p_norm[i] +
+                 W_PROXIMITY * proximity)
+
+        z['priority_score'] = round(score, 4)
+        z['gudang_terdekat'] = gudang_names[i]
+        z['gudang_coords'] = gudang_coords_list[i]
+        z['jarak_gudang_km'] = round(distances[i], 1)
+
+    zones.sort(key=lambda x: x['priority_score'], reverse=True)
+    for rank, z in enumerate(zones, 1):
+        z['priority_rank'] = rank
+        score = z['priority_score']
+        if score >= 0.75:
+            z['priority_label'] = 'Kritis'
+        elif score >= 0.50:
+            z['priority_label'] = 'Tinggi'
+        elif score >= 0.25:
+            z['priority_label'] = 'Sedang'
+        else:
+            z['priority_label'] = 'Rendah'
+
+    return zones

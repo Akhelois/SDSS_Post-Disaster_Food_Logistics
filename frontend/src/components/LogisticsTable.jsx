@@ -32,7 +32,7 @@ export default function LogisticsTable({ data, onRowClick }) {
               <span className="zone-badge">{zone.count}</span>
             </div>
             <div className="zone-info">
-              <span><LuTriangleAlert size={12} /> {zone.disaster_type || 'Bencana Alam'}</span>
+              <span><LuTriangleAlert size={12} /> {zone.disaster_type || 'Banjir / Tanah Longsor'}</span>
               <span><LuMapPin size={12} /> {zone.lon.toFixed(3)}, {zone.lat.toFixed(3)}</span>
             </div>
             {zone.logistics && (

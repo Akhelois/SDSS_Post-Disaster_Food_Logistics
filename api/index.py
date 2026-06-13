@@ -6,7 +6,6 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 BASE = os.path.join(os.path.dirname(__file__), "data")
-# GEOJSON_PATH = os.path.join(BASE, "sdss_result.geojson")
 GEOJSON_PATH = os.path.join(BASE, "../backend/output/sdss_result.geojson")
 
 def point_to_bbox_polygon(lon, lat, pad=0.01):
@@ -39,7 +38,7 @@ def root():
                 "polygon": point_to_bbox_polygon(lon, lat, pad=0.02),
                 "desa": props.get("wilayah", "Tidak Diketahui"),
                 "count": 1,
-                "disaster_type": props.get("disaster_type", "Bencana Alam"),
+                "disaster_type": props.get("disaster_type", "Banjir / Tanah Longsor"),
                 "logistics": {},
                 "lon": lon,
                 "lat": lat

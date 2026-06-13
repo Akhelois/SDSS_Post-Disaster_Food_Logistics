@@ -1,6 +1,5 @@
 import React from 'react';
 import { LuRadar } from 'react-icons/lu';
-import '../styles/LoadingOverlay.css';
 
 export default function LoadingOverlay() {
   return (
