@@ -124,7 +124,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark' }) {
           <div className="tt-divider" />
           <div className="tt-row"><span className="tt-label">Desa</span><span className="tt-val">{obj.desa || 'Tidak Diketahui'}</span></div>
           <div className="tt-row"><span className="tt-label">Kerusakan</span><span className="tt-val">{obj.count} unit</span></div>
-          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{obj.count * 4} jiwa</span></div>
+          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{obj.population || obj.count * 4} jiwa</span></div>
           {obj.logistics && (
             <>
               <div className="tt-divider" />

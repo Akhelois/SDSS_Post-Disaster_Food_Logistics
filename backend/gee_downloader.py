@@ -123,7 +123,7 @@ def detect_change(pre_image, post_image, region):
         )
         built_ratio = built_stats.getInfo().get('built', 0)
 
-        if built_ratio is None or built_ratio < 0.03:
+        if built_ratio is None or built_ratio < 0.10:
             return 0
 
     except Exception:
@@ -165,11 +165,12 @@ def download_image_as_png(image, region, filename):
     return False
 
 
-def create_label_json(bbox, scene_id, image_date):
+def create_label_json(bbox, scene_id, image_date, pre_img_name=None):
     lon_min, lat_min, lon_max, lat_max = bbox
     label = {
         "metadata": {
             "img_name": f"{scene_id}_post_disaster.png",
+            "pre_img_name": pre_img_name,
             "geotransform": [lon_min, (lon_max - lon_min) / 1024, 0,
                              lat_max, 0, -(lat_max - lat_min) / 1024],
             "capture_date": image_date,
@@ -237,22 +238,33 @@ def process_cell(cell_info, days_before=7):
             return False
 
         scene_id = f"{name}_{image_date.replace('-', '')}"
-        filename = f"{scene_id}_post_disaster.png"
+        filename_post = f"{scene_id}_post_disaster.png"
+        filename_pre = f"{scene_id}_pre_disaster.png"
 
         if scene_id in processed_scenes:
             print(f"    [{name}] Scene sudah pernah diproses, skip")
             return False
 
-        if os.path.exists(os.path.join(INPUT_IMAGES, filename)):
+        if os.path.exists(os.path.join(INPUT_IMAGES, filename_post)):
             return False
 
-        if not download_image_as_png(post_col.first(), region_geom, filename):
+        # Download post-disaster image
+        if not download_image_as_png(post_col.first(), region_geom, filename_post):
             return False
 
-        create_label_json(bbox, scene_id, image_date)
+        # Download pre-disaster image (untuk referensi change detection)
+        pre_img_name = None
+        try:
+            if download_image_as_png(pre_col.first(), region_geom, filename_pre):
+                pre_img_name = filename_pre
+                print(f"    [{name}] Pre-disaster image tersimpan: {filename_pre}")
+        except Exception as e:
+            print(f"    [{name}] Pre-disaster download gagal (lanjut tanpa pre): {e}")
+
+        create_label_json(bbox, scene_id, image_date, pre_img_name=pre_img_name)
         processed_scenes.add(scene_id)
         save_manifest(processed_scenes)
-        print(f"    [{name}] Tersimpan: {filename}")
+        print(f"    [{name}] Tersimpan: {filename_post}")
         return True
 
     except Exception as e:

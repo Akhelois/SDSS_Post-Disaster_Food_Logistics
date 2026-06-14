@@ -1,3 +1,4 @@
+# from model import train_model
 import os
 import json
 import shutil
@@ -105,54 +106,75 @@ def is_in_indonesia(buildings, bbox):
     return lon_min <= lon <= lon_max and lat_min <= lat <= lat_max
 
 
-# ==================== ARSITEKTUR: ResNet50-UNet ====================
-def build_resnet_unet(input_shape=(256, 256, 3)):
+def build_resnet_unet(input_shape=(256, 256, 6)):
     """
-    ResNet50-UNet: Encoder pretrained ImageNet + Decoder U-Net.
-    Menggantikan U-Net polos yang hanya menghasilkan confidence 20-37%.
+    DualResNet50-UNet: 6-channel input (pre+post disaster).
+      Channel 0-2: Pre-disaster RGB
+      Channel 3-5: Post-disaster RGB
+    Shared encoder mengekstrak fitur dari kedua citra.
+    Bridge: gabungan pre+post → Conv 2048.
+    Decoder: U-Net dengan skip connections dari branch post-disaster.
     """
-    base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
+    # Shared ResNet50 encoder (weights ImageNet)
+    _base = ResNet50(weights='imagenet', include_top=False, input_shape=(256, 256, 3))
+    skip_names = ['conv1_relu', 'conv2_block3_out', 'conv3_block4_out',
+                  'conv4_block6_out', 'conv5_block3_out']
+    encoder_model = models.Model(
+        inputs=_base.input,
+        outputs=[_base.get_layer(n).output for n in skip_names],
+        name='shared_resnet50'
+    )
 
-    s1 = base_model.get_layer('conv1_relu').output       # 128x128
-    s2 = base_model.get_layer('conv2_block3_out').output  # 64x64
-    s3 = base_model.get_layer('conv3_block4_out').output  # 32x32
-    s4 = base_model.get_layer('conv4_block6_out').output  # 16x16
-    bridge = base_model.get_layer('conv5_block3_out').output  # 8x8
+    # Input 6-channel
+    inputs = layers.Input(shape=input_shape, name='input_6ch')
+    pre_img  = inputs[:, :, :, :3]
+    post_img = inputs[:, :, :, 3:]
 
-    u4 = layers.Conv2DTranspose(512, (2,2), strides=(2,2), padding='same')(bridge)
-    u4 = layers.concatenate([u4, s4])
-    u4 = layers.Conv2D(512, (3,3), activation='relu', padding='same')(u4)
+    # Forward kedua cabang (shared weights)
+    pre_s1, pre_s2, pre_s3, pre_s4, pre_bridge    = encoder_model(pre_img)
+    post_s1, post_s2, post_s3, post_s4, post_bridge = encoder_model(post_img)
+
+    # Fusi bridge: concat → reduksi ke 2048
+    bridge = layers.concatenate([post_bridge, pre_bridge], name='bridge_fusion')
+    bridge = layers.Conv2D(2048, (1, 1), activation='relu', padding='same', name='bridge_reduce')(bridge)
+    bridge = layers.BatchNormalization(name='bridge_bn')(bridge)
+
+    # Decoder U-Net (skip connections dari post branch)
+    u4 = layers.Conv2DTranspose(512, (2, 2), strides=(2, 2), padding='same')(bridge)
+    u4 = layers.concatenate([u4, post_s4])
+    u4 = layers.Conv2D(512, (3, 3), activation='relu', padding='same')(u4)
     u4 = layers.BatchNormalization()(u4)
-    u4 = layers.Conv2D(512, (3,3), activation='relu', padding='same')(u4)
+    u4 = layers.Conv2D(512, (3, 3), activation='relu', padding='same')(u4)
     u4 = layers.BatchNormalization()(u4)
 
-    u3 = layers.Conv2DTranspose(256, (2,2), strides=(2,2), padding='same')(u4)
-    u3 = layers.concatenate([u3, s3])
-    u3 = layers.Conv2D(256, (3,3), activation='relu', padding='same')(u3)
+    u3 = layers.Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same')(u4)
+    u3 = layers.concatenate([u3, post_s3])
+    u3 = layers.Conv2D(256, (3, 3), activation='relu', padding='same')(u3)
     u3 = layers.BatchNormalization()(u3)
-    u3 = layers.Conv2D(256, (3,3), activation='relu', padding='same')(u3)
+    u3 = layers.Conv2D(256, (3, 3), activation='relu', padding='same')(u3)
     u3 = layers.BatchNormalization()(u3)
 
-    u2 = layers.Conv2DTranspose(128, (2,2), strides=(2,2), padding='same')(u3)
-    u2 = layers.concatenate([u2, s2])
-    u2 = layers.Conv2D(128, (3,3), activation='relu', padding='same')(u2)
+    u2 = layers.Conv2DTranspose(128, (2, 2), strides=(2, 2), padding='same')(u3)
+    u2 = layers.concatenate([u2, post_s2])
+    u2 = layers.Conv2D(128, (3, 3), activation='relu', padding='same')(u2)
     u2 = layers.BatchNormalization()(u2)
-    u2 = layers.Conv2D(128, (3,3), activation='relu', padding='same')(u2)
+    u2 = layers.Conv2D(128, (3, 3), activation='relu', padding='same')(u2)
     u2 = layers.BatchNormalization()(u2)
 
-    u1 = layers.Conv2DTranspose(64, (2,2), strides=(2,2), padding='same')(u2)
-    u1 = layers.concatenate([u1, s1])
-    u1 = layers.Conv2D(64, (3,3), activation='relu', padding='same')(u1)
+    u1 = layers.Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(u2)
+    u1 = layers.concatenate([u1, post_s1])
+    u1 = layers.Conv2D(64, (3, 3), activation='relu', padding='same')(u1)
     u1 = layers.BatchNormalization()(u1)
-    u1 = layers.Conv2D(64, (3,3), activation='relu', padding='same')(u1)
+    u1 = layers.Conv2D(64, (3, 3), activation='relu', padding='same')(u1)
     u1 = layers.BatchNormalization()(u1)
 
-    u0 = layers.Conv2DTranspose(32, (2,2), strides=(2,2), padding='same')(u1)
-    u0 = layers.Conv2D(32, (3,3), activation='relu', padding='same')(u0)
-    u0 = layers.Conv2D(32, (3,3), activation='relu', padding='same')(u0)
+    u0 = layers.Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(u1)
+    u0 = layers.Conv2D(32, (3, 3), activation='relu', padding='same')(u0)
+    u0 = layers.Conv2D(32, (3, 3), activation='relu', padding='same')(u0)
 
-    outputs = layers.Conv2D(1, (1,1), activation='sigmoid')(u0)
-    return models.Model(inputs=base_model.input, outputs=outputs)
+    outputs = layers.Conv2D(1, (1, 1), activation='sigmoid', name='output_mask')(u0)
+    return models.Model(inputs=inputs, outputs=outputs, name='DualResNet50_UNet_6ch')
+
 
 
 def bce_dice_loss(y_true, y_pred):
@@ -190,7 +212,6 @@ def dice_coef(y_true, y_pred):
     return (2. * intersection + 1.0) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + 1.0)
 
 
-# ==================== MODEL LOADING ====================
 def load_model():
     """Load model dari .h5 file, atau bangun dari awal jika belum ada."""
     print(f"[{now()}] Loading model dari {MODEL_PATH}...")
@@ -224,7 +245,6 @@ def load_model():
     return model
 
 
-# ==================== CONTINUAL LEARNING ====================
 def backup_model():
     """Simpan salinan model sebelum di-fine-tune (safety net)."""
     if not os.path.exists(MODEL_PATH):
@@ -282,13 +302,23 @@ def incremental_train(model, processed_images, processed_masks):
     print(f"[{now()}] Tersimpan: {MODEL_PATH}")
 
 
-# ==================== DETEKSI ====================
-def predict_mask(model, img_path):
-    img = cv2.imread(img_path)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = cv2.resize(img, IMG_SIZE) / 255.0
-    return model.predict(np.expand_dims(img, 0), verbose=0)[0, :, :, 0]
-
+def predict_mask(model, img_path, pre_img_path=None):
+    """Prediksi mask dengan opsional pre-disaster image."""
+    post_img = cv2.imread(img_path)
+    post_img = cv2.cvtColor(post_img, cv2.COLOR_BGR2RGB)
+    post_img = cv2.resize(post_img, IMG_SIZE) / 255.0
+    
+    if pre_img_path and os.path.exists(pre_img_path):
+        pre_img = cv2.imread(pre_img_path)
+        pre_img = cv2.cvtColor(pre_img, cv2.COLOR_BGR2RGB)
+        pre_img = cv2.resize(pre_img, IMG_SIZE) / 255.0
+        # Concatenate: [pre_R, pre_G, pre_B, post_R, post_G, post_B]
+        combined = np.concatenate([pre_img, post_img], axis=-1)  # (256, 256, 6)
+    else:
+        # Fallback: duplicate post as pre (jika pre tidak tersedia)
+        combined = np.concatenate([post_img, post_img], axis=-1)
+    
+    return model.predict(np.expand_dims(combined, 0), verbose=0)[0, :, :, 0]
 
 def parse_label(label_path):
     with open(label_path, 'r') as f:
@@ -368,7 +398,6 @@ def load_existing():
     return gpd.GeoDataFrame(columns=['geometry', 'confidence', 'scene_id', 'processed_at', 'status'])
 
 
-# ==================== PIPELINE UTAMA ====================
 def run_pipeline(model):
     png_files = [f for f in os.listdir(INPUT_IMAGES)
                  if f.endswith('.png') and 'post_disaster' in f]
@@ -405,7 +434,17 @@ def run_pipeline(model):
                 os.remove(label_path)
                 continue
 
-            mask = predict_mask(model, img_path)
+            pre_img_path = None
+            try:
+                with open(label_path, 'r') as f:
+                    label_data = json.load(f)
+                pre_img_name = label_data.get('metadata', {}).get('pre_img_name')
+                if pre_img_name:
+                    pre_img_path = os.path.join(INPUT_IMAGES, pre_img_name)
+            except Exception:
+                pass
+
+            mask = predict_mask(model, img_path, pre_img_path=pre_img_path)
             pts  = mask_to_points(mask, buildings, bbox)
 
             print(f"    {len(pts)} titik kerusakan terdeteksi (conf >= {CONF_THRESHOLD})")
@@ -453,9 +492,20 @@ def run_pipeline(model):
         try:
             gdf_desa = gpd.read_file(DESA_SHP).to_crs(epsg=4326)
             adm_cols = [c for c in gdf_desa.columns if c.startswith('ADM')]
-            new_gdf  = gpd.sjoin_nearest(new_gdf, gdf_desa[adm_cols + ['geometry']],
+
+            # Filter: hanya titik yang jatuh di dalam polygon desa (permukiman)
+            pts_within = gpd.sjoin(new_gdf, gdf_desa[['geometry']], how='inner', predicate='within')
+            kept_indices = pts_within.index.unique()
+            before_count = len(new_gdf)
+            new_gdf = new_gdf.loc[new_gdf.index.isin(kept_indices)].copy()
+            removed = before_count - len(new_gdf)
+            if removed > 0:
+                print(f"[{now()}] Filter permukiman: {removed} titik di luar polygon desa dibuang")
+
+            # Spatial join untuk info administratif
+            new_gdf = gpd.sjoin_nearest(new_gdf, gdf_desa[adm_cols + ['geometry']],
                                           how='left', max_distance=0.5)
-            new_gdf  = new_gdf.drop(columns=['index_right'], errors='ignore')
+            new_gdf = new_gdf.drop(columns=['index_right'], errors='ignore')
         except Exception as e:
             print(f"[{now()}] Spatial join gagal: {e}")
 

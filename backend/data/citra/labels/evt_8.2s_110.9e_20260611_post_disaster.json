@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "img_name": "evt_8.2s_110.9e_20260611_post_disaster.png",
+    "geotransform": [
+      110.67539393939396,
+      0.00048828125,
+      0,
+      -7.936484848484849,
+      0,
+      -0.00048828125
+    ],
+    "capture_date": "2026-06-11",
+    "source": "Sentinel-2 via GEE (Event-Driven)",
+    "lng_lat": [
+      110.92539393939396,
+      -8.186484848484849
+    ]
+  },
+  "features": {
+    "lng_lat": []
+  }
+}

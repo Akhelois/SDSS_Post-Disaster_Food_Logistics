@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { PolygonLayer, ScatterplotLayer } from '@deck.gl/layers';
+import { PolygonLayer } from '@deck.gl/layers';
 import axios from 'axios';
 import { LuRadar, LuMoon, LuSun, LuTriangleAlert, LuMap, LuUsers, LuTable2 } from 'react-icons/lu';
 import './styles/App.css';
 
 import DeckMap from './components/DeckMap';
-import LoadingOverlay from './components/LoadingOverlay';
+import LoadingSkeleton from './components/LoadingSkeleton';
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -19,7 +19,8 @@ export default function App() {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    axios.get('http://127.0.0.1:8000/')
+    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+    axios.get(`${API_URL}/`)
       .then(res => {
         setData(res.data);
         setLoading(false);
@@ -55,39 +56,30 @@ export default function App() {
   const mapData = data?.map_data || {};
   const metrics = data?.metrics || {};
   const redZones = mapData.red_zones || [];
-  const rawPoints = mapData.raw_points || [];
+
+  // Hapus semua raw points karena user tidak ingin melihat titik atau heatmap
+  const allRawPoints = [];
 
   const layers = useMemo(() => {
     const filteredZones = redZones.filter(d => d.polygon);
     
     return [
-      ...(rawPoints.length > 0 ? [
-        new ScatterplotLayer({
-          id: 'damage-points',
-          data: rawPoints,
-          getPosition: d => [d.lon, d.lat],
-          getFillColor: [239, 68, 68, 180],
-          getRadius: 15,
-          radiusMinPixels: 2,
-          pickable: true
-        })
-      ] : []),
       ...(filteredZones.length > 0 ? [
         new PolygonLayer({
           id: 'damage-zones',
           data: filteredZones,
           getPolygon: d => d.polygon,
           getFillColor: d => {
-            if (d.priority_label === 'Kritis') return [239, 68, 68, 60];
-            if (d.priority_label === 'Tinggi') return [249, 115, 22, 60];
-            if (d.priority_label === 'Sedang') return [234, 179, 8, 60];
-            return [34, 197, 94, 60];
+            if (d.priority_label === 'Kritis') return [239, 68, 68, 120];
+            if (d.priority_label === 'Tinggi') return [249, 115, 22, 120];
+            if (d.priority_label === 'Sedang') return [234, 179, 8, 120];
+            return [34, 197, 94, 120];
           },
           getLineColor: d => {
-            if (d.priority_label === 'Kritis') return [239, 68, 68, 180];
-            if (d.priority_label === 'Tinggi') return [249, 115, 22, 180];
-            if (d.priority_label === 'Sedang') return [234, 179, 8, 180];
-            return [34, 197, 94, 180];
+            if (d.priority_label === 'Kritis') return [239, 68, 68, 255];
+            if (d.priority_label === 'Tinggi') return [249, 115, 22, 255];
+            if (d.priority_label === 'Sedang') return [234, 179, 8, 255];
+            return [34, 197, 94, 255];
           },
           lineWidthMinPixels: 1.5,
           filled: true,
@@ -97,7 +89,7 @@ export default function App() {
         })
       ] : [])
     ];
-  }, [rawPoints, redZones]);
+  }, [allRawPoints, redZones]);
 
   const handleRowClick = (zone) => {
     setFlyToTarget({ 
@@ -110,7 +102,8 @@ export default function App() {
   const handleResolve = (e, desa) => {
     e.stopPropagation();
     if (window.confirm(`Tandai bencana di desa ${desa} sebagai selesai dan hapus dari prioritas?`)) {
-      axios.delete(`http://127.0.0.1:8000/resolve/${desa}`)
+      const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+      axios.delete(`${API_URL}/resolve/${desa}`)
         .then(() => {
           fetchData();
         })
@@ -126,7 +119,6 @@ export default function App() {
 
   return (
     <div className="dashboard-layout">
-      {loading && <LoadingOverlay />}
 
       <header className="dashboard-header" id="dashboard-header">
         <div className="header-left">
@@ -136,7 +128,7 @@ export default function App() {
           <div>
             <h1 className="header-title">SDSS Logistik Bencana Nasional</h1>
             <p className="header-subtitle">
-              Sistem Pendukung Keputusan Otomatis: Peta Prioritas Distribusi (Data H+1 hingga H+5 Pasca-Bencana)
+              Sistem Pendukung Keputusan Otomatis: Peta Prioritas Distribusi (Data Realtime hingga H+5 Pasca-Bencana)
             </p>
           </div>
         </div>
@@ -154,6 +146,7 @@ export default function App() {
       </header>
 
       <main className="dashboard-content">
+        {loading ? <LoadingSkeleton /> : (<>
 
         <div className="metrics-row" id="metrics-section">
           <div className="metric-card" id="metric-wilayah">
@@ -243,11 +236,8 @@ export default function App() {
                     <tr key={i} onClick={() => handleRowClick(zone)}>
                       <td>
                         <span className={`priority-badge ${zone.priority_label?.toLowerCase()}`}>
-                          #{zone.priority_rank} - {zone.priority_label}
+                          {zone.priority_label}
                         </span>
-                        <div style={{ marginTop: '4px', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-                          Skor: {zone.priority_score?.toFixed(2)}
-                        </div>
                       </td>
                       <td style={{ fontWeight: 600 }}>{zone.desa || 'Tidak Diketahui'}</td>
                       <td>
@@ -258,7 +248,7 @@ export default function App() {
                       </td>
                       <td>
                         <span className={`unit-badge ${getUnitLevel(zone.count)}`} style={{ padding: '4px 8px', borderRadius: '4px' }}>
-                          {zone.count} Bangunan Rusak
+                          {zone.count} Bangunan Rusak | {zone.population || zone.count * 4} Jiwa
                         </span>
                       </td>
                       <td>
@@ -289,6 +279,7 @@ export default function App() {
             </div>
           )}
         </div>
+        </>)}
       </main>
     </div>
   );

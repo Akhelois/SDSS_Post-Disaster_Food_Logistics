@@ -131,7 +131,9 @@ def get_dashboard_data():
         return {"error": "standby"}
 
     if gdf_desa is not None and not gdf_desa.empty:
-        is_bmkg = df_raw.get('source', pd.Series(dtype=str)).fillna('') == 'BMKG'
+        if 'source' not in df_raw.columns:
+            df_raw['source'] = 'Satelit'
+        is_bmkg = df_raw['source'].fillna('') == 'BMKG'
         df_bmkg = df_raw[is_bmkg].copy()
         df_satelit = df_raw[~is_bmkg].copy()
 
@@ -229,6 +231,12 @@ def get_dashboard_data():
                     "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
                 }
 
+                # Kumpulkan titik mentah
+                raw_pts = []
+                desa_points = df_valid[df_valid['_desa_idx'] == row['_desa_idx']]
+                for _, pt in desa_points.iterrows():
+                    raw_pts.append([float(pt['lon']), float(pt['lat'])])
+
                 rz_data.append({
                     "polygon": polygon,
                     "desa": str(row['desa']),
@@ -237,6 +245,7 @@ def get_dashboard_data():
                     "logistics": logistics,
                     "lon": float(desa_geom.centroid.x),
                     "lat": float(desa_geom.centroid.y),
+                    "raw_points": raw_pts,
                 })
             except Exception:
                 continue
@@ -282,6 +291,10 @@ def get_dashboard_data():
                     "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
                 }
 
+                raw_pts = []
+                for _, pt in group.iterrows():
+                    raw_pts.append([float(pt['lon']), float(pt['lat'])])
+
                 rz_data.append({
                     "polygon": polygon,
                     "desa": str(name),
@@ -290,6 +303,7 @@ def get_dashboard_data():
                     "logistics": logistics,
                     "lon": float(avg_lon),
                     "lat": float(avg_lat),
+                    "raw_points": raw_pts,
                 })
             except Exception:
                 continue
@@ -341,6 +355,36 @@ def get_dashboard_data():
             "raw_points": filtered_points
         }
     }
+
+
+@app.delete("/resolve/{desa}")
+def resolve_desa(desa: str):
+    """Tandai bencana di desa tertentu sebagai selesai."""
+    import json
+    geojson_path = "output/sdss_result.geojson"
+    try:
+        if not os.path.exists(geojson_path):
+            return {"error": "no data"}
+        with open(geojson_path, 'r') as f:
+            geojson = json.load(f)
+        
+        resolved_count = 0
+        for feature in geojson.get("features", []):
+            props = feature.get("properties", {})
+            wilayah = props.get("wilayah", "")
+            adm4 = props.get("ADM4_EN", "")
+            if (desa.lower() in wilayah.lower() or 
+                desa.lower() in adm4.lower() or
+                desa.lower() == adm4.lower()):
+                props["status"] = "resolved"
+                resolved_count += 1
+        
+        with open(geojson_path, 'w') as f:
+            json.dump(geojson, f, indent=2)
+        
+        return {"resolved": resolved_count, "desa": desa}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 @app.get("/status")

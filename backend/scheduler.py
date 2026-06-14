@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from gee_downloader import scan_disaster_area
 from shapely.geometry import Point
+import geopandas as gpd
 import services
 
 BMKG_GEMPA_URL = "https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json"
@@ -25,6 +26,46 @@ HEADERS = {
 }
 
 os.makedirs("output", exist_ok=True)
+
+
+def is_residential_area(lat, lon, min_built_ratio=0.03):
+    """
+    Validasi apakah koordinat berada di daerah permukiman.
+    Menggunakan shapefile batas desa + opsional GEE Dynamic World.
+    Return True jika di area permukiman, False jika lautan/hutan/gunung.
+    """
+    try:
+        gdf_desa = services.load_desa_boundaries()
+        if gdf_desa is None or gdf_desa.empty:
+            print(f"  [Residential Check] Shapefile tidak tersedia, skip validasi")
+            return True  # Fallback: allow if no shapefile
+
+        pt = Point(lon, lat)
+        # Cek apakah titik jatuh di dalam polygon desa manapun
+        contains = gdf_desa.geometry.contains(pt)
+        if contains.any():
+            print(f"  [Residential Check] ({lat:.4f}, {lon:.4f}) -> DALAM polygon desa")
+            return True
+
+        # Cek jarak ke desa terdekat (buffer 5km ≈ 0.045 derajat)
+        pt_gdf = gpd.GeoDataFrame(geometry=[pt], crs="EPSG:4326").to_crs(epsg=3857)
+        desa_proj = gdf_desa.to_crs(epsg=3857)
+        distances = desa_proj.geometry.distance(pt_gdf.geometry.iloc[0])
+        min_dist_m = distances.min()
+
+        if min_dist_m <= 5000:  # 5km threshold
+            nearest_idx = distances.idxmin()
+            nearest_desa = gdf_desa.iloc[nearest_idx]
+            desa_name = nearest_desa.get('ADM4_EN', 'Unknown')
+            print(f"  [Residential Check] ({lat:.4f}, {lon:.4f}) -> {min_dist_m:.0f}m dari desa {desa_name} -> PERMUKIMAN")
+            return True
+        else:
+            print(f"  [Residential Check] ({lat:.4f}, {lon:.4f}) -> {min_dist_m:.0f}m dari desa terdekat -> BUKAN PERMUKIMAN (skip)")
+            return False
+
+    except Exception as e:
+        print(f"  [Residential Check] Error: {e} -> fallback allow")
+        return True  # Fallback: allow on error
 
 
 def now():
@@ -92,7 +133,9 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
             gdf_desa = services.load_desa_boundaries()
             if gdf_desa is not None:
                 pt = Point(lon, lat)
-                distances = gdf_desa.geometry.distance(pt)
+                pt_gdf = gpd.GeoDataFrame(geometry=[pt], crs="EPSG:4326").to_crs(epsg=3857)
+                desa_proj = gdf_desa.to_crs(epsg=3857)
+                distances = desa_proj.geometry.distance(pt_gdf.geometry.iloc[0])
                 nearest_idx = distances.idxmin()
                 nearest_desa = gdf_desa.iloc[nearest_idx]
 
@@ -165,14 +208,18 @@ def check_gempa():
                             "wilayah": wilayah,
                             "lat": lat, "lon": lon
                         })
-                        write_event_to_geojson(lat, lon, "Gempa Bumi", wilayah,
-                                              severity="Severe", event_id=event_id)
-                        # count = scan_disaster_area(
-                        #     lat, lon, magnitude, event_id, wilayah,
-                        #     disaster_type="Gempa Bumi"
-                        # )
-                        # if count > 0:
-                        #     new_images = True
+                        # Validasi: hanya proses jika daerah permukiman
+                        if is_residential_area(lat, lon):
+                            write_event_to_geojson(lat, lon, "Gempa Bumi", wilayah,
+                                                  severity="Severe", event_id=event_id)
+                            count = scan_disaster_area(
+                                lat, lon, magnitude, event_id, wilayah,
+                                disaster_type="Gempa Bumi"
+                            )
+                            if count > 0:
+                                new_images = True
+                        else:
+                            print(f"  -> Skip: bukan daerah permukiman")
                     else:
                         skip_count += 1
 
@@ -310,17 +357,21 @@ def check_cuaca_ekstrem():
                     "wilayah": wilayah,
                     "lat": lat, "lon": lon
                 })
-                write_event_to_geojson(lat, lon, disaster_type, wilayah,
-                                      severity=severity_text, event_id=event_id)
+                # Validasi: hanya proses jika daerah permukiman
+                if is_residential_area(lat, lon):
+                    write_event_to_geojson(lat, lon, disaster_type, wilayah,
+                                           severity=severity_text, event_id=event_id)
 
-                pseudo_magnitude = 6.0 if severity_text == "Extreme" else 5.5
-                count = scan_disaster_area(
-                    lat, lon, pseudo_magnitude, event_id, wilayah,
-                    disaster_type=disaster_type
-                )
-                if count > 0:
-                    trigger_count += 1
-                    new_images = True
+                    pseudo_magnitude = 6.0 if severity_text == "Extreme" else 5.5
+                    count = scan_disaster_area(
+                        lat, lon, pseudo_magnitude, event_id, wilayah,
+                        disaster_type=disaster_type
+                    )
+                    if count > 0:
+                        trigger_count += 1
+                        new_images = True
+                else:
+                    print(f"  -> Skip: bukan daerah permukiman")
 
             except Exception as e:
                 print(f"[{now()}] Error parsing CAP {cap_url}: {e}")
@@ -344,6 +395,31 @@ def check_all_sources():
         run_pipeline()
 
 
+def update_bps_data_monthly():
+    """Tugas latar belakang untuk sinkronisasi data BPS bulanan."""
+    bps_file = "bps_data.json"
+    print(f"[{now()}] Sinkronisasi Data Kepadatan Penduduk BPS (Bulanan)...")
+    try:
+        # Simulasi fetch ke BPS API / Central Repo
+        import urllib.request
+        import json
+        
+        # Endpoint simulasi
+        url = "https://raw.githubusercontent.com/BPS-Indonesia/OpenData/main/kepadatan_penduduk.json"
+        
+        # Jika dalam mode produksi, URL ini akan mengunduh data terbaru
+        # Untuk tujuan demo, jika gagal fetch kita biarkan saja (akan menggunakan lokal)
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=5) as response:
+            data = json.loads(response.read().decode())
+            if isinstance(data, dict) and 'jawa' in data:
+                with open(bps_file, 'w') as f:
+                    json.dump(data, f, indent=4)
+                print(f"[{now()}] Data BPS berhasil diupdate!")
+    except Exception as e:
+        print(f"[{now()}] Sync BPS gagal atau menggunakan data lokal: {e}")
+
+
 if __name__ == "__main__":
     print(f"[{now()}] === Multi-Hazard Event-Driven Scheduler ===")
     print(f"[{now()}] Sumber Data:")
@@ -354,7 +430,14 @@ if __name__ == "__main__":
     print(f"[{now()}] Tekan Ctrl+C untuk berhenti\n")
 
     check_all_sources()
+    update_bps_data_monthly()
+    last_bps_update = datetime.now()
 
     while True:
         time.sleep(CHECK_INTERVAL_MINUTES * 60)
         check_all_sources()
+        
+        # Cek apakah sudah 30 hari sejak update BPS terakhir
+        if (datetime.now() - last_bps_update).days >= 30:
+            update_bps_data_monthly()
+            last_bps_update = datetime.now()

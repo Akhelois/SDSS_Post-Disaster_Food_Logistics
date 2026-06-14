@@ -188,8 +188,19 @@ def load_geodata(path):
                 pass
         return datetime.datetime.now()
 
+    for attempt in range(3):
+        try:
+            gdf = gpd.read_file(path).to_crs(epsg=4326)
+            break
+        except Exception as e:
+            if attempt < 2:
+                import time as _time
+                _time.sleep(0.3)
+                continue
+            print(f"Error loading geodata: {e}")
+            return None
+
     try:
-        gdf = gpd.read_file(path).to_crs(epsg=4326)
         if 'status' in gdf.columns:
             gdf = gdf[gdf['status'] == 'active'].copy()
             
@@ -197,7 +208,7 @@ def load_geodata(path):
         if 'scene_id' in gdf.columns:
             gdf['event_date'] = gdf.apply(lambda r: extract_event_date(r['scene_id'], r.get('processed_at')), axis=1)
             gdf['age_days'] = (now - gdf['event_date']).dt.total_seconds() / 86400.0
-            gdf = gdf[(gdf['age_days'] >= 1.0) & (gdf['age_days'] <= 5.0)].copy()
+            gdf = gdf[gdf['age_days'] <= 5.0].copy()
 
         if gdf.empty:
             return gdf
@@ -242,10 +253,50 @@ def calculate_priority_scores(zones):
     gudang_names = []
     gudang_coords_list = []
 
+    import json
+    import os
+    bps_file = "bps_data.json"
+    
+    # Rata-rata default BPS
+    default_bps = {
+        'jawa': 4.5, 'sumatera': 4.2, 'sulawesi': 4.0, 'kalimantan': 3.8,
+        'papua': 5.0, 'maluku': 4.8, 'bali': 4.1, 'nusa tenggara': 4.5, 'nasional': 4.0
+    }
+    
+    BPS_DENSITY = default_bps
+    if os.path.exists(bps_file):
+        try:
+            with open(bps_file, 'r') as f:
+                BPS_DENSITY = json.load(f)
+        except Exception:
+            pass
+    else:
+        try:
+            with open(bps_file, 'w') as f:
+                json.dump(default_bps, f, indent=4)
+        except Exception:
+            pass
+
+    def get_bps_multiplier(wilayah):
+        w = str(wilayah).lower()
+        for region, density in BPS_DENSITY.items():
+            if region in w:
+                return density
+        return BPS_DENSITY.get('nasional', 4.0)
+
     for z in zones:
         count = z.get('count', 0)
+        desa = z.get('desa', '')
+        
+        # Menggunakan standar BPS untuk menghitung estimasi jiwa terdampak
+        bps_multiplier = get_bps_multiplier(desa)
+        pop_estimate = int(count * bps_multiplier)
+        
+        z['population'] = pop_estimate
+        
         densities.append(count)
-        populations.append(count * 4)
+        populations.append(pop_estimate)
+        
         dist_km, g_name, g_coords = nearest_gudang_distance_km(z['lat'], z['lon'])
         distances.append(dist_km)
         gudang_names.append(g_name)
