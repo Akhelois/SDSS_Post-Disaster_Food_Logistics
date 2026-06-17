@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { PolygonLayer } from '@deck.gl/layers';
+import { PolygonLayer, ScatterplotLayer } from '@deck.gl/layers';
 import axios from 'axios';
 import { LuRadar, LuMoon, LuSun, LuTriangleAlert, LuMap, LuUsers, LuTable2 } from 'react-icons/lu';
 import './styles/App.css';
@@ -57,39 +57,123 @@ export default function App() {
   const metrics = data?.metrics || {};
   const redZones = mapData.red_zones || [];
 
-  // Hapus semua raw points karena user tidak ingin melihat titik atau heatmap
-  const allRawPoints = [];
+  // Kumpulkan building footprints (zona DENGAN bangunan OSM)
+  const buildingFootprints = useMemo(() => {
+    const buildings = [];
+    for (const zone of redZones) {
+      const footprints = zone.building_footprints || [];
+      for (const fp of footprints) {
+        buildings.push({
+          polygon: fp,
+          priority: zone.priority_label,
+          desa: zone.desa,
+          disaster_type: zone.disaster_type,
+          count: zone.count,
+          population: zone.population,
+          logistics: zone.logistics,
+        });
+      }
+    }
+    return buildings;
+  }, [redZones]);
+
+  // Kumpulkan heatmap points (zona TANPA bangunan OSM → pakai heatmap overlay)
+  const heatmapPoints = useMemo(() => {
+    const points = [];
+    for (const zone of redZones) {
+      const hasBuildings = zone.building_footprints && zone.building_footprints.length > 0;
+      if (!hasBuildings && zone.raw_points && zone.raw_points.length > 0) {
+        for (const pt of zone.raw_points) {
+          points.push({
+            position: [pt[0], pt[1]],
+            priority: zone.priority_label,
+            desa: zone.desa,
+            count: zone.count,
+          });
+        }
+      }
+    }
+    return points;
+  }, [redZones]);
 
   const layers = useMemo(() => {
     const filteredZones = redZones.filter(d => d.polygon);
     
+    const priorityFill = (label) => {
+      if (label === 'Kritis') return [239, 68, 68];
+      if (label === 'Tinggi') return [249, 115, 22];
+      if (label === 'Sedang') return [234, 179, 8];
+      return [34, 197, 94];
+    };
+    
     return [
+      // Layer 1: Polygon desa (batas area terdampak)
       ...(filteredZones.length > 0 ? [
         new PolygonLayer({
           id: 'damage-zones',
           data: filteredZones,
           getPolygon: d => d.polygon,
-          getFillColor: d => {
-            if (d.priority_label === 'Kritis') return [239, 68, 68, 120];
-            if (d.priority_label === 'Tinggi') return [249, 115, 22, 120];
-            if (d.priority_label === 'Sedang') return [234, 179, 8, 120];
-            return [34, 197, 94, 120];
-          },
-          getLineColor: d => {
-            if (d.priority_label === 'Kritis') return [239, 68, 68, 255];
-            if (d.priority_label === 'Tinggi') return [249, 115, 22, 255];
-            if (d.priority_label === 'Sedang') return [234, 179, 8, 255];
-            return [34, 197, 94, 255];
-          },
-          lineWidthMinPixels: 1.5,
+          getFillColor: d => [...priorityFill(d.priority_label), 25],
+          getLineColor: d => [...priorityFill(d.priority_label), 180],
+          lineWidthMinPixels: 2,
           filled: true,
           stroked: true,
           pickable: true,
           extruded: false
         })
+      ] : []),
+
+      // Layer 2: Building footprints — warna di bangunan langsung (dari OSM)
+      ...(buildingFootprints.length > 0 ? [
+        new PolygonLayer({
+          id: 'building-footprints',
+          data: buildingFootprints,
+          getPolygon: d => d.polygon,
+          getFillColor: d => [...priorityFill(d.priority), 190],
+          getLineColor: d => [...priorityFill(d.priority), 240],
+          lineWidthMinPixels: 1,
+          filled: true,
+          stroked: true,
+          pickable: true,
+          extruded: false,
+        })
+      ] : []),
+
+      // Layer 3A: Heatmap overlay — glow besar (skala sesuai area bencana)
+      ...(heatmapPoints.length > 0 ? [
+        new ScatterplotLayer({
+          id: 'heatmap-glow',
+          data: heatmapPoints,
+          getPosition: d => d.position,
+          getFillColor: d => [...priorityFill(d.priority), 40],
+          getRadius: d => 60 + Math.sqrt(d.count) * 30,
+          radiusUnits: 'meters',
+          radiusMinPixels: 8,
+          stroked: false,
+          filled: true,
+          pickable: false,
+          antialiasing: true,
+        })
+      ] : []),
+
+      // Layer 3B: Heatmap overlay — inti terang (skala sesuai area bencana)
+      ...(heatmapPoints.length > 0 ? [
+        new ScatterplotLayer({
+          id: 'heatmap-core',
+          data: heatmapPoints,
+          getPosition: d => d.position,
+          getFillColor: d => [...priorityFill(d.priority), 120],
+          getRadius: d => 20 + Math.sqrt(d.count) * 10,
+          radiusUnits: 'meters',
+          radiusMinPixels: 4,
+          stroked: false,
+          filled: true,
+          pickable: true,
+          antialiasing: true,
+        })
       ] : [])
     ];
-  }, [allRawPoints, redZones]);
+  }, [redZones, buildingFootprints, heatmapPoints]);
 
   const handleRowClick = (zone) => {
     setFlyToTarget({ 

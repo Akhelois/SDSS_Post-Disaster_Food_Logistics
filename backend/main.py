@@ -8,7 +8,11 @@ from shapely.geometry import Point, box, MultiPoint
 from shapely.ops import unary_union
 import geopandas as gpd
 import os
+import json
+import time as _time
+import requests
 import threading
+from functools import lru_cache
 
 app = FastAPI(title="SDSS Logistik Bencana API", version="1.0.0")
 
@@ -58,6 +62,106 @@ def get_current_disaster_type(island_fallback='other', lat=None, lon=None):
     except Exception:
         pass
     return DISASTER_BY_ISLAND.get(island_fallback, 'Banjir / Tanah Longsor')
+
+
+# === OSM Building Footprints Cache ===
+_building_cache = {}  # key: (round(lat,3), round(lon,3)) -> list of building polygons
+_building_cache_time = {}  # key -> timestamp
+BUILDING_CACHE_TTL = 3600  # 1 hour
+
+def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
+    """
+    Fetch building footprints dari OpenStreetMap Overpass API.
+    Returns list of building polygon coords [[lon,lat], ...]
+    """
+    cache_key = (round(lat, 3), round(lon, 3))
+    now = _time.time()
+    
+    # Check cache
+    if cache_key in _building_cache:
+        if now - _building_cache_time.get(cache_key, 0) < BUILDING_CACHE_TTL:
+            return _building_cache[cache_key]
+    
+    try:
+        overpass_url = "https://overpass-api.de/api/interpreter"
+        query = f"""
+        [out:json][timeout:10];
+        way["building"](around:{radius_m},{lat},{lon});
+        out geom;
+        """
+        r = requests.get(overpass_url, params={'data': query}, timeout=12)
+        if r.status_code != 200:
+            return []
+        
+        data = r.json()
+        buildings = []
+        for elem in data.get('elements', [])[:max_buildings]:
+            if elem.get('type') == 'way' and 'geometry' in elem:
+                coords = [[round(n['lon'], 6), round(n['lat'], 6)] for n in elem['geometry']]
+                if len(coords) >= 4:  # Valid polygon
+                    buildings.append(coords)
+        
+        _building_cache[cache_key] = buildings
+        _building_cache_time[cache_key] = now
+        return buildings
+    except Exception as e:
+        print(f"  [OSM] Error fetching buildings: {e}")
+        return []
+
+
+def get_buildings_for_zone(raw_points, zone_lat, zone_lon):
+    """
+    Fetch building footprints untuk satu zona kerusakan.
+    - Jika ada bangunan di OSM: snap setiap damage point ke bangunan terdekat
+    - Jika tidak ada bangunan: return [] → frontend pakai heatmap overlay
+    TIDAK membuat fallback rectangles (menghindari kotak di jalan/laut).
+    """
+    if not raw_points:
+        return []
+    
+    buildings = fetch_buildings_near(zone_lat, zone_lon, radius_m=1500)
+    
+    if not buildings:
+        return []  # Frontend akan gunakan heatmap overlay
+    
+    # Parse buildings ke shapely polygons
+    from shapely.geometry import Polygon as ShapelyPolygon
+    building_data = []
+    for bcoords in buildings:
+        try:
+            bp = ShapelyPolygon(bcoords)
+            if bp.is_valid and not bp.is_empty:
+                building_data.append((bcoords, bp))
+        except Exception:
+            continue
+    
+    if not building_data:
+        return []
+    
+    # Untuk setiap damage point, cari bangunan OSM terdekat
+    matched_indices = set()
+    result = []
+    
+    for pt in raw_points:
+        pt_geom = Point(pt[0], pt[1])
+        
+        min_dist = float('inf')
+        nearest_idx = -1
+        for i, (bcoords, bpoly) in enumerate(building_data):
+            if i in matched_indices:
+                continue
+            dist = pt_geom.distance(bpoly)
+            if dist < min_dist:
+                min_dist = dist
+                nearest_idx = i
+        
+        # Hanya match jika bangunan dalam ~300m (≈0.003 derajat)
+        if nearest_idx >= 0 and min_dist < 0.003:
+            matched_indices.add(nearest_idx)
+            result.append(building_data[nearest_idx][0])
+    
+    return result
+
 
 def desa_to_polygon(geom, simplify_tol=0.0005, shrink_m=50):
     try:
@@ -186,6 +290,11 @@ def get_dashboard_data():
             df_raw['_desa'] = 'Tidak Diketahui'
             desa_col = '_desa'
     else:
+        # Untuk titik BMKG: gunakan wilayah sebagai fallback jika ADM4_EN NaN
+        if 'wilayah' in df_raw.columns and 'source' in df_raw.columns:
+            bmkg_mask = (df_raw['source'] == 'BMKG') & (df_raw[desa_col].isna())
+            if bmkg_mask.any():
+                df_raw.loc[bmkg_mask, desa_col] = df_raw.loc[bmkg_mask, 'wilayah']
         df_raw[desa_col] = df_raw[desa_col].fillna('Tidak Diketahui')
 
     df_raw['island'] = df_raw.apply(lambda r: services.assign_island(r['lat'], r['lon']), axis=1)
@@ -202,6 +311,8 @@ def get_dashboard_data():
         }
         if 'disaster_type' in df_valid.columns:
             agg_dict['disaster_type'] = ('disaster_type', lambda x: next((v for v in x if pd.notna(v) and str(v).strip() != ''), None))
+        if 'source' in df_valid.columns:
+            agg_dict['has_bmkg'] = ('source', lambda x: any(str(v).upper() == 'BMKG' for v in x if pd.notna(v)))
         
         desa_damage = df_valid.groupby('_desa_idx').agg(**agg_dict).reset_index()
 
@@ -213,7 +324,8 @@ def get_dashboard_data():
                 if polygon is None:
                     continue
                 damage_count = int(row['count'])
-                if damage_count < 2:
+                is_bmkg = row.get('has_bmkg', False)
+                if damage_count < 2 and not is_bmkg:
                     continue
 
                 island = row['island']
@@ -231,11 +343,23 @@ def get_dashboard_data():
                     "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
                 }
 
-                # Kumpulkan titik mentah
+                # Kumpulkan titik mentah (filter: hanya yang di daratan/dalam polygon desa)
                 raw_pts = []
+                desa_buffered = desa_geom.buffer(0.002)  # ~200m buffer tolerance
                 desa_points = df_valid[df_valid['_desa_idx'] == row['_desa_idx']]
                 for _, pt in desa_points.iterrows():
-                    raw_pts.append([float(pt['lon']), float(pt['lat'])])
+                    pt_geom = Point(float(pt['lon']), float(pt['lat']))
+                    if desa_buffered.contains(pt_geom):
+                        raw_pts.append([float(pt['lon']), float(pt['lat'])])
+                
+                if not raw_pts:
+                    continue  # Semua titik di laut, skip zona ini
+
+                zone_lon = float(desa_geom.centroid.x)
+                zone_lat = float(desa_geom.centroid.y)
+
+                # Fetch building footprints dari OSM
+                building_polys = get_buildings_for_zone(raw_pts, zone_lat, zone_lon)
 
                 rz_data.append({
                     "polygon": polygon,
@@ -243,9 +367,10 @@ def get_dashboard_data():
                     "count": damage_count,
                     "disaster_type": disaster_type,
                     "logistics": logistics,
-                    "lon": float(desa_geom.centroid.x),
-                    "lat": float(desa_geom.centroid.y),
+                    "lon": zone_lon,
+                    "lat": zone_lat,
                     "raw_points": raw_pts,
+                    "building_footprints": building_polys,
                 })
             except Exception:
                 continue
@@ -295,6 +420,8 @@ def get_dashboard_data():
                 for _, pt in group.iterrows():
                     raw_pts.append([float(pt['lon']), float(pt['lat'])])
 
+                building_polys = get_buildings_for_zone(raw_pts, float(avg_lat), float(avg_lon))
+
                 rz_data.append({
                     "polygon": polygon,
                     "desa": str(name),
@@ -304,6 +431,7 @@ def get_dashboard_data():
                     "lon": float(avg_lon),
                     "lat": float(avg_lat),
                     "raw_points": raw_pts,
+                    "building_footprints": building_polys,
                 })
             except Exception:
                 continue

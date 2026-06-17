@@ -58,7 +58,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark' }) {
   }, [flyToTarget]);
 
   const onHover = useCallback((info) => {
-    if (info.object && info.object.count !== undefined) {
+    if (info.object && (info.object.count !== undefined || info.object.desa !== undefined)) {
       setTooltip({
         x: info.x,
         y: info.y,

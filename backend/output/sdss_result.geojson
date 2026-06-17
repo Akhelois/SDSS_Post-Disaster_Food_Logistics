@@ -848,6 +848,348 @@
           -3.359375
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T03:27:44+00:00",
+        "processed_at": "2026-06-17 07:51:20",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "42 km Tenggara PALU-SULTENG (Desa Astina)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.269353,
+          -0.994203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T04:14:00+00:00",
+        "processed_at": "2026-06-17 07:55:47",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "29 km Tenggara PALU-SULTENG (Desa Rejeki)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.103124,
+          -1.084519
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T18:29:38+00:00",
+        "processed_at": "2026-06-17 07:55:55",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "54 km BaratLaut POSO-SULTENG (Desa Beraban)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.370932,
+          -1.046765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.72.001",
+        "processed_at": "2026-06-17 07:56:01",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah (Desa Ogodopi Kasimbar)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.990107,
+          -0.137507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.21.001",
+        "processed_at": "2026-06-17 07:56:29",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Riau (Desa Senayang)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.646894,
+          0.064275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.18.001",
+        "processed_at": "2026-06-17 07:56:35",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Lampung (Desa Karang Umpu)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.4468,
+          -4.536114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.14.003",
+        "processed_at": "2026-06-17 07:56:41",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Riau (Desa Pelanduk)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.131993,
+          0.161948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.15.004",
+        "processed_at": "2026-06-17 07:56:46",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Jambi (Desa Lubuk Napal)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.870023,
+          -2.243806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.71.006",
+        "processed_at": "2026-06-17 07:56:53",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Utara (Desa Marampit)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.122582,
+          4.732246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.16.003",
+        "processed_at": "2026-06-17 07:56:57",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Selatan (Desa Simpang Tiga Sakti)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.703541,
+          -3.030459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.72.006",
+        "processed_at": "2026-06-17 07:57:04",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah (Desa Luangon)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.859847,
+          -0.481372
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.11.006",
+        "processed_at": "2026-06-17 07:57:16",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Aceh (Desa Haloban)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.2413,
+          2.121434
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.00.12.006",
+        "processed_at": "2026-06-17 07:57:24",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Utara (Desa Pasar I Singkuang)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.042291,
+          1.099575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.01.72.001",
+        "processed_at": "2026-06-17 08:02:34",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah (Desa Ogodopi Kasimbar)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.990107,
+          -0.137507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.01.21.001",
+        "processed_at": "2026-06-17 08:02:49",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Riau (Desa Senayang)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.646894,
+          0.064275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.01.18.001",
+        "processed_at": "2026-06-17 08:02:58",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Lampung (Desa Karang Umpu)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.4468,
+          -4.536114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.01.14.003",
+        "processed_at": "2026-06-17 08:03:06",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Riau (Desa Pelanduk)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.131993,
+          0.161948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.17.01.15.004",
+        "processed_at": "2026-06-17 08:03:16",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Jambi (Desa Lubuk Napal)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.870023,
+          -2.243806
+        ]
+      }
     }
   ]
 }

@@ -163,29 +163,35 @@ def load_geodata(path):
     import datetime
     
     def extract_event_date(scene_id, processed_at):
-        if pd.notna(processed_at):
-            try:
-                return pd.to_datetime(processed_at).replace(tzinfo=None)
-            except:
-                pass
         scene_id = str(scene_id)
+        # Try to parse ISO date from scene_id (e.g. BMKG events)
         if 'T' in scene_id and '-' in scene_id:
             try:
                 return pd.to_datetime(scene_id).replace(tzinfo=None)
             except:
                 pass
+        # Try to parse YYYYMMDD from scene_id (e.g. satellite idn_3s_129e_20260421)
         match = re.search(r'(\d{8})$', scene_id)
         if match:
             try:
                 return datetime.datetime.strptime(match.group(1), '%Y%m%d')
             except:
                 pass
+        # Try to parse YYYY.MM.DD
         match = re.search(r'(\d{4}\.\d{2}\.\d{2})', scene_id)
         if match:
             try:
                 return datetime.datetime.strptime(match.group(1), '%Y.%m.%d')
             except:
                 pass
+        
+        # Fallback to processed_at if scene_id doesn't contain a recognizable date
+        if pd.notna(processed_at):
+            try:
+                return pd.to_datetime(processed_at).replace(tzinfo=None)
+            except:
+                pass
+                
         return datetime.datetime.now()
 
     for attempt in range(3):
