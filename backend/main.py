@@ -2,17 +2,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
-import numpy as np
-import services
-from shapely.geometry import Point, box, MultiPoint
-from shapely.ops import unary_union
 import geopandas as gpd
+from shapely.geometry import Point, MultiPoint
 import os
-import json
-import time as _time
-import requests
 import threading
-from functools import lru_cache
+import time
+
+from config import LOGISTIK_PER_KK, OUTPUT_GEOJSON
+from services import (
+    load_geodata, load_desa_boundaries, assign_island,
+    calculate_priority_scores
+)
+from core.disaster import get_current_disaster_type, get_buildings_for_zone
+from core.zone_builder import desa_to_polygon, remove_overlaps
 
 app = FastAPI(title="SDSS Logistik Bencana API", version="1.0.0")
 
@@ -24,213 +26,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DISASTER_BY_ISLAND = {
-    'sumatera': 'Gempa Bumi',
-    'jawa': 'Gempa Bumi',
-    'kalimantan': 'Banjir',
-    'sulawesi': 'Gempa Bumi',
-    'nusa_tenggara': 'Gempa Bumi',
-    'maluku': 'Gempa Bumi',
-    'papua': 'Banjir',
-    'bali': 'Gempa Bumi',
-    'lombok': 'Gempa Bumi',
-    'nias': 'Tsunami',
-    'simeulue': 'Tsunami',
-    'mentawai': 'Tsunami',
-    'bangka': 'Banjir',
-    'belitung': 'Banjir',
-    'madura': 'Banjir Rob',
-    'batu': 'Gempa Bumi',
-    'other': 'Banjir / Tanah Longsor',
-}
-
-def get_current_disaster_type(island_fallback='other', lat=None, lon=None):
-    import json
-    flag_path = "output/new_event.flag"
-    try:
-        if os.path.exists(flag_path) and lat is not None and lon is not None:
-            with open(flag_path) as f:
-                event = json.load(f)
-            event_data = event.get("event", {})
-            event_type = event_data.get("type", "")
-            event_lat = event_data.get("lat")
-            event_lon = event_data.get("lon")
-            if event_type and event_lat is not None and event_lon is not None:
-                dist = ((lat - event_lat)**2 + (lon - event_lon)**2)**0.5
-                if dist < 2.0:
-                    return event_type
-    except Exception:
-        pass
-    return DISASTER_BY_ISLAND.get(island_fallback, 'Banjir / Tanah Longsor')
-
-
-# === OSM Building Footprints Cache ===
-_building_cache = {}  # key: (round(lat,3), round(lon,3)) -> list of building polygons
-_building_cache_time = {}  # key -> timestamp
-BUILDING_CACHE_TTL = 3600  # 1 hour
-
-def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
-    """
-    Fetch building footprints dari OpenStreetMap Overpass API.
-    Returns list of building polygon coords [[lon,lat], ...]
-    """
-    cache_key = (round(lat, 3), round(lon, 3))
-    now = _time.time()
-    
-    # Check cache
-    if cache_key in _building_cache:
-        if now - _building_cache_time.get(cache_key, 0) < BUILDING_CACHE_TTL:
-            return _building_cache[cache_key]
-    
-    try:
-        overpass_url = "https://overpass-api.de/api/interpreter"
-        query = f"""
-        [out:json][timeout:10];
-        way["building"](around:{radius_m},{lat},{lon});
-        out geom;
-        """
-        r = requests.get(overpass_url, params={'data': query}, timeout=12)
-        if r.status_code != 200:
-            return []
-        
-        data = r.json()
-        buildings = []
-        for elem in data.get('elements', [])[:max_buildings]:
-            if elem.get('type') == 'way' and 'geometry' in elem:
-                coords = [[round(n['lon'], 6), round(n['lat'], 6)] for n in elem['geometry']]
-                if len(coords) >= 4:  # Valid polygon
-                    buildings.append(coords)
-        
-        _building_cache[cache_key] = buildings
-        _building_cache_time[cache_key] = now
-        return buildings
-    except Exception as e:
-        print(f"  [OSM] Error fetching buildings: {e}")
-        return []
-
-
-def get_buildings_for_zone(raw_points, zone_lat, zone_lon):
-    """
-    Fetch building footprints untuk satu zona kerusakan.
-    - Jika ada bangunan di OSM: snap setiap damage point ke bangunan terdekat
-    - Jika tidak ada bangunan: return [] → frontend pakai heatmap overlay
-    TIDAK membuat fallback rectangles (menghindari kotak di jalan/laut).
-    """
-    if not raw_points:
-        return []
-    
-    buildings = fetch_buildings_near(zone_lat, zone_lon, radius_m=1500)
-    
-    if not buildings:
-        return []  # Frontend akan gunakan heatmap overlay
-    
-    # Parse buildings ke shapely polygons
-    from shapely.geometry import Polygon as ShapelyPolygon
-    building_data = []
-    for bcoords in buildings:
-        try:
-            bp = ShapelyPolygon(bcoords)
-            if bp.is_valid and not bp.is_empty:
-                building_data.append((bcoords, bp))
-        except Exception:
-            continue
-    
-    if not building_data:
-        return []
-    
-    # Untuk setiap damage point, cari bangunan OSM terdekat
-    matched_indices = set()
-    result = []
-    
-    for pt in raw_points:
-        pt_geom = Point(pt[0], pt[1])
-        
-        min_dist = float('inf')
-        nearest_idx = -1
-        for i, (bcoords, bpoly) in enumerate(building_data):
-            if i in matched_indices:
-                continue
-            dist = pt_geom.distance(bpoly)
-            if dist < min_dist:
-                min_dist = dist
-                nearest_idx = i
-        
-        # Hanya match jika bangunan dalam ~300m (≈0.003 derajat)
-        if nearest_idx >= 0 and min_dist < 0.003:
-            matched_indices.add(nearest_idx)
-            result.append(building_data[nearest_idx][0])
-    
-    return result
-
-
-def desa_to_polygon(geom, simplify_tol=0.0005, shrink_m=50):
-    try:
-        simplified = geom.simplify(simplify_tol, preserve_topology=True).buffer(0)
-        if simplified.is_empty:
-            return None
-        shrink_deg = shrink_m / 111320.0
-        shrunk = simplified.buffer(-shrink_deg)
-        if shrunk.is_empty:
-            shrunk = simplified
-        target = shrunk
-        if target.geom_type == 'MultiPolygon':
-            largest = max(target.geoms, key=lambda p: p.area)
-            return [[round(c[0], 6), round(c[1], 6)] for c in largest.exterior.coords]
-        elif target.geom_type == 'Polygon':
-            return [[round(c[0], 6), round(c[1], 6)] for c in target.exterior.coords]
-    except Exception:
-        pass
-    return None
-
-def remove_overlaps(zone_list):
-    from shapely.geometry import Polygon as ShapelyPolygon
-    geoms = []
-    valid_indices = []
-    for i, z in enumerate(zone_list):
-        try:
-            poly = ShapelyPolygon(z['polygon'])
-            if poly.is_valid and not poly.is_empty:
-                geoms.append(poly)
-                valid_indices.append(i)
-        except Exception:
-            continue
-
-    if len(geoms) <= 1:
-        return zone_list
-
-    result = []
-    claimed = None
-    for idx, gi in enumerate(geoms):
-        if claimed is None:
-            cleaned = gi
-        else:
-            cleaned = gi.difference(claimed)
-        if cleaned.is_empty:
-            continue
-        if cleaned.geom_type == 'MultiPolygon':
-            cleaned = max(cleaned.geoms, key=lambda p: p.area)
-        if cleaned.is_empty or cleaned.geom_type != 'Polygon':
-            continue
-        z = zone_list[valid_indices[idx]].copy()
-        z['polygon'] = [[round(c[0], 6), round(c[1], 6)] for c in cleaned.exterior.coords]
-        result.append(z)
-        if claimed is None:
-            claimed = cleaned
-        else:
-            claimed = claimed.union(cleaned)
-
-    return result
-
-print("Loading geodata boundaries...")
-gdf_desa = services.load_desa_boundaries()
+gdf_desa = load_desa_boundaries()
 if gdf_desa is not None and not gdf_desa.empty:
-    print(f"  Shapefile loaded: {len(gdf_desa)} desa polygons")
+    print(f"Shapefile loaded: {len(gdf_desa)} desa polygons")
 else:
-    print("  Shapefile batas desa TIDAK DITEMUKAN - menggunakan fallback mode")
+    print("Shapefile batas desa TIDAK DITEMUKAN - menggunakan fallback mode")
+
 
 @app.get("/")
 def get_dashboard_data():
-    df_raw = services.load_geodata(services.OUTPUT_GEOJSON)
+    df_raw = load_geodata(OUTPUT_GEOJSON)
     if df_raw is None or df_raw.empty:
         return {"error": "standby"}
 
@@ -249,6 +54,17 @@ def get_dashboard_data():
             )
             joined = gpd.sjoin(gdf_points, gdf_desa[['geometry']], how='inner', predicate='within')
             df_satelit = df_satelit.loc[df_satelit.index.isin(joined.index.unique())].copy()
+
+            if not df_satelit.empty and not df_bmkg.empty:
+                valid_sat_indices = []
+                bmkg_points = MultiPoint([Point(lon, lat) for lon, lat in zip(df_bmkg['lon'], df_bmkg['lat'])])
+                for idx, row in df_satelit.iterrows():
+                    pt = Point(row['lon'], row['lat'])
+                    if pt.distance(bmkg_points) <= 0.5:
+                        valid_sat_indices.append(idx)
+                df_satelit = df_satelit.loc[valid_sat_indices].copy()
+            elif df_bmkg.empty:
+                df_satelit = pd.DataFrame(columns=df_satelit.columns)
 
         df_raw = pd.concat([df_bmkg, df_satelit], ignore_index=True)
 
@@ -290,14 +106,13 @@ def get_dashboard_data():
             df_raw['_desa'] = 'Tidak Diketahui'
             desa_col = '_desa'
     else:
-        # Untuk titik BMKG: gunakan wilayah sebagai fallback jika ADM4_EN NaN
         if 'wilayah' in df_raw.columns and 'source' in df_raw.columns:
             bmkg_mask = (df_raw['source'] == 'BMKG') & (df_raw[desa_col].isna())
             if bmkg_mask.any():
                 df_raw.loc[bmkg_mask, desa_col] = df_raw.loc[bmkg_mask, 'wilayah']
         df_raw[desa_col] = df_raw[desa_col].fillna('Tidak Diketahui')
 
-    df_raw['island'] = df_raw.apply(lambda r: services.assign_island(r['lat'], r['lon']), axis=1)
+    df_raw['island'] = df_raw.apply(lambda r: assign_island(r['lat'], r['lon']), axis=1)
 
     rz_data = []
     df_valid = df_raw[df_raw[desa_col] != 'Tidak Diketahui'].copy()
@@ -336,29 +151,28 @@ def get_dashboard_data():
                     disaster_type = str(dt)
 
                 logistics = {
-                    "beras": damage_count * services.LOGISTIK_PER_KK['Beras (kg)'],
-                    "air": damage_count * services.LOGISTIK_PER_KK['Air Minum (liter)'],
-                    "mie": damage_count * services.LOGISTIK_PER_KK['Mie Instan (Dus)'],
-                    "minyak": damage_count * services.LOGISTIK_PER_KK['Minyak Goreng (liter)'],
-                    "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
+                    "beras": damage_count * LOGISTIK_PER_KK['Beras (kg)'],
+                    "air": damage_count * LOGISTIK_PER_KK['Air Minum (liter)'],
+                    "mie": damage_count * LOGISTIK_PER_KK['Mie Instan (Dus)'],
+                    "minyak": damage_count * LOGISTIK_PER_KK['Minyak Goreng (liter)'],
+                    "lauk": damage_count * LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
                 }
 
-                # Kumpulkan titik mentah (filter: hanya yang di daratan/dalam polygon desa)
                 raw_pts = []
-                desa_buffered = desa_geom.buffer(0.002)  # ~200m buffer tolerance
+                from shapely.geometry import Polygon as ShapelyPolygon
+                frontend_polygon = ShapelyPolygon(polygon).buffer(0.0001)
                 desa_points = df_valid[df_valid['_desa_idx'] == row['_desa_idx']]
                 for _, pt in desa_points.iterrows():
                     pt_geom = Point(float(pt['lon']), float(pt['lat']))
-                    if desa_buffered.contains(pt_geom):
+                    if frontend_polygon.contains(pt_geom):
                         raw_pts.append([float(pt['lon']), float(pt['lat'])])
                 
                 if not raw_pts:
-                    continue  # Semua titik di laut, skip zona ini
+                    continue
 
                 zone_lon = float(desa_geom.centroid.x)
                 zone_lat = float(desa_geom.centroid.y)
 
-                # Fetch building footprints dari OSM
                 building_polys = get_buildings_for_zone(raw_pts, zone_lat, zone_lon)
 
                 rz_data.append({
@@ -375,8 +189,6 @@ def get_dashboard_data():
             except Exception:
                 continue
     else:
-        print("  [Fallback] Membangun zona kerusakan tanpa shapefile...")
-
         for name, group in df_valid.groupby(desa_col):
             try:
                 damage_count = len(group)
@@ -409,11 +221,11 @@ def get_dashboard_data():
                     continue
 
                 logistics = {
-                    "beras": damage_count * services.LOGISTIK_PER_KK['Beras (kg)'],
-                    "air": damage_count * services.LOGISTIK_PER_KK['Air Minum (liter)'],
-                    "mie": damage_count * services.LOGISTIK_PER_KK['Mie Instan (Dus)'],
-                    "minyak": damage_count * services.LOGISTIK_PER_KK['Minyak Goreng (liter)'],
-                    "lauk": damage_count * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
+                    "beras": damage_count * LOGISTIK_PER_KK['Beras (kg)'],
+                    "air": damage_count * LOGISTIK_PER_KK['Air Minum (liter)'],
+                    "mie": damage_count * LOGISTIK_PER_KK['Mie Instan (Dus)'],
+                    "minyak": damage_count * LOGISTIK_PER_KK['Minyak Goreng (liter)'],
+                    "lauk": damage_count * LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
                 }
 
                 raw_pts = []
@@ -435,22 +247,22 @@ def get_dashboard_data():
                 })
             except Exception:
                 continue
-        print(f"  [Fallback] {len(rz_data)} zona berhasil dibangun")
+        print(f"[Fallback] {len(rz_data)} zona berhasil dibangun")
 
     rz_data = remove_overlaps(rz_data)
 
-    rz_data = services.calculate_priority_scores(rz_data)
+    rz_data = calculate_priority_scores(rz_data)
 
     disaster_types = list(set(r['disaster_type'] for r in rz_data if 'disaster_type' in r))
-    disaster_summary = ', '.join(sorted(disaster_types)) if disaster_types else 'Banjir / Tanah Longsor'
+    disaster_summary = ', '.join(sorted(disaster_types)) if disaster_types else 'Bencana Alam'
 
     total_damage = int(len(df_raw))
     total_logistics = {
-        "beras": total_damage * services.LOGISTIK_PER_KK['Beras (kg)'],
-        "air": total_damage * services.LOGISTIK_PER_KK['Air Minum (liter)'],
-        "mie": total_damage * services.LOGISTIK_PER_KK['Mie Instan (Dus)'],
-        "minyak": total_damage * services.LOGISTIK_PER_KK['Minyak Goreng (liter)'],
-        "lauk": total_damage * services.LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
+        "beras": total_damage * LOGISTIK_PER_KK['Beras (kg)'],
+        "air": total_damage * LOGISTIK_PER_KK['Air Minum (liter)'],
+        "mie": total_damage * LOGISTIK_PER_KK['Mie Instan (Dus)'],
+        "minyak": total_damage * LOGISTIK_PER_KK['Minyak Goreng (liter)'],
+        "lauk": total_damage * LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
     }
 
     from shapely.geometry import Polygon as ShapelyPolygon
@@ -487,13 +299,11 @@ def get_dashboard_data():
 
 @app.delete("/resolve/{desa}")
 def resolve_desa(desa: str):
-    """Tandai bencana di desa tertentu sebagai selesai."""
     import json
-    geojson_path = "output/sdss_result.geojson"
     try:
-        if not os.path.exists(geojson_path):
+        if not os.path.exists(OUTPUT_GEOJSON):
             return {"error": "no data"}
-        with open(geojson_path, 'r') as f:
+        with open(OUTPUT_GEOJSON, 'r') as f:
             geojson = json.load(f)
         
         resolved_count = 0
@@ -507,7 +317,7 @@ def resolve_desa(desa: str):
                 props["status"] = "resolved"
                 resolved_count += 1
         
-        with open(geojson_path, 'w') as f:
+        with open(OUTPUT_GEOJSON, 'w') as f:
             json.dump(geojson, f, indent=2)
         
         return {"resolved": resolved_count, "desa": desa}
@@ -517,12 +327,12 @@ def resolve_desa(desa: str):
 
 @app.get("/status")
 def get_status():
-    flag_path = "output/new_event.flag"
+    from config import NEW_EVENT_FLAG
     last_event = None
-    if os.path.exists(flag_path):
+    if os.path.exists(NEW_EVENT_FLAG):
         try:
             import json
-            with open(flag_path) as f:
+            with open(NEW_EVENT_FLAG) as f:
                 last_event = json.load(f)
         except Exception:
             pass
@@ -534,8 +344,8 @@ def get_status():
 
 def start_scheduler_background():
     try:
-        from scheduler import check_all_sources, CHECK_INTERVAL_MINUTES
-        import time
+        from scheduler.runner import check_all_sources
+        from config import CHECK_INTERVAL_MINUTES
         from datetime import datetime
 
         def scheduler_loop():
@@ -551,7 +361,6 @@ def start_scheduler_background():
         print("Multi-Hazard Scheduler aktif (background thread)")
     except Exception as e:
         print(f"Scheduler gagal start: {e}")
-        print("  Backend tetap berjalan tanpa realtime monitoring")
 
 
 @app.on_event("startup")
