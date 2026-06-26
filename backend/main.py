@@ -350,7 +350,6 @@ def start_scheduler_background():
 
         def scheduler_loop():
             print(f"[{datetime.now().strftime('%H:%M:%S')}] Background scheduler started")
-            print(f"  Interval: {CHECK_INTERVAL_MINUTES} menit")
             check_all_sources()
             while True:
                 time.sleep(CHECK_INTERVAL_MINUTES * 60)
@@ -358,7 +357,6 @@ def start_scheduler_background():
 
         t = threading.Thread(target=scheduler_loop, daemon=True)
         t.start()
-        print("Multi-Hazard Scheduler aktif (background thread)")
     except Exception as e:
         print(f"Scheduler gagal start: {e}")
 
