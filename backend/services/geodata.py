@@ -39,17 +39,27 @@ def load_geodata(path):
                 pass
         return datetime.datetime.now()
 
-    for attempt in range(3):
+    for attempt in range(5):
         try:
             gdf = gpd.read_file(path).to_crs(epsg=4326)
             break
         except Exception as e:
-            if attempt < 2:
+            if attempt < 4:
                 import time as _time
-                _time.sleep(0.3)
+                _time.sleep(0.5)
                 continue
-            print(f"Error loading geodata: {e}")
-            return None
+            # Fallback: try loading as raw JSON
+            try:
+                import json
+                with open(path, 'r') as f:
+                    raw = json.load(f)
+                gdf = gpd.GeoDataFrame.from_features(
+                    raw.get('features', []), crs="EPSG:4326"
+                )
+                break
+            except Exception:
+                print(f"Error loading geodata: {e}")
+                return None
 
     try:
         if 'status' in gdf.columns:

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { PolygonLayer, ScatterplotLayer } from '@deck.gl/layers';
+import { PolygonLayer } from '@deck.gl/layers';
 import axios from 'axios';
 import { LuRadar, LuMoon, LuSun, LuTriangleAlert, LuMap, LuUsers, LuTable2 } from 'react-icons/lu';
 import './styles/App.css';
@@ -57,6 +57,17 @@ export default function App() {
   const metrics = data?.metrics || {};
   const redZones = mapData.red_zones || [];
 
+  // Polygon hull yang mengikuti bentuk persis dari sekumpulan titik kerusakan
+  const damageHulls = useMemo(() => {
+    return redZones
+      .filter(z => z.damage_polygon && z.damage_polygon.length > 0)
+      .map(z => ({
+        ...z,
+        polygon: z.damage_polygon,
+        priority: z.priority_label
+      }));
+  }, [redZones]);
+
   // Kumpulkan building footprints (zona DENGAN bangunan OSM)
   const buildingFootprints = useMemo(() => {
     const buildings = [];
@@ -77,27 +88,20 @@ export default function App() {
     return buildings;
   }, [redZones]);
 
-  const heatmapPoints = useMemo(() => {
-    const points = [];
-    for (const zone of redZones) {
-      if (zone.raw_points && zone.raw_points.length > 0) {
-        let i = 0;
-        for (const pt of zone.raw_points) {
-          const jitterX = (i > 0) ? (Math.cos(i) * 0.0002) : 0;
-          const jitterY = (i > 0) ? (Math.sin(i) * 0.0002) : 0;
+  // Heatmap color: makin banyak kerusakan -> makin merah tua
+  const heatColor = (count, priority) => {
+    if (priority === 'Kritis')  return [180, 0, 20];    // merah tua
+    if (priority === 'Tinggi')  return [220, 60, 20];   // merah oranye
+    if (priority === 'Sedang')  return [240, 160, 20];  // oranye kuning
+    return [240, 220, 60];                               // kuning
+  };
 
-          points.push({
-            position: [pt[0] + jitterX, pt[1] + jitterY],
-            priority: zone.priority_label,
-            desa: zone.desa,
-            count: zone.count,
-          });
-          i++;
-        }
-      }
-    }
-    return points;
-  }, [redZones]);
+  const heatOpacity = (count) => {
+    if (count >= 10) return 160;
+    if (count >= 5) return 120;
+    if (count >= 3) return 90;
+    return 60;
+  };
 
   const layers = useMemo(() => {
     const filteredZones = redZones.filter(d => d.polygon);
@@ -110,14 +114,14 @@ export default function App() {
     };
 
     return [
-      // Layer 1: Polygon desa (batas area terdampak)
+      // Layer 1: Polygon desa — fill heatmap (warna mengikuti bentuk geografis desa/kerusakan)
       ...(filteredZones.length > 0 ? [
         new PolygonLayer({
-          id: 'damage-zones',
+          id: 'damage-zones-heat',
           data: filteredZones,
           getPolygon: d => d.polygon,
-          getFillColor: d => [...priorityFill(d.priority_label), 25],
-          getLineColor: d => [...priorityFill(d.priority_label), 180],
+          getFillColor: d => [...heatColor(d.count, d.priority_label), heatOpacity(d.count)],
+          getLineColor: d => [...priorityFill(d.priority_label), 200],
           lineWidthMinPixels: 2,
           filled: true,
           stroked: true,
@@ -126,7 +130,23 @@ export default function App() {
         })
       ] : []),
 
-      // Layer 2: Building footprints — warna di bangunan langsung (dari OSM)
+      // Layer 1.5: Heatmap Area (Polygon Khusus Kerusakan)
+      ...(damageHulls.length > 0 ? [
+        new PolygonLayer({
+          id: 'damage-heatmap-polygon',
+          data: damageHulls,
+          getPolygon: d => d.polygon,
+          getFillColor: d => [...heatColor(d.count, d.priority), 200], // Opacity 200/255
+          getLineColor: d => [...heatColor(d.count, d.priority), 255],
+          lineWidthMinPixels: 2,
+          filled: true,
+          stroked: true,
+          pickable: true,
+          extruded: false,
+        })
+      ] : []),
+
+      // Layer 2: Building footprints
       ...(buildingFootprints.length > 0 ? [
         new PolygonLayer({
           id: 'building-footprints',
@@ -141,43 +161,9 @@ export default function App() {
           extruded: true,
           getElevation: 15,
         })
-      ] : []),
-
-      // Layer 3A: Titik kerusakan (Glow luar)
-      ...(heatmapPoints.length > 0 ? [
-        new ScatterplotLayer({
-          id: 'heatmap-glow',
-          data: heatmapPoints,
-          getPosition: d => d.position,
-          getFillColor: d => [...priorityFill(d.priority), 60],
-          getRadius: d => 15,
-          radiusUnits: 'meters',
-          radiusMinPixels: 4,
-          stroked: false,
-          filled: true,
-          pickable: false,
-          antialiasing: true,
-        })
-      ] : []),
-
-      // Layer 3B: Titik kerusakan (Inti terang)
-      ...(heatmapPoints.length > 0 ? [
-        new ScatterplotLayer({
-          id: 'heatmap-core',
-          data: heatmapPoints,
-          getPosition: d => d.position,
-          getFillColor: d => [...priorityFill(d.priority), 200],
-          getRadius: d => 5,
-          radiusUnits: 'meters',
-          radiusMinPixels: 2,
-          stroked: false,
-          filled: true,
-          pickable: true,
-          antialiasing: true,
-        })
       ] : [])
     ];
-  }, [redZones, buildingFootprints, heatmapPoints]);
+  }, [redZones, buildingFootprints, damageHulls]);
 
   const handleRowClick = (zone) => {
     setFlyToTarget({

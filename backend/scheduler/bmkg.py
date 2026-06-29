@@ -36,7 +36,7 @@ def is_residential_area(lat, lon, min_built_ratio=0.03):
         distances = desa_proj.geometry.distance(pt_gdf.geometry.iloc[0])
         min_dist_m = distances.min()
 
-        if min_dist_m <= 5000:
+        if min_dist_m <= 2000:
             nearest_idx = distances.idxmin()
             nearest_desa = gdf_desa.iloc[nearest_idx]
             desa_name = nearest_desa.get('ADM4_EN', 'Unknown')

@@ -57,6 +57,7 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
     import services
     from shapely.geometry import Point
     import geopandas as gpd
+    from datetime import datetime, timedelta
 
     try:
         if os.path.exists(OUTPUT_GEOJSON) and os.path.getsize(OUTPUT_GEOJSON) > 10:
@@ -69,6 +70,29 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
                 "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
                 "features": []
             }
+
+        # === 72-hour TTL: buang fitur yang sudah lewat golden time ===
+        cutoff = datetime.now() - timedelta(hours=72)
+        fresh_features = []
+        for feat in geojson.get("features", []):
+            pa = feat.get("properties", {}).get("processed_at", "")
+            try:
+                feat_time = datetime.fromisoformat(pa.replace("Z", "+00:00")).replace(tzinfo=None)
+                if feat_time >= cutoff:
+                    fresh_features.append(feat)
+            except Exception:
+                fresh_features.append(feat)  # keep if unparseable
+        geojson["features"] = fresh_features
+
+        # === Deduplikasi spasial: skip jika sudah ada titik dalam radius ~5km ===
+        DEDUP_THRESHOLD = 0.05  # ~5.5km
+        for feat in geojson["features"]:
+            coords = feat.get("geometry", {}).get("coordinates", [])
+            if len(coords) >= 2:
+                existing_lon, existing_lat = coords[0], coords[1]
+                if abs(lat - existing_lat) < DEDUP_THRESHOLD and abs(lon - existing_lon) < DEDUP_THRESHOLD:
+                    print(f"  -> Skip duplikat: ({lat:.4f}, {lon:.4f}) terlalu dekat dengan titik existing")
+                    return
 
         conf_map = {"Extreme": 0.9, "Severe": 0.7, "Moderate": 0.5}
         confidence = conf_map.get(severity, 0.5)
@@ -98,7 +122,7 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
             "properties": {
                 "confidence": confidence,
                 "scene_id": event_id,
-                "processed_at": now(),
+                "processed_at": datetime.now().isoformat(),
                 "status": "active",
                 "disaster_type": disaster_type,
                 "wilayah": wilayah,

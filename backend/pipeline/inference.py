@@ -231,11 +231,20 @@ def run_pipeline(model):
             if len(pts) < pts_before:
                 print(f"    Post-filter: {pts_before} -> {len(pts)} titik (removed isolated non-residential)")
 
-            img_for_train = cv2.imread(img_path)
-            if img_for_train is not None:
-                img_for_train = cv2.cvtColor(img_for_train, cv2.COLOR_BGR2RGB)
-                img_for_train = cv2.resize(img_for_train, IMG_SIZE).astype(np.float32) / 255.0
-                train_images.append(img_for_train)
+            post_for_train = cv2.imread(img_path)
+            if post_for_train is not None:
+                post_for_train = cv2.cvtColor(post_for_train, cv2.COLOR_BGR2RGB)
+                post_for_train = cv2.resize(post_for_train, IMG_SIZE).astype(np.float32) / 255.0
+                
+                if pre_img_path and os.path.exists(pre_img_path):
+                    pre_for_train = cv2.imread(pre_img_path)
+                    pre_for_train = cv2.cvtColor(pre_for_train, cv2.COLOR_BGR2RGB)
+                    pre_for_train = cv2.resize(pre_for_train, IMG_SIZE).astype(np.float32) / 255.0
+                    combined_train = np.concatenate([pre_for_train, post_for_train], axis=-1)
+                else:
+                    combined_train = np.concatenate([post_for_train, post_for_train], axis=-1)
+
+                train_images.append(combined_train)
                 mask_binary = (mask > 0.5).astype(np.float32)
                 train_masks.append(mask_binary)
 

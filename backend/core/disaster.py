@@ -54,10 +54,43 @@ def get_current_disaster_type(island_fallback='other', lat=None, lon=None):
     return "Bencana Alam"
 
 
-# === OSM Building Footprints ===
+import json
+import os
+
+BUILDING_CACHE_FILE = "output/building_cache.json"
+
 _building_cache = {}
 _building_cache_time = {}
 
+if os.path.exists(BUILDING_CACHE_FILE):
+    try:
+        with open(BUILDING_CACHE_FILE, "r") as f:
+            _disk_cache = json.load(f)
+            for k_str, v in _disk_cache.items():
+                if isinstance(v, dict) and "buildings" in v and "time" in v:
+                    # keys in JSON are strings, convert back to tuple of floats
+                    try:
+                        lat_s, lon_s = k_str.split("_")
+                        _building_cache[(float(lat_s), float(lon_s))] = v["buildings"]
+                        _building_cache_time[(float(lat_s), float(lon_s))] = v["time"]
+                    except:
+                        pass
+    except Exception as e:
+        print(f"Failed to load building cache: {e}")
+
+def save_building_cache():
+    try:
+        os.makedirs(os.path.dirname(BUILDING_CACHE_FILE), exist_ok=True)
+        dump_data = {}
+        for k, v in _building_cache.items():
+            dump_data[f"{k[0]}_{k[1]}"] = {
+                "buildings": v,
+                "time": _building_cache_time.get(k, 0)
+            }
+        with open(BUILDING_CACHE_FILE, "w") as f:
+            json.dump(dump_data, f)
+    except Exception as e:
+        print(f"Failed to save building cache: {e}")
 
 def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
     cache_key = (round(lat, 3), round(lon, 3))
@@ -105,6 +138,7 @@ def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
 
         _building_cache[cache_key] = buildings
         _building_cache_time[cache_key] = now
+        save_building_cache()
         return buildings
     except Exception as e:
         print(f"  [OSM] Error fetching buildings: {e}")
@@ -115,7 +149,7 @@ def get_buildings_for_zone(raw_points, zone_lat, zone_lon):
     if not raw_points:
         return []
 
-    buildings = fetch_buildings_near(zone_lat, zone_lon, radius_m=1500)
+    buildings = fetch_buildings_near(zone_lat, zone_lon, radius_m=400)
 
     if not buildings:
         return []

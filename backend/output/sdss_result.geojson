@@ -1,0 +1,1606 @@
+{
+  "type": "FeatureCollection",
+  "name": "sdss_result",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T03:27:44+00:00",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "42 km Tenggara PALU-SULTENG (Desa Astina)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.269353,
+          -0.994203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T04:14:00+00:00",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "29 km Tenggara PALU-SULTENG (Desa Rejeki)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.103124,
+          -1.084519
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-16T18:29:38+00:00",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "54 km BaratLaut POSO-SULTENG (Desa Beraban)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.370932,
+          -1.046765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-06-17T03:44:16+00:00",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "10 km TimurLaut WAIKABUBAK-NTT (Desa Doka Kaka)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.451344,
+          -9.568196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.75.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Gorontalo (Desa Mekarti Jaya)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.809609,
+          0.791908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.13.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat (Desa Tanjuang Balik Sumiso)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.094366,
+          -1.078841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.14.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Riau (Desa Pangkalan Indarung)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.227755,
+          -0.494694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.76.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Barat (Desa Gunung Sari)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.458763,
+          -1.217706
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.81.003",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Maluku (Desa Rumahsoal)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.418141,
+          -3.016554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.21.004",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Riau (Desa Sri Bintan)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.455052,
+          1.127217
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.74.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tenggara (Desa Lamoahi)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          123.108196,
+          -4.566547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.35.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Jawa Timur (Desa Renteng)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.469528,
+          -7.878023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.11.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Aceh (Desa Paya Guci)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.934932,
+          5.049487
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.12.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Utara (Desa Pasar I Singkuang)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.042291,
+          1.099575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.62.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah (Desa Teluk Pulai)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.919148,
+          -3.000414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.82.003",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Maluku Utara (Desa Soa Gimalaha)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.254352,
+          0.64084
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.75.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Gorontalo (Desa Hulawa)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.986333,
+          0.716859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.63.001",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Selatan (Desa Bangkalan Melayu)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.023993,
+          -2.944949
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.71.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Utara (Desa Kauneran)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.769223,
+          1.255222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.53.002",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Nusa Tenggara Timur (Desa Sidabui)",
+        "source": "BMKG",
+        "ADM4_EN": null,
+        "ADM4_PCODE": null,
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": null,
+        "ADM3_PCODE": null,
+        "ADM2_EN": null,
+        "ADM2_PCODE": null,
+        "ADM1_EN": null,
+        "ADM1_PCODE": null,
+        "ADM0_EN": null,
+        "ADM0_PCODE": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.71368,
+          -8.342866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.2679,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Tegal Gede",
+        "ADM4_PCODE": "ID3509720006",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Sumbersari",
+        "ADM3_PCODE": "ID3509720",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.72657848837207,
+          -8.161991279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.4425,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Sumber Pinang",
+        "ADM4_PCODE": "ID3509230005",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Pakusari",
+        "ADM3_PCODE": "ID3509230",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.161991279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.6224,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Jatian",
+        "ADM4_PCODE": "ID3509230003",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Pakusari",
+        "ADM3_PCODE": "ID3509230",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.78907848837207,
+          -8.161991279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.2629,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Lembengan",
+        "ADM4_PCODE": "ID3509250005",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Ledokombo",
+        "ADM3_PCODE": "ID3509250",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.82032848837207,
+          -8.161991279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5001,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Mrawan",
+        "ADM4_PCODE": "ID3509080007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mayang",
+        "ADM3_PCODE": "ID3509080",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.193241279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5467,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Mayang",
+        "ADM4_PCODE": "ID3509080006",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mayang",
+        "ADM3_PCODE": "ID3509080",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.78907848837207,
+          -8.193241279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5761,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Karangkedawung",
+        "ADM4_PCODE": "ID3509090007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mumbulsari",
+        "ADM3_PCODE": "ID3509090",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.224491279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.4316,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Seputih",
+        "ADM4_PCODE": "ID3509080001",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mayang",
+        "ADM3_PCODE": "ID3509080",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.78907848837207,
+          -8.224491279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.6919,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Lampeji",
+        "ADM4_PCODE": "ID3509090004",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mumbulsari",
+        "ADM3_PCODE": "ID3509090",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.255741279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.2935,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Harjomulyo",
+        "ADM4_PCODE": "ID3509070003",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Silo",
+        "ADM3_PCODE": "ID3509070",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.78907848837207,
+          -8.255741279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5128,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Suco",
+        "ADM4_PCODE": "ID3509090003",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Mumbulsari",
+        "ADM3_PCODE": "ID3509090",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.286991279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.2471,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Curahtakir",
+        "ADM4_PCODE": "ID3509060007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Tempurejo",
+        "ADM3_PCODE": "ID3509060",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.72657848837207,
+          -8.318241279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.4336,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Curahtakir",
+        "ADM4_PCODE": "ID3509060007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Tempurejo",
+        "ADM3_PCODE": "ID3509060",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.318241279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.2574,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Curahtakir",
+        "ADM4_PCODE": "ID3509060007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Tempurejo",
+        "ADM3_PCODE": "ID3509060",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.72657848837207,
+          -8.349491279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.4031,
+        "scene_id": "evt_8.1s_113.7e_20260623",
+        "processed_at": "2026-06-26T15:36:02.992889",
+        "status": "active",
+        "disaster_type": null,
+        "wilayah": null,
+        "source": null,
+        "ADM4_EN": "Curahtakir",
+        "ADM4_PCODE": "ID3509060007",
+        "ADM4_REF": null,
+        "ADM4ALT1EN": null,
+        "ADM4ALT2EN": null,
+        "ADM3_EN": "Tempurejo",
+        "ADM3_PCODE": "ID3509060",
+        "ADM2_EN": "Jember",
+        "ADM2_PCODE": "ID3509",
+        "ADM1_EN": "Jawa Timur",
+        "ADM1_PCODE": "ID35",
+        "ADM0_EN": "Indonesia",
+        "ADM0_PCODE": "ID"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.75782848837207,
+          -8.349491279069769
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.08.92.002",
+        "processed_at": "2026-06-26T15:48:47.070422",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Papua Barat (Desa Senebuay)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.149194,
+          -1.845501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.63.002",
+        "processed_at": "2026-06-26T16:03:00.226800",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Selatan (Desa Salikung)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.614639,
+          -1.589761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.13.001",
+        "processed_at": "2026-06-26T16:03:25.170546",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat (Desa Tanjuang Balik Sumiso)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          101.094366,
+          -1.078841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.12.001",
+        "processed_at": "2026-06-26T16:04:16.349615",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Utara (Desa Pasar I Singkuang)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          99.042291,
+          1.099575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.62.002",
+        "processed_at": "2026-06-26T16:04:24.290161",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah (Desa Teluk Pulai)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.919148,
+          -3.000414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.32.003",
+        "processed_at": "2026-06-26T16:18:50.427575",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Jawa Barat (Desa Sirnajaya)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.719638,
+          -6.999376
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.64.001",
+        "processed_at": "2026-06-26T16:19:01.229197",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Timur (Desa Datah Naha)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.684704,
+          1.05383
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.17.002",
+        "processed_at": "2026-06-26T16:19:13.592946",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Bengkulu (Desa Mekar Sari Mukti)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.880625,
+          -4.122866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.81.004",
+        "processed_at": "2026-06-26T16:32:54.679368",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Maluku (Desa Porto)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.609074,
+          -3.540503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.94.001",
+        "processed_at": "2026-06-26T16:33:52.259981",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Papua Tengah (Desa Napan)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.004012,
+          -3.036889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.62.003",
+        "processed_at": "2026-06-26T16:35:05.691137",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah (Desa Kotawaringin Hulu)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.445273,
+          -2.437093
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.21.005",
+        "processed_at": "2026-06-26T16:49:33.130150",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Riau (Desa Kelarik Utara)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.093201,
+          4.050295
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.26.09.13.002",
+        "processed_at": "2026-06-26T16:49:39.384406",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat (Desa Bojakan)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          98.841396,
+          -1.303489
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.62.001",
+        "processed_at": "2026-06-29T07:48:25.905790",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah (Desa Tumbang Taranei)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.128658,
+          -1.162298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.64.001",
+        "processed_at": "2026-06-29T07:48:37.799345",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Timur (Desa Kelinjau Ilir)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.499768,
+          0.488734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.16.001",
+        "processed_at": "2026-06-29T07:48:46.064421",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Selatan (Desa Bukit Batu)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.164577,
+          -3.10805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.14.001",
+        "processed_at": "2026-06-29T07:48:54.985019",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Riau (Desa Kasang Bangsawan Muda)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.595383,
+          1.402272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.13.006",
+        "processed_at": "2026-06-29T07:49:06.978115",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat (Desa Sinaka)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.411858,
+          -3.101478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.71.002",
+        "processed_at": "2026-06-29T07:49:26.095368",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Utara (Desa Marampit)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.122582,
+          4.732246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.16.007",
+        "processed_at": "2026-06-29T07:49:30.104267",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Selatan (Desa Sungai Batang)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.391972,
+          -2.736809
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.72.007",
+        "processed_at": "2026-06-29T07:49:39.006048",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sulawesi Tengah (Desa Maninili Barat)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.082288,
+          0.081852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.62.011",
+        "processed_at": "2026-06-29T07:50:07.392882",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Tengah (Desa Liang Naga)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.999717,
+          -0.955176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.64.006",
+        "processed_at": "2026-06-29T07:50:13.805826",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kalimantan Timur (Desa Gunung Sari Ulu)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.847868,
+          -1.257319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.00.11.008",
+        "processed_at": "2026-06-29T07:50:28.562123",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Aceh (Desa Buket Linteung)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.473252,
+          4.89973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.01.19.001",
+        "processed_at": "2026-06-29T08:03:09.055070",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Kep. Bangka Belitung (Desa Mempaya)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.177097,
+          -2.767672
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.06.29.01.13.006",
+        "processed_at": "2026-06-29T08:05:14.049688",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Sumatera Barat (Desa Sinaka)",
+        "source": "BMKG"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          100.411858,
+          -3.101478
+        ]
+      }
+    }
+  ]
+}

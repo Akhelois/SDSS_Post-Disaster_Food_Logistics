@@ -10,8 +10,13 @@ const MAP_STYLES = {
     sources: {
       'basemap': {
         type: 'raster',
-        tiles: ['https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'],
+        tiles: [
+          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        ],
         tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }
     },
     layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
@@ -23,6 +28,7 @@ const MAP_STYLES = {
         type: 'raster',
         tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
         tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
       }
     },
     layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
@@ -37,7 +43,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0
 };
 
-export default function DeckMap({ flyToTarget, layers, theme = 'dark' }) {
+export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomChange }) {
   const mapStyle = MAP_STYLES[theme] || MAP_STYLES.dark;
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [tooltip, setTooltip] = useState(null);
@@ -46,14 +52,16 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark' }) {
 
   useEffect(() => {
     if (flyToTarget) {
+      const newZoom = 13.5;
       setViewState(prev => ({
         ...prev,
         longitude: flyToTarget.lon,
         latitude: flyToTarget.lat,
-        zoom: 13.5,
+        zoom: newZoom,
         transitionDuration: 1500,
         transitionInterpolator: new FlyToInterpolator()
       }));
+      if (onZoomChange) onZoomChange(newZoom);
     }
   }, [flyToTarget]);
 
@@ -109,6 +117,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark' }) {
           viewState.longitude = Math.max(minLng, Math.min(maxLng, viewState.longitude));
           viewState.latitude = Math.max(minLat, Math.min(maxLat, viewState.latitude));
           setViewState(viewState);
+          if (onZoomChange) onZoomChange(viewState.zoom);
         }}
         controller={true}
         layers={layers}
