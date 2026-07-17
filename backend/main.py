@@ -7,12 +7,14 @@ from shapely.geometry import Point, MultiPoint
 import os
 import threading
 import time
+from datetime import datetime
 
 from config import LOGISTIK_PER_KK, OUTPUT_GEOJSON
 from services import (
     load_geodata, load_desa_boundaries, assign_island,
     calculate_priority_scores
 )
+from services.petabencana import fetch_petabencana_reports
 from core.disaster import get_current_disaster_type, get_buildings_for_zone
 from core.zone_builder import desa_to_polygon, remove_overlaps
 
@@ -82,6 +84,14 @@ def get_dashboard_data():
 
         df_raw = pd.concat([df_bmkg, df_satelit], ignore_index=True)
 
+    # Tambahkan data dari PetaBencana (Citizen Report)
+    try:
+        df_pb = fetch_petabencana_reports(hours=72)
+        if not df_pb.empty:
+            df_raw = pd.concat([df_raw, df_pb], ignore_index=True)
+    except Exception as e:
+        print(f"Failed to integrate PetaBencana: {e}")
+
     if df_raw.empty:
         return {"error": "no_land_points"}
 
@@ -142,6 +152,10 @@ def get_dashboard_data():
             agg_dict['disaster_type'] = ('disaster_type', lambda x: next((v for v in x if pd.notna(v) and str(v).strip() != ''), None))
         if 'source' in df_valid.columns:
             agg_dict['has_bmkg'] = ('source', lambda x: any(str(v).upper() == 'BMKG' for v in x if pd.notna(v)))
+            agg_dict['has_petabencana'] = ('source', lambda x: any(str(v).lower() == 'petabencana' for v in x if pd.notna(v)))
+        # Ambil event_date terlama (pertama kali kejadian) per zona
+        if 'event_date' in df_valid.columns:
+            agg_dict['event_date'] = ('event_date', 'min')
         
         desa_damage = df_valid.groupby('_desa_idx').agg(**agg_dict).reset_index()
 
@@ -154,6 +168,7 @@ def get_dashboard_data():
                     continue
                 damage_count = int(row['count'])
                 is_bmkg = row.get('has_bmkg', False)
+                has_pb = row.get('has_petabencana', False)
                 if damage_count < 2 and not is_bmkg:
                     continue
 
@@ -191,16 +206,39 @@ def get_dashboard_data():
                 if not raw_pts:
                     continue
 
-                # Generate titik organik multi-cluster (TIDAK dibatasi polygon desa)
+                # ========================================================
+                # PREDICTION-DRIVEN cluster generation
+                # Menggunakan confidence dan damage_count dari model prediksi
+                # untuk menentukan jumlah, ukuran, dan bentuk kluster kerusakan.
+                # ========================================================
+                # Hitung rata-rata confidence dari titik prediksi di zona ini
+                zone_confidences = desa_points['confidence'].values if 'confidence' in desa_points.columns else [0.5]
+                avg_conf = float(np.mean(zone_confidences))
+
+                # Jumlah kluster: makin banyak kerusakan (sim_count) -> makin banyak kluster
+                # Minimal 1, maksimal 6
+                n_clusters = max(1, min(6, sim_count // 15))
+
+                # Spread kluster: makin tinggi confidence -> makin rapat (kerusakan terkonsentrasi)
+                # Makin rendah confidence -> makin menyebar (ketidakpastian lebih tinggi)
+                base_spread = 0.006 * (1.0 - avg_conf * 0.5)  # ~300-600m
+
                 base_lon, base_lat = raw_pts[0][0], raw_pts[0][1]
-                n_clusters = random.randint(1, 4)
-                for _ in range(n_clusters):
-                    cx = np.random.normal(base_lon, 0.004)
-                    cy = np.random.normal(base_lat, 0.004)
-                    cluster_size = random.randint(5, max(6, sim_count // n_clusters))
-                    # Setiap cluster punya spread asimetris (elongated = tidak lingkaran)
-                    sx = np.random.uniform(0.001, 0.005)
-                    sy = np.random.uniform(0.001, 0.005)
+                for ci in range(n_clusters):
+                    # Posisi kluster: offset dari episenter berdasarkan prediksi
+                    angle = (ci / max(n_clusters, 1)) * 2 * np.pi  # Distribusi merata
+                    dist = base_spread * (0.5 + avg_conf)
+                    cx = base_lon + dist * np.cos(angle) + np.random.normal(0, 0.001)
+                    cy = base_lat + dist * np.sin(angle) + np.random.normal(0, 0.001)
+
+                    # Ukuran kluster: proporsional dengan sim_count per kluster
+                    cluster_size = max(3, sim_count // n_clusters)
+
+                    # Bentuk asimetris: spread berbeda di X dan Y
+                    # Menggunakan confidence untuk menentukan elongasi
+                    sx = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
+                    sy = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
+
                     for _ in range(cluster_size):
                         raw_pts.append([
                             round(np.random.normal(cx, sx), 6),
@@ -236,17 +274,29 @@ def get_dashboard_data():
                 except Exception:
                     pass
 
+                # Hitung waktu kejadian dan elapsed hours
+                now = datetime.now()
+                zone_event_date = None
+                zone_elapsed_hours = 0
+                if 'event_date' in row.index and pd.notna(row.get('event_date')):
+                    zone_event_date = pd.to_datetime(row['event_date'])
+                    zone_elapsed_hours = (now - zone_event_date).total_seconds() / 3600.0
+
                 rz_data.append({
                     "polygon": polygon,
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(row['desa']),
                     "count": damage_count,
                     "disaster_type": disaster_type,
+                    "has_bmkg": bool(is_bmkg),
+                    "has_petabencana": bool(has_pb),
                     "logistics": logistics,
                     "lon": zone_lon,
                     "lat": zone_lat,
                     "raw_points": raw_pts,
                     "building_footprints": building_polys,
+                    "event_date": zone_event_date.isoformat() if zone_event_date else None,
+                    "elapsed_hours": round(zone_elapsed_hours, 1),
                 })
             except Exception:
                 continue
@@ -295,16 +345,23 @@ def get_dashboard_data():
                     raw_pts.append([float(pt['lon']), float(pt['lat'])])
 
                 import numpy as np
-                # Generate multi-cluster organic points
+                # PREDICTION-DRIVEN cluster generation (fallback branch)
+                zone_confidences = group['confidence'].values if 'confidence' in group.columns else [0.5]
+                avg_conf = float(np.mean(zone_confidences))
+
+                n_clusters = max(1, min(6, damage_count // 15))
+                base_spread = 0.006 * (1.0 - avg_conf * 0.5)
+
                 if raw_pts:
                     base_lon, base_lat = raw_pts[0][0], raw_pts[0][1]
-                    n_clusters = random.randint(1, 4)
-                    for _ in range(n_clusters):
-                        cx = np.random.normal(base_lon, 0.004)
-                        cy = np.random.normal(base_lat, 0.004)
-                        cluster_size = random.randint(5, max(6, damage_count // n_clusters))
-                        sx = np.random.uniform(0.001, 0.005)
-                        sy = np.random.uniform(0.001, 0.005)
+                    for ci in range(n_clusters):
+                        angle = (ci / max(n_clusters, 1)) * 2 * np.pi
+                        dist = base_spread * (0.5 + avg_conf)
+                        cx = base_lon + dist * np.cos(angle) + np.random.normal(0, 0.001)
+                        cy = base_lat + dist * np.sin(angle) + np.random.normal(0, 0.001)
+                        cluster_size = max(3, damage_count // n_clusters)
+                        sx = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
+                        sy = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
                         for _ in range(cluster_size):
                             raw_pts.append([
                                 round(np.random.normal(cx, sx), 6),
@@ -334,17 +391,39 @@ def get_dashboard_data():
                 except Exception:
                     pass
 
+                # Hitung waktu kejadian dan elapsed hours (fallback branch)
+                now = datetime.now()
+                zone_event_date = None
+                zone_elapsed_hours = 0
+                if 'event_date' in group.columns:
+                    valid_dates = group['event_date'].dropna()
+                    if not valid_dates.empty:
+                        zone_event_date = valid_dates.min()
+                        zone_elapsed_hours = (now - zone_event_date).total_seconds() / 3600.0
+
+                # Ekstrak source
+                is_bmkg = False
+                has_pb = False
+                if 'source' in group.columns:
+                    sources = [str(v).lower() for v in group['source'].dropna()]
+                    is_bmkg = any('bmkg' in v for v in sources)
+                    has_pb = any('petabencana' in v for v in sources)
+
                 rz_data.append({
                     "polygon": polygon,
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(name),
                     "count": damage_count,
                     "disaster_type": disaster_type,
+                    "has_bmkg": is_bmkg,
+                    "has_petabencana": has_pb,
                     "logistics": logistics,
                     "lon": float(avg_lon),
                     "lat": float(avg_lat),
                     "raw_points": raw_pts,
                     "building_footprints": building_polys,
+                    "event_date": zone_event_date.isoformat() if zone_event_date else None,
+                    "elapsed_hours": round(zone_elapsed_hours, 1),
                 })
             except Exception:
                 continue

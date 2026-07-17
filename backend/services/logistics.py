@@ -57,12 +57,29 @@ def merge_nearby_hubs(cc, min_dist_m):
 
 
 def calculate_priority_scores(zones):
+    """
+    Multi-Criteria Priority Scoring untuk distribusi logistik pasca-bencana.
+
+    PARAMETER (sumber resmi):
+    1. Damage Density    — Perka BNPB No. 2/2012 (JITUPASNA: jumlah kerusakan bangunan)
+    2. Population        — BPS SP2020 + Perka BNPB No. 7/2008 (estimasi jiwa/KK per pulau)
+    3. Proximity         — Perka BNPB No. 13/2008 (aksesibilitas logistik ke zona terdampak)
+    4. Temporal Urgency  — Sphere Handbook 2018, Ch.6 (Golden Time 72 jam respons darurat)
+
+    BOBOT:
+    Equal weighting method (Dawes, 1979) — masing-masing 0.25.
+    Untuk bobot yang divalidasi pakar, gunakan AHP (Saaty, 1980).
+
+    KATEGORI PRIORITAS:
+    3 level: Tinggi, Sedang, Kecil — berdasarkan distribusi skor tercile.
+    """
     if not zones:
         return zones
 
     densities = []
     populations = []
     distances = []
+    urgencies = []
     gudang_names = []
     gudang_coords_list = []
 
@@ -109,6 +126,12 @@ def calculate_priority_scores(zones):
         gudang_names.append(g_name)
         gudang_coords_list.append(g_coords)
 
+        # Temporal Urgency: Golden Time 72 jam (Sphere Standards 2018)
+        # Semakin baru kejadian → urgency semakin tinggi
+        elapsed = z.get('elapsed_hours', 0)
+        urgency = max(0.0, 1.0 - min(elapsed / 72.0, 1.0))
+        urgencies.append(urgency)
+
     def normalize(values):
         min_v = min(values)
         max_v = max(values)
@@ -119,17 +142,22 @@ def calculate_priority_scores(zones):
     d_norm = normalize(densities)
     p_norm = normalize(populations)
     dist_norm = normalize(distances)
+    # Urgency sudah dalam range 0-1, tidak perlu normalisasi ulang
 
-    W_DENSITY = 0.4
-    W_POPULATION = 0.3
-    W_PROXIMITY = 0.3
+    # Equal Weighting Method (Dawes, 1979; Einhorn & Hogarth, 1975)
+    # Baseline sebelum validasi AHP oleh expert
+    W_DENSITY = 0.25
+    W_POPULATION = 0.25
+    W_PROXIMITY = 0.25
+    W_URGENCY = 0.25
 
     for i, z in enumerate(zones):
         proximity = 1.0 - dist_norm[i]
 
         score = (W_DENSITY * d_norm[i] +
                  W_POPULATION * p_norm[i] +
-                 W_PROXIMITY * proximity)
+                 W_PROXIMITY * proximity +
+                 W_URGENCY * urgencies[i])
 
         z['priority_score'] = round(score, 4)
         z['gudang_terdekat'] = gudang_names[i]
@@ -137,16 +165,19 @@ def calculate_priority_scores(zones):
         z['jarak_gudang_km'] = round(distances[i], 1)
 
     zones.sort(key=lambda x: x['priority_score'], reverse=True)
+
+    # Kategori Prioritas: 3 level (Tinggi, Sedang, Kecil)
+    # Menggunakan distribusi tercile berdasarkan skor
+    n = len(zones)
     for rank, z in enumerate(zones, 1):
         z['priority_rank'] = rank
-        score = z['priority_score']
-        if score >= 0.75:
-            z['priority_label'] = 'Kritis'
-        elif score >= 0.50:
+        # Tercile: top 1/3 = Tinggi, mid 1/3 = Sedang, bottom 1/3 = Kecil
+        if rank <= n / 3:
             z['priority_label'] = 'Tinggi'
-        elif score >= 0.25:
+        elif rank <= 2 * n / 3:
             z['priority_label'] = 'Sedang'
         else:
-            z['priority_label'] = 'Rendah'
+            z['priority_label'] = 'Kecil'
 
     return zones
+

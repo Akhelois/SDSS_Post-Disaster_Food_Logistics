@@ -88,12 +88,11 @@ export default function App() {
     return buildings;
   }, [redZones]);
 
-  // Heatmap color: makin banyak kerusakan -> makin merah tua
+  // Heatmap color: makin tinggi prioritas -> makin merah
   const heatColor = (count, priority) => {
-    if (priority === 'Kritis')  return [180, 0, 20];    // merah tua
-    if (priority === 'Tinggi')  return [220, 60, 20];   // merah oranye
-    if (priority === 'Sedang')  return [240, 160, 20];  // oranye kuning
-    return [240, 220, 60];                               // kuning
+    if (priority === 'Tinggi')  return [200, 30, 20];    // merah
+    if (priority === 'Sedang')  return [230, 120, 20];   // oranye
+    return [240, 190, 40];                                // kuning
   };
 
   const heatOpacity = (count) => {
@@ -107,10 +106,9 @@ export default function App() {
     const filteredZones = redZones.filter(d => d.polygon);
 
     const priorityFill = (label) => {
-      if (label === 'Kritis') return [239, 68, 68];
-      if (label === 'Tinggi') return [249, 115, 22];
-      if (label === 'Sedang') return [234, 179, 8];
-      return [34, 197, 94];
+      if (label === 'Tinggi') return [239, 68, 68];
+      if (label === 'Sedang') return [249, 115, 22];
+      return [234, 179, 8];
     };
 
     return [
@@ -191,6 +189,23 @@ export default function App() {
     return 'low';
   };
 
+  // Format elapsed time: "12.5 jam lalu" atau "2.1 hari lalu"
+  const formatElapsed = (hours) => {
+    if (!hours && hours !== 0) return '-';
+    if (hours < 1) return `${Math.round(hours * 60)} menit lalu`;
+    if (hours < 24) return `${Math.round(hours)} jam lalu`;
+    return `${(hours / 24).toFixed(1)} hari lalu`;
+  };
+
+  // Urgency badge berdasarkan Golden Time 72 jam (Sphere Standards 2018)
+  const getUrgencyBadge = (hours) => {
+    if (!hours && hours !== 0) return { emoji: '⚪', label: 'N/A', cls: '' };
+    if (hours < 24) return { emoji: '🔴', label: '< 24 jam', cls: 'urgency-high' };
+    if (hours < 48) return { emoji: '🟠', label: '24-48 jam', cls: 'urgency-med' };
+    if (hours < 72) return { emoji: '🟡', label: '48-72 jam', cls: 'urgency-low' };
+    return { emoji: '⚪', label: '> 72 jam', cls: 'urgency-expired' };
+  };
+
   return (
     <div className="dashboard-layout">
 
@@ -251,16 +266,13 @@ export default function App() {
               <div className="map-legend">
                 <span className="legend-label">Prioritas:</span>
                 <span className="legend-item">
-                  <span className="legend-dot red"></span> Kritis
+                  <span className="legend-dot red"></span> Tinggi
                 </span>
                 <span className="legend-item">
-                  <span className="legend-dot orange"></span> Tinggi
+                  <span className="legend-dot orange"></span> Sedang
                 </span>
                 <span className="legend-item">
-                  <span className="legend-dot yellow"></span> Sedang
-                </span>
-                <span className="legend-item">
-                  <span className="legend-dot green"></span> Rendah
+                  <span className="legend-dot yellow"></span> Kecil
                 </span>
               </div>
             </div>
@@ -299,14 +311,16 @@ export default function App() {
                       <th>Prioritas</th>
                       <th>ADM4_EN (Desa)</th>
                       <th>Informasi Bencana</th>
+                      <th>Waktu Kejadian</th>
                       <th>Titik Kerusakan Bangunan</th>
                       <th>Kebutuhan Logistik</th>
-                      <th>Gudang Terdekat</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {redZones.map((zone, i) => (
+                    {redZones.map((zone, i) => {
+                      const ub = getUrgencyBadge(zone.elapsed_hours);
+                      return (
                       <tr key={i} onClick={() => handleRowClick(zone)}>
                         <td>
                           <span className={`priority-badge ${zone.priority_label?.toLowerCase()}`}>
@@ -315,10 +329,26 @@ export default function App() {
                         </td>
                         <td style={{ fontWeight: 600 }}>{zone.desa || 'Tidak Diketahui'}</td>
                         <td>
-                          <span className="disaster-type-badge">
-                            <LuTriangleAlert size={11} />
-                            {zone.disaster_type || 'Banjir / Tanah Longsor'}
-                          </span>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <span className="disaster-type-badge">
+                              <LuTriangleAlert size={11} />
+                              {zone.disaster_type || 'Bencana Alam'}
+                            </span>
+                            {zone.has_petabencana && (
+                              <span style={{ fontSize: '0.65rem', padding: '2px 6px', background: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', width: 'fit-content', fontWeight: 600 }}>
+                                📱 Citizen Report
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ lineHeight: 1.4 }}>
+                            <span style={{ fontWeight: 600 }}>{ub.emoji} {formatElapsed(zone.elapsed_hours)}</span>
+                            <br />
+                            <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>
+                              {zone.event_date ? new Date(zone.event_date).toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}
+                            </span>
+                          </div>
                         </td>
                         <td>
                           <span className={`unit-badge ${getUnitLevel(zone.count)}`} style={{ padding: '4px 8px', borderRadius: '4px' }}>
@@ -334,10 +364,6 @@ export default function App() {
                             </div>
                           )}
                         </td>
-                        <td style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          {zone.gudang_terdekat || '-'} <br />
-                          <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>({zone.jarak_gudang_km ? `${zone.jarak_gudang_km} km` : '-'})</span>
-                        </td>
                         <td>
                           <button
                             className="resolve-btn"
@@ -347,7 +373,7 @@ export default function App() {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    )})}
                   </tbody>
                 </table>
               </div>

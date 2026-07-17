@@ -14,6 +14,14 @@ from config import (
 
 def load_geodata(path):
     def extract_event_date(scene_id, processed_at):
+        # Prioritize processed_at because it contains the exact time, not just the date
+        if pd.notna(processed_at):
+            try:
+                return pd.to_datetime(processed_at).replace(tzinfo=None)
+            except:
+                pass
+        
+        # Fallback to extracting from scene_id if processed_at is missing/invalid
         scene_id = str(scene_id)
         if 'T' in scene_id and '-' in scene_id:
             try:
@@ -32,11 +40,7 @@ def load_geodata(path):
                 return datetime.datetime.strptime(match.group(1), '%Y.%m.%d')
             except:
                 pass
-        if pd.notna(processed_at):
-            try:
-                return pd.to_datetime(processed_at).replace(tzinfo=None)
-            except:
-                pass
+        
         return datetime.datetime.now()
 
     for attempt in range(5):
