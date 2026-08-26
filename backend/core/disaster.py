@@ -68,7 +68,6 @@ if os.path.exists(BUILDING_CACHE_FILE):
             _disk_cache = json.load(f)
             for k_str, v in _disk_cache.items():
                 if isinstance(v, dict) and "buildings" in v and "time" in v:
-                    # keys in JSON are strings, convert back to tuple of floats
                     try:
                         lat_s, lon_s = k_str.split("_")
                         _building_cache[(float(lat_s), float(lon_s))] = v["buildings"]
@@ -109,7 +108,7 @@ def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
         ]
         
         query = f"""
-        [out:json][timeout:15];
+        [out:json][timeout:8];
         way["building"](around:{radius_m},{lat},{lon});
         out geom;
         """
@@ -118,7 +117,7 @@ def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
         headers = {'User-Agent': 'SDSS-Disaster-Logistics-Research/1.0'}
         for url in overpass_endpoints:
             try:
-                r = requests.get(url, params={'data': query}, headers=headers, timeout=25)
+                r = requests.get(url, params={'data': query}, headers=headers, timeout=2)
                 if r.status_code == 200:
                     data = r.json()
                     break

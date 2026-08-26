@@ -7,7 +7,7 @@ from shapely.geometry import Point
 import geopandas as gpd
 
 import services
-from gee.downloader import scan_disaster_area
+from services.nasa_earthdata import scan_disaster_area_nasa
 from config import (
     BMKG_GEMPA_URL, BMKG_NOWCAST_URL, MIN_MAGNITUDE, MIN_SEVERITY,
     PROCESSED_EVENTS_FILE, HEADERS
@@ -17,6 +17,20 @@ from scheduler.runner import (
     write_event_flag, write_event_to_geojson
 )
 
+
+_gdf_desa_proj_cache = None
+
+def _get_desa_proj():
+    global _gdf_desa_proj_cache
+    if _gdf_desa_proj_cache is not None:
+        return _gdf_desa_proj_cache
+    gdf_desa = services.load_desa_boundaries()
+    if gdf_desa is not None and not gdf_desa.empty:
+        try:
+            _gdf_desa_proj_cache = gdf_desa.to_crs(epsg=3857)
+        except Exception:
+            pass
+    return _gdf_desa_proj_cache
 
 def is_residential_area(lat, lon, min_built_ratio=0.03):
     try:
@@ -31,8 +45,11 @@ def is_residential_area(lat, lon, min_built_ratio=0.03):
             print(f"[Residential Check] ({lat:.4f}, {lon:.4f}) -> DALAM polygon desa")
             return True
 
+        desa_proj = _get_desa_proj()
+        if desa_proj is None:
+            return True
+
         pt_gdf = gpd.GeoDataFrame(geometry=[pt], crs="EPSG:4326").to_crs(epsg=3857)
-        desa_proj = gdf_desa.to_crs(epsg=3857)
         distances = desa_proj.geometry.distance(pt_gdf.geometry.iloc[0])
         min_dist_m = distances.min()
 
@@ -49,6 +66,7 @@ def is_residential_area(lat, lon, min_built_ratio=0.03):
     except Exception as e:
         print(f"[Residential Check] Error: {e} -> fallback allow")
         return True
+
 
 
 def parse_polygon_centroid(polygon_text):
@@ -121,8 +139,9 @@ def check_gempa():
                         })
                         if is_residential_area(lat, lon):
                             write_event_to_geojson(lat, lon, "Gempa Bumi", wilayah,
-                                                  severity="Severe", event_id=event_id)
-                            count = scan_disaster_area(
+                                                   severity="Severe", event_id=event_id,
+                                                   event_date=quake.get("DateTime"))
+                            count = scan_disaster_area_nasa(
                                 lat, lon, magnitude, event_id, wilayah,
                                 disaster_type="Gempa Bumi"
                             )
@@ -223,6 +242,11 @@ def check_cuaca_ekstrem():
                 area_desc = area.find("cap:areaDesc", ns) if area is not None else None
                 wilayah = area_desc.text if area_desc is not None else title_text
 
+                sent_el = cap_root.find("cap:sent", ns)
+                if sent_el is None:
+                    sent_el = info.find("cap:onset", ns)
+                cap_event_date = sent_el.text if sent_el is not None else None
+
                 alert_count += 1
                 print(f"[{now()}] {disaster_type.upper()} di {wilayah} (Severity: {severity_text})")
                 write_event_flag({
@@ -233,10 +257,11 @@ def check_cuaca_ekstrem():
                 })
                 if is_residential_area(lat, lon):
                     write_event_to_geojson(lat, lon, disaster_type, wilayah,
-                                           severity=severity_text, event_id=event_id)
+                                           severity=severity_text, event_id=event_id,
+                                           event_date=cap_event_date)
 
                     pseudo_magnitude = 6.0 if severity_text == "Extreme" else 5.5
-                    count = scan_disaster_area(
+                    count = scan_disaster_area_nasa(
                         lat, lon, pseudo_magnitude, event_id, wilayah,
                         disaster_type=disaster_type
                     )
@@ -250,7 +275,7 @@ def check_cuaca_ekstrem():
                 print(f"[{now()}] Error parsing CAP {cap_url}: {e}")
                 continue
 
-        print(f"[Cuaca] {alert_count} alert diproses, {trigger_count} trigger GEE, {skip_processed} sudah diproses, {skip_severity} severity rendah")
+        print(f"[Cuaca] {alert_count} alert diproses, {trigger_count} trigger NASA, {skip_processed} sudah diproses, {skip_severity} severity rendah")
 
     except Exception as e:
         print(f"[Cuaca] Error: {e}")

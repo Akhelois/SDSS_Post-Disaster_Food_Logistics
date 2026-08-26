@@ -18,7 +18,6 @@ from services.routing import (
 )
 
 from services.logistics import (
-    nearest_gudang_distance_km,
     merge_nearby_hubs,
     calculate_priority_scores,
 )

@@ -4,3 +4,7 @@
 /training/
 /backend/__pycache__/
 /backend/model/checkpoints_copy/
+/backend/model/backup/
+/backend/model/checkpoints/
+/backend/model/*.h5
+/agent/

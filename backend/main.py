@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
 import geopandas as gpd
-from shapely.geometry import Point, MultiPoint
+from shapely.geometry import Point, MultiPoint, Polygon, MultiPolygon
+from shapely.ops import unary_union
 import os
 import threading
 import time
@@ -34,8 +35,14 @@ _dashboard_cache = {
 }
 
 gdf_desa = load_desa_boundaries()
+gdf_desa_proj = None
 if gdf_desa is not None and not gdf_desa.empty:
     print(f"Shapefile loaded: {len(gdf_desa)} desa polygons")
+    adm_cols = [c for c in gdf_desa.columns if c.startswith('ADM')]
+    try:
+        gdf_desa_proj = gdf_desa[adm_cols + ['geometry']].to_crs(epsg=3857)
+    except Exception as e:
+        print(f"Error pre-projecting gdf_desa: {e}")
 else:
     print("Shapefile batas desa TIDAK DITEMUKAN - menggunakan fallback mode")
 
@@ -84,9 +91,18 @@ def get_dashboard_data():
 
         df_raw = pd.concat([df_bmkg, df_satelit], ignore_index=True)
 
-    # Tambahkan data dari PetaBencana (Citizen Report)
+    _pb_cache_ttl = 300
     try:
-        df_pb = fetch_petabencana_reports(hours=72)
+        now_ts = time.time()
+        if (not hasattr(app, '_pb_cache') or
+                app._pb_cache is None or
+                now_ts - getattr(app, '_pb_cache_time', 0) > _pb_cache_ttl):
+            df_pb = fetch_petabencana_reports(hours=72)
+            app._pb_cache = df_pb
+            app._pb_cache_time = now_ts
+        else:
+            df_pb = app._pb_cache
+
         if not df_pb.empty:
             df_raw = pd.concat([df_raw, df_pb], ignore_index=True)
     except Exception as e:
@@ -109,8 +125,10 @@ def get_dashboard_data():
                 geometry=[Point(lon, lat) for lon, lat in zip(df_raw['lon'], df_raw['lat'])],
                 crs="EPSG:4326"
             ).to_crs(epsg=3857)
-            gdf_desa_proj = gdf_desa[adm_cols + ['geometry']].to_crs(epsg=3857)
-            joined = gpd.sjoin_nearest(gdf_points_proj, gdf_desa_proj, how='left', max_distance=55000)
+            if gdf_desa_proj is not None:
+                joined = gpd.sjoin_nearest(gdf_points_proj, gdf_desa_proj, how='left', max_distance=55000)
+            else:
+                joined = gpd.sjoin_nearest(gdf_points_proj, gdf_desa[adm_cols + ['geometry']].to_crs(epsg=3857), how='left', max_distance=55000)
             joined = joined[~joined.index.duplicated(keep='first')]
             if 'index_right' in joined.columns:
                 df_raw['_desa_idx'] = joined['index_right'].values
@@ -130,10 +148,10 @@ def get_dashboard_data():
             df_raw['_desa'] = 'Tidak Diketahui'
             desa_col = '_desa'
     else:
-        if 'wilayah' in df_raw.columns and 'source' in df_raw.columns:
-            bmkg_mask = (df_raw['source'] == 'BMKG') & (df_raw[desa_col].isna())
-            if bmkg_mask.any():
-                df_raw.loc[bmkg_mask, desa_col] = df_raw.loc[bmkg_mask, 'wilayah']
+        if 'wilayah' in df_raw.columns:
+            fallback_mask = df_raw[desa_col].isna() | (df_raw[desa_col] == 'Tidak Diketahui') | (df_raw[desa_col] == None)
+            if fallback_mask.any():
+                df_raw.loc[fallback_mask, desa_col] = df_raw.loc[fallback_mask, 'wilayah']
         df_raw[desa_col] = df_raw[desa_col].fillna('Tidak Diketahui')
 
     df_raw['island'] = df_raw.apply(lambda r: assign_island(r['lat'], r['lon']), axis=1)
@@ -148,12 +166,13 @@ def get_dashboard_data():
             'avg_lon': ('lon', 'mean'),
             'avg_lat': ('lat', 'mean')
         }
+        if 'ADM2_EN' in df_valid.columns:
+            agg_dict['adm2'] = ('ADM2_EN', 'first')
         if 'disaster_type' in df_valid.columns:
             agg_dict['disaster_type'] = ('disaster_type', lambda x: next((v for v in x if pd.notna(v) and str(v).strip() != ''), None))
         if 'source' in df_valid.columns:
             agg_dict['has_bmkg'] = ('source', lambda x: any(str(v).upper() == 'BMKG' for v in x if pd.notna(v)))
             agg_dict['has_petabencana'] = ('source', lambda x: any(str(v).lower() == 'petabencana' for v in x if pd.notna(v)))
-        # Ambil event_date terlama (pertama kali kejadian) per zona
         if 'event_date' in df_valid.columns:
             agg_dict['event_date'] = ('event_date', 'min')
         
@@ -169,7 +188,7 @@ def get_dashboard_data():
                 damage_count = int(row['count'])
                 is_bmkg = row.get('has_bmkg', False)
                 has_pb = row.get('has_petabencana', False)
-                if damage_count < 2 and not is_bmkg:
+                if damage_count < 2 and not is_bmkg and not has_pb:
                     continue
 
                 island = row['island']
@@ -179,7 +198,6 @@ def get_dashboard_data():
                 else:
                     disaster_type = str(dt)
 
-                # Boost damage_count jika terlalu kecil (data BMKG hanya kirim 1 episenter)
                 import numpy as np
                 import random
                 sim_count = damage_count
@@ -195,8 +213,7 @@ def get_dashboard_data():
                 }
 
                 raw_pts = []
-                from shapely.geometry import Polygon as ShapelyPolygon
-                frontend_polygon = ShapelyPolygon(polygon).buffer(0.0001)
+                frontend_polygon = Polygon(polygon).buffer(0.0001)
                 desa_points = df_valid[df_valid['_desa_idx'] == row['_desa_idx']]
                 for _, pt in desa_points.iterrows():
                     pt_geom = Point(float(pt['lon']), float(pt['lat']))
@@ -206,36 +223,22 @@ def get_dashboard_data():
                 if not raw_pts:
                     continue
 
-                # ========================================================
-                # PREDICTION-DRIVEN cluster generation
-                # Menggunakan confidence dan damage_count dari model prediksi
-                # untuk menentukan jumlah, ukuran, dan bentuk kluster kerusakan.
-                # ========================================================
-                # Hitung rata-rata confidence dari titik prediksi di zona ini
                 zone_confidences = desa_points['confidence'].values if 'confidence' in desa_points.columns else [0.5]
                 avg_conf = float(np.mean(zone_confidences))
 
-                # Jumlah kluster: makin banyak kerusakan (sim_count) -> makin banyak kluster
-                # Minimal 1, maksimal 6
                 n_clusters = max(1, min(6, sim_count // 15))
 
-                # Spread kluster: makin tinggi confidence -> makin rapat (kerusakan terkonsentrasi)
-                # Makin rendah confidence -> makin menyebar (ketidakpastian lebih tinggi)
                 base_spread = 0.006 * (1.0 - avg_conf * 0.5)  # ~300-600m
 
                 base_lon, base_lat = raw_pts[0][0], raw_pts[0][1]
                 for ci in range(n_clusters):
-                    # Posisi kluster: offset dari episenter berdasarkan prediksi
                     angle = (ci / max(n_clusters, 1)) * 2 * np.pi  # Distribusi merata
                     dist = base_spread * (0.5 + avg_conf)
                     cx = base_lon + dist * np.cos(angle) + np.random.normal(0, 0.001)
                     cy = base_lat + dist * np.sin(angle) + np.random.normal(0, 0.001)
 
-                    # Ukuran kluster: proporsional dengan sim_count per kluster
                     cluster_size = max(3, sim_count // n_clusters)
 
-                    # Bentuk asimetris: spread berbeda di X dan Y
-                    # Menggunakan confidence untuk menentukan elongasi
                     sx = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
                     sy = np.random.uniform(0.001, 0.003 + (1 - avg_conf) * 0.003)
 
@@ -259,22 +262,18 @@ def get_dashboard_data():
                         building_polys = get_buildings_for_zone(raw_pts, zone_lat, zone_lon)
                         app.overpass_fetches = getattr(app, "overpass_fetches", 0) + 1
 
-                # Buat damage polygon dari concave alpha shape (organik, bukan kotak)
                 damage_polygon_coords = []
                 try:
-                    from shapely.geometry import MultiPoint
                     from shapely.ops import unary_union
                     pts_geom = [Point(p[0], p[1]) for p in raw_pts]
                     mp = MultiPoint(pts_geom)
                     ch = mp.convex_hull.buffer(0.001)
                     if ch.geom_type == 'Polygon':
-                        # Simplify agar tidak terlalu banyak vertices tapi tetap organik
                         ch = ch.simplify(0.0005, preserve_topology=True)
                         damage_polygon_coords = [[round(c[0], 6), round(c[1], 6)] for c in ch.exterior.coords]
                 except Exception:
                     pass
 
-                # Hitung waktu kejadian dan elapsed hours
                 now = datetime.now()
                 zone_event_date = None
                 zone_elapsed_hours = 0
@@ -286,7 +285,9 @@ def get_dashboard_data():
                     "polygon": polygon,
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(row['desa']),
+                    "adm2": str(row.get('adm2', '')) if pd.notna(row.get('adm2')) else '',
                     "count": damage_count,
+                    "sim_count": sim_count,
                     "disaster_type": disaster_type,
                     "has_bmkg": bool(is_bmkg),
                     "has_petabencana": bool(has_pb),
@@ -345,7 +346,6 @@ def get_dashboard_data():
                     raw_pts.append([float(pt['lon']), float(pt['lat'])])
 
                 import numpy as np
-                # PREDICTION-DRIVEN cluster generation (fallback branch)
                 zone_confidences = group['confidence'].values if 'confidence' in group.columns else [0.5]
                 avg_conf = float(np.mean(zone_confidences))
 
@@ -381,7 +381,6 @@ def get_dashboard_data():
 
                 damage_polygon_coords = []
                 try:
-                    from shapely.geometry import MultiPoint
                     pts_geom = [Point(p[0], p[1]) for p in raw_pts]
                     mp = MultiPoint(pts_geom)
                     ch = mp.convex_hull.buffer(0.001)
@@ -391,7 +390,6 @@ def get_dashboard_data():
                 except Exception:
                     pass
 
-                # Hitung waktu kejadian dan elapsed hours (fallback branch)
                 now = datetime.now()
                 zone_event_date = None
                 zone_elapsed_hours = 0
@@ -401,7 +399,6 @@ def get_dashboard_data():
                         zone_event_date = valid_dates.min()
                         zone_elapsed_hours = (now - zone_event_date).total_seconds() / 3600.0
 
-                # Ekstrak source
                 is_bmkg = False
                 has_pb = False
                 if 'source' in group.columns:
@@ -414,6 +411,7 @@ def get_dashboard_data():
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(name),
                     "count": damage_count,
+                    "sim_count": damage_count,
                     "disaster_type": disaster_type,
                     "has_bmkg": is_bmkg,
                     "has_petabencana": has_pb,
@@ -433,6 +431,24 @@ def get_dashboard_data():
 
     rz_data = calculate_priority_scores(rz_data)
 
+    from services.itemized_logistics import predict_itemized_logistics
+    for z in rz_data:
+        sc = z.get('sim_count', z.get('count', 1))
+        pop = z.get('population', sc * 4)
+        elapsed = z.get('elapsed_hours', 0)
+        severity = 4 if z.get('has_bmkg') else (3 if z.get('has_petabencana') else 2)
+        duration = max(3, min(30, int(7 + (sc / 10))))
+        vuln = min(1.0, 0.3 + (sc / 200.0) + (0.1 if elapsed > 48 else 0))
+        z['itemized_logistics'] = predict_itemized_logistics(
+            damage_count=sc,
+            affected_kk=sc,
+            total_population=pop,
+            disaster_type=z.get('disaster_type', 'Bencana Alam'),
+            severity_level=severity,
+            emergency_duration=duration,
+            vulnerability_idx=round(vuln, 3)
+        )
+
     disaster_types = list(set(r['disaster_type'] for r in rz_data if 'disaster_type' in r))
     disaster_summary = ', '.join(sorted(disaster_types)) if disaster_types else 'Bencana Alam'
 
@@ -445,11 +461,10 @@ def get_dashboard_data():
         "lauk": total_damage * LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
     }
 
-    from shapely.geometry import Polygon as ShapelyPolygon
     valid_polys = []
     for z in rz_data:
         try:
-            valid_polys.append(ShapelyPolygon(z['polygon']).buffer(0.0002))
+            valid_polys.append(Polygon(z['polygon']).buffer(0.0002))
         except Exception:
             pass
 
@@ -505,6 +520,8 @@ def resolve_desa(desa: str):
         with open(OUTPUT_GEOJSON, 'w') as f:
             json.dump(geojson, f, indent=2)
         
+        _dashboard_cache["data"] = None
+        _dashboard_cache["mtime"] = 0
         return {"resolved": resolved_count, "desa": desa}
     except Exception as e:
         return {"error": str(e)}

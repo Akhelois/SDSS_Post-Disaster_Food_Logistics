@@ -1,6 +1,5 @@
 import os
 
-# === Path ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = "model/model_sdss.h5"
 MODEL_BACKUP_DIR = "model/backup"
@@ -13,21 +12,18 @@ STATUS_FILE = "output/hub_status.json"
 PROCESSED_MANIFEST = "output/processed_scenes.json"
 PROCESSED_EVENTS_FILE = "output/processed_events.json"
 NEW_EVENT_FLAG = "output/new_event.flag"
-BPS_DATA_FILE = "bps_data.json"
+WORLDPOP_CACHE_FILE = "output/worldpop_cache.json"
 
-# === Model Hyperparameters ===
 IMG_SIZE = (256, 256)
 CONF_THRESHOLD = 0.2
 GRID_SIZE = 16
 INCREMENTAL_EPOCHS = 3
 INCREMENTAL_LR = 1e-5
 
-# === GEE ===
 GEE_PROJECT = "sdss-bencana"
 CLOUD_THRESHOLD = 30
 CHANGE_THRESHOLD = 0.03
 
-# === Scheduler ===
 BMKG_GEMPA_URL = "https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json"
 BMKG_NOWCAST_URL = "https://www.bmkg.go.id/alerts/nowcast/id"
 CHECK_INTERVAL_MINUTES = 2
@@ -38,7 +34,6 @@ HEADERS = {
     "Accept": "application/json, application/xml, text/xml, */*"
 }
 
-# === Geografi Indonesia ===
 INDONESIA_BBOX = (95.0, -11.0, 141.0, 6.0)
 
 INDONESIA_LAND = [
@@ -87,7 +82,6 @@ WEATHER_RADIUS = {
     'Cuaca Ekstrem': 0.5,
 }
 
-# === Logistik per KK ===
 LOGISTIK_PER_KK = {
     'Beras (kg)': 10,
     'Air Minum (liter)': 50,
@@ -96,7 +90,6 @@ LOGISTIK_PER_KK = {
     'Lauk Kaleng (paket)': 4,
 }
 
-# === Gudang BNPB ===
 GUDANG_BNPB = [
     {"nama": "Gudang BNPB Jakarta",       "lat": -6.1751, "lon": 106.8650},
     {"nama": "Gudang BPBD Jawa Barat",    "lat": -6.9175, "lon": 107.6191},
@@ -111,6 +104,5 @@ GUDANG_BNPB = [
     {"nama": "Gudang BPBD Papua",         "lat": -2.5337, "lon": 140.7183},
 ]
 
-# === Konstanta TTL ===
 DATA_TTL_HOURS = 2
 BUILDING_CACHE_TTL = 3600
