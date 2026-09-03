@@ -14017,6 +14017,3726 @@
           2.31703
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "2026-09-02T00:04:55+00:00",
+        "processed_at": "2026-09-03T09:25:56.980900",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "69 km TimurLaut KOBAGMA-PAPUAPGNGN (Desa Komra)",
+        "source": "BMKG",
+        "event_date": "2026-09-02T00:04:55+00:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.391824,
+          -2.999164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "nasa_2026-09-02T00:04:55+00:00_scan",
+        "processed_at": "2026-09-03T09:25:57.362703",
+        "status": "active",
+        "disaster_type": "Gempa Bumi",
+        "wilayah": "69 km TimurLaut KOBAGMA-PAPUAPGNGN (Desa Komra)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-03 09:25:57"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.391824,
+          -2.999164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.5,
+        "scene_id": "nowcast_2.49.0.1.360.0.2026.09.03.02.11.002",
+        "processed_at": "2026-09-03T09:25:58.954594",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Aceh (Desa Pasir Belo)",
+        "source": "BMKG",
+        "event_date": "2026-08-24T07:24:00+07:00"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.910896,
+          2.925538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.7,
+        "scene_id": "nasa_nowcast_2.49.0.1.360.0.2026.09.03.02.11.002_scan",
+        "processed_at": "2026-09-03T09:25:59.483776",
+        "status": "active",
+        "disaster_type": "Banjir",
+        "wilayah": "Aceh (Desa Pasir Belo)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-03 09:25:58"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          97.910896,
+          2.925538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_1.03_109.52_2026-09-01",
+        "processed_at": "2026-09-03T09:26:24.800126",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Bengkayang (Desa Lesabela)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.548596,
+          1.039439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:26:25.997414",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.57_111.06_2026-09-01",
+        "processed_at": "2026-09-03T09:26:27.185510",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Buluh)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.019633,
+          -2.549326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:26:28.390269",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:26:29.606257",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:26:30.801138",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:26:31.984079",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:26:33.130766",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:26:34.136665",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:26:35.532435",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.22_113.77_2026-09-02",
+        "processed_at": "2026-09-03T09:26:36.671130",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Pulang Pisau (Desa Sei Hambawang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.745969,
+          -3.19755
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:26:37.827897",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.16_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:26:39.047374",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Nanjung)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.224241,
+          -2.174775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.02_113.31_2026-09-02",
+        "processed_at": "2026-09-03T09:26:40.226006",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Katingan (Desa Teluk Sebulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.26556,
+          -3.03777
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.19_114.97_2026-09-02",
+        "processed_at": "2026-09-03T09:26:41.711158",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Selatan, Banjar (Desa Alalak Padang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.962883,
+          -3.187674
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.04_112.02_2026-09-01",
+        "processed_at": "2026-09-03T09:26:42.883067",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Sintang (Desa Landau Beringin)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.050145,
+          -0.020734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:26:44.013968",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.04_111.4_2026-09-02",
+        "processed_at": "2026-09-03T09:26:45.196155",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Sintang (Desa Nanga Tempunak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.387208,
+          0.057409
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-8.32_124.62_2026-09-01",
+        "processed_at": "2026-09-03T09:26:46.630868",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Nusa Tenggara Timur, Alor (Desa Malaipea)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          124.632374,
+          -8.304055
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:26:47.846472",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.6_114.77_2026-09-02",
+        "processed_at": "2026-09-03T09:26:48.982424",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Barito Selatan (Desa Teluk Mampun)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.804926,
+          -1.595805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:26:50.489417",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.43_111.62_2026-09-01",
+        "processed_at": "2026-09-03T09:26:51.657175",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Kotawaringin Barat (Desa Rangda)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.603185,
+          -2.425477
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:26:52.856675",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.03_102.35_2026-09-02",
+        "processed_at": "2026-09-03T09:26:54.201297",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Jambi, Tebo (Desa Pemayongan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          102.322377,
+          -1.028752
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.17_112.93_2026-09-02",
+        "processed_at": "2026-09-03T09:26:55.403607",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Kotawaringin Timur (Desa Ujung Pandaran)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.931324,
+          -3.139406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:29:30.216478",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:29:31.434317",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:29:32.252515",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:29:32.915829",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:29:33.720383",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:29:34.368036",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:29:34.942990",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:29:35.861751",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:29:36.572031",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:29:38.176033",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:29:40.010518",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:29:41.505192",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:29:42.720185",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:32:12.051584",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:32:13.424101",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:32:14.582713",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:32:15.595446",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:32:16.566676",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:32:17.507243",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:32:18.488114",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:32:19.764899",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:32:21.143933",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:32:24.021220",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:32:26.384529",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:32:28.284767",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:32:29.673950",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:34:50.509004",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:34:51.883404",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:34:52.831416",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:34:53.751700",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:34:54.860930",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:34:55.780923",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:34:56.701228",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:34:57.938684",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:34:59.271879",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:35:02.264868",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:35:04.440966",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:35:06.018698",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:35:07.424884",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:37:45.630703",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:37:46.938162",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:37:47.848840",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:37:48.784632",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:37:49.742255",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:37:50.571917",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:37:51.497312",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:37:52.772550",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:37:54.146634",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:37:56.985941",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:37:59.118271",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:38:00.693569",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:38:01.992644",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:40:24.975126",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:40:26.381624",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:40:27.358058",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:40:28.313829",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:40:29.230403",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:40:30.092123",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:40:31.022138",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:40:32.291570",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:40:33.628371",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:40:36.600778",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:40:38.795188",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:40:40.474230",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:40:41.747229",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:43:03.061232",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:43:04.446227",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:43:05.398174",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:43:06.262293",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:43:07.271595",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:43:08.129244",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:43:09.044856",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:43:10.334430",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:43:11.725086",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:43:14.872672",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:43:17.160390",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:43:18.911768",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:43:20.273614",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:45:43.266580",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:45:44.611164",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:45:45.538636",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:45:46.547828",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:45:47.321989",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:45:48.193103",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:45:49.100311",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:45:50.221236",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:45:51.595529",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:45:54.541508",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:45:56.766958",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:45:58.430298",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:45:59.840045",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:48:22.060216",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:48:23.369243",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:48:24.263678",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:48:25.158312",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:48:26.069794",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:48:26.948302",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:48:27.847697",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:48:29.046587",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:48:30.381773",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:48:33.005796",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:48:35.061762",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:48:36.633471",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:48:38.007451",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:50:59.818938",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:51:01.178737",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:51:01.979459",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:51:02.705062",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:51:03.515657",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:51:04.319135",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:51:05.257819",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:51:06.529562",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:51:07.822962",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:51:10.257582",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:51:12.394743",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:51:14.097334",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:51:15.535380",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:53:40.242563",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:53:41.574259",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:53:42.272436",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:53:43.091503",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:53:43.839559",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:53:44.666100",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:53:45.581770",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:53:46.864519",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:53:48.330711",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:53:51.728206",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:53:52.954343",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:53:53.913655",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:53:54.662875",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:56:17.678750",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:56:19.049413",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:56:19.966211",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:56:20.862258",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:56:21.726157",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:56:22.601918",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:56:23.506203",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:56:24.719005",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:56:26.092100",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:56:28.928747",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:56:30.890181",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:56:32.455715",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:56:33.759431",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-3.01_112.6_2026-09-02",
+        "processed_at": "2026-09-03T09:58:54.818858",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Seruyan (Desa Pematang Limau)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.577013,
+          -3.059429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.56_110.07_2026-09-02",
+        "processed_at": "2026-09-03T09:58:56.140334",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Sungai Putri)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.159469,
+          -1.599419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.38_110.47_2026-09-02",
+        "processed_at": "2026-09-03T09:58:57.044728",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Bangkal Serai)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.519198,
+          -2.504411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.02_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:58:58.002398",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Pesaguan Kanan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.286154,
+          -2.036266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.97_111.21_2026-09-02",
+        "processed_at": "2026-09-03T09:58:58.950941",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Lamandau (Desa Suja)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.272489,
+          -1.994916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_0.54_112.16_2026-09-01",
+        "processed_at": "2026-09-03T09:58:59.829923",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kapuas Hulu (Desa Gudang Hulu)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          112.204717,
+          0.59322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-2.82_111.06_2026-09-02",
+        "processed_at": "2026-09-03T09:59:00.788063",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Tengah, Sukamara (Desa Sungai Damar)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          111.026268,
+          -2.931897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.44_117.95_2026-09-02",
+        "processed_at": "2026-09-03T09:59:02.097025",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Utara, Bulungan (Desa Mangku Padi)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.769486,
+          2.459813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.81_110.18_2026-09-02",
+        "processed_at": "2026-09-03T09:59:03.613216",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Negeri Baru)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.213779,
+          -1.752792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-7.64_138.81_2026-09-02",
+        "processed_at": "2026-09-03T09:59:06.732585",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Papua, Merauke (Desa Padua)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.770984,
+          -7.540522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-1.52_110.16_2026-09-02",
+        "processed_at": "2026-09-03T09:59:09.099231",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Ketapang (Desa Kuala Tolak)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          110.111766,
+          -1.470298
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_2.6_117.07_2026-09-02",
+        "processed_at": "2026-09-03T09:59:10.896572",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Timur, Berau (Desa Long Ayan)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.972149,
+          2.31703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "confidence": 0.9,
+        "scene_id": "nasa_firms_-0.18_109.61_2026-09-02",
+        "processed_at": "2026-09-03T09:59:12.432338",
+        "status": "active",
+        "disaster_type": "Kebakaran Hutan",
+        "wilayah": "Kalimantan Barat, Kubu Raya (Desa Pasak Piang)",
+        "source": "NASA FIRMS",
+        "event_date": "2026-09-02"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.671312,
+          -0.12017
+        ]
+      }
     }
   ]
 }

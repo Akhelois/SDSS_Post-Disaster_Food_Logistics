@@ -475,11 +475,12 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.82rem;
+  table-layout: fixed;
 }
 
 .data-table thead th {
   background: var(--bg-body);
-  padding: 11px 18px;
+  padding: 10px 14px;
   text-align: left;
   font-size: 0.68rem;
   font-weight: 700;
@@ -490,6 +491,9 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .data-table tbody tr {
@@ -534,10 +538,13 @@
 }
 
 .data-table tbody td {
-  padding: 12px 18px;
+  padding: 10px 14px;
   color: var(--text-primary);
   font-weight: 450;
   transition: color 0.2s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
 }
 .data-table tbody tr:hover td:first-child {
   color: var(--accent);
