@@ -100,8 +100,11 @@ def load_geodata(path):
         if gdf.empty:
             return gdf
 
-        gdf['lat'] = gdf.geometry.centroid.y
-        gdf['lon'] = gdf.geometry.centroid.x
+        if gdf.crs is None:
+            gdf.set_crs(epsg=4326, inplace=True)
+        centroids = gdf.geometry.to_crs(epsg=3857).centroid.to_crs(epsg=4326)
+        gdf['lat'] = centroids.y
+        gdf['lon'] = centroids.x
         if 'confidence' not in gdf.columns:
             gdf['confidence'] = 0.5
         return gdf

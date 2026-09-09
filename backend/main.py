@@ -31,7 +31,8 @@ app.add_middleware(
 
 _dashboard_cache = {
     "data": None,
-    "mtime": 0
+    "mtime": 0,
+    "last_calc": 0
 }
 
 gdf_desa = load_desa_boundaries()
@@ -50,13 +51,17 @@ else:
 @app.get("/")
 def get_dashboard_data():
     app.overpass_fetches = 0
+    now_ts = time.time()
     try:
         current_mtime = os.path.getmtime(OUTPUT_GEOJSON)
     except Exception:
         current_mtime = 0
 
-    if _dashboard_cache["data"] is not None and _dashboard_cache["mtime"] >= current_mtime:
-        return _dashboard_cache["data"]
+    if _dashboard_cache["data"] is not None:
+        if _dashboard_cache["mtime"] >= current_mtime:
+            return _dashboard_cache["data"]
+        if now_ts - _dashboard_cache.get("last_calc", 0) < 30:
+            return _dashboard_cache["data"]
 
     df_raw = load_geodata(OUTPUT_GEOJSON)
     if df_raw is None or df_raw.empty:
@@ -469,10 +474,16 @@ def get_dashboard_data():
             pass
 
     filtered_points = []
-    for lon, lat in zip(df_raw['lon'], df_raw['lat']):
-        p = Point(lon, lat)
-        if any(poly.contains(p) for poly in valid_polys):
-            filtered_points.append({"lon": round(lon, 6), "lat": round(lat, 6)})
+    if valid_polys:
+        try:
+            from shapely.prepared import prep
+            union_prep = prep(unary_union(valid_polys))
+            for lon, lat in zip(df_raw['lon'], df_raw['lat']):
+                if union_prep.contains(Point(lon, lat)):
+                    filtered_points.append({"lon": round(lon, 6), "lat": round(lat, 6)})
+        except Exception:
+            for lon, lat in zip(df_raw['lon'], df_raw['lat']):
+                filtered_points.append({"lon": round(lon, 6), "lat": round(lat, 6)})
 
     response_data = {
         "disaster_info": {
@@ -493,6 +504,7 @@ def get_dashboard_data():
     
     _dashboard_cache["data"] = response_data
     _dashboard_cache["mtime"] = current_mtime
+    _dashboard_cache["last_calc"] = time.time()
     
     return response_data
 

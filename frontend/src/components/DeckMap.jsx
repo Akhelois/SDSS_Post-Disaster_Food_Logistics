@@ -11,6 +11,11 @@ function formatDecimal(val) {
   return (Math.floor(num * 100) / 100).toFixed(2);
 }
 
+function formatInt(val) {
+  if (val === null || val === undefined || isNaN(val)) return '0';
+  return Math.round(Number(val)).toLocaleString('id-ID');
+}
+
 const MAP_STYLES = {
   satellite: {
     version: 8,
@@ -64,7 +69,7 @@ const INITIAL_VIEW_STATE = {
   bearing: 0
 };
 
-export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomChange }) {
+export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomChange, onPolygonClick }) {
   const [mapMode, setMapMode] = useState(theme);
   
   useEffect(() => {
@@ -103,6 +108,12 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
       setTooltip(null);
     }
   }, []);
+
+  const handleClick = useCallback((info) => {
+    if (info && info.object && onPolygonClick) {
+      onPolygonClick(info.object);
+    }
+  }, [onPolygonClick]);
 
   const getTooltipStyle = () => {
     if (!tooltip || !tooltipRef.current || !containerRef.current) return { display: 'none' };
@@ -145,7 +156,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
         backgroundColor: 'rgba(15, 23, 42, 0.85)',
         backdropFilter: 'blur(8px)',
         padding: '4px',
-        borderRadius: '8px',
+        borderRadius: '0px',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         display: 'flex',
         gap: '4px'
@@ -157,7 +168,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
             fontSize: '0.75rem',
             fontWeight: 600,
             border: 'none',
-            borderRadius: '6px',
+            borderRadius: '0px',
             cursor: 'pointer',
             backgroundColor: mapMode === 'satellite' ? '#38bdf8' : 'transparent',
             color: mapMode === 'satellite' ? '#0f172a' : '#94a3b8'
@@ -172,7 +183,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
             fontSize: '0.75rem',
             fontWeight: 600,
             border: 'none',
-            borderRadius: '6px',
+            borderRadius: '0px',
             cursor: 'pointer',
             backgroundColor: mapMode === 'dark' ? '#38bdf8' : 'transparent',
             color: mapMode === 'dark' ? '#0f172a' : '#94a3b8'
@@ -187,7 +198,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
             fontSize: '0.75rem',
             fontWeight: 600,
             border: 'none',
-            borderRadius: '6px',
+            borderRadius: '0px',
             cursor: 'pointer',
             backgroundColor: mapMode === 'light' ? '#38bdf8' : 'transparent',
             color: mapMode === 'light' ? '#0f172a' : '#94a3b8'
@@ -210,6 +221,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
         controller={true}
         layers={layers}
         onHover={onHover}
+        onClick={handleClick}
         getTooltip={() => null}
       >
         <Map key={mapMode} mapStyle={currentStyle} />
@@ -217,34 +229,22 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
 
       {tooltip && obj && (
         <div ref={tooltipRef} className="custom-tooltip" style={getTooltipStyle()}>
-          <div className="tt-type">{(obj.disaster_type || 'Banjir / Tanah Longsor').toUpperCase()}</div>
+          <div className="tt-header-row">
+            <span className="tt-type">{(obj.disaster_type || 'Bencana Alam').toUpperCase()}</span>
+            {obj.priority_label && (
+              <span className={`tt-priority-tag ${(obj.priority_label || '').toLowerCase()}`}>
+                Prioritas {obj.priority_label}
+              </span>
+            )}
+          </div>
           <div className="tt-divider" />
-          <div className="tt-row"><span className="tt-label">Desa</span><span className="tt-val">{obj.desa || 'Tidak Diketahui'}</span></div>
-          <div className="tt-row"><span className="tt-label">Kerusakan</span><span className="tt-val">{obj.count} unit</span></div>
-          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{obj.population || obj.count * 4} jiwa</span></div>
-          {item ? (
-            <>
-              <div className="tt-divider" />
-              <div className="tt-section">Logistik Presisi (Model DL .h5)</div>
-              <div className="tt-row"><span className="tt-label">Beras</span><span className="tt-val">{formatDecimal(item.beras_kg)} kg</span></div>
-              <div className="tt-row"><span className="tt-label">Minyak Goreng</span><span className="tt-val">{formatDecimal(item.minyak_liter)} L</span></div>
-              <div className="tt-row"><span className="tt-label">Gula Pasir</span><span className="tt-val">{formatDecimal(item.gula_kg)} kg</span></div>
-              <div className="tt-row"><span className="tt-label">Mie Instan</span><span className="tt-val">{formatDecimal(item.indomie_pcs)} pcs</span></div>
-              <div className="tt-row"><span className="tt-label">Biskuit Roma</span><span className="tt-val">{formatDecimal(item.roma_sari_gandum_pack)} pack</span></div>
-              <div className="tt-row"><span className="tt-label">Sarden / Kornet</span><span className="tt-val">{formatDecimal(item.sarden_pcs)} / {formatDecimal(item.kornet_pcs)} klg</span></div>
-              <div className="tt-row"><span className="tt-label">Susu Cream/Dancow</span><span className="tt-val">{formatDecimal(item.susu_full_cream_pcs)} pcs / {formatDecimal(item.susu_dancow_box)} box</span></div>
-              <div className="tt-row"><span className="tt-label">Matras / Kompor</span><span className="tt-val">{formatDecimal(item.matras_pcs)} pcs / {formatDecimal(item.kompor_set)} set</span></div>
-              <div className="tt-row"><span className="tt-label">Kasur / Karpet</span><span className="tt-val">{formatDecimal(item.kasur_lipat_pcs)} / {formatDecimal(item.karpet_plastik_pcs)} pcs</span></div>
-            </>
-          ) : obj.logistics && (
-            <>
-              <div className="tt-divider" />
-              <div className="tt-section">Kebutuhan Logistik</div>
-              <div className="tt-row"><span className="tt-label">Beras</span><span className="tt-val">{formatDecimal(obj.logistics.beras)} kg</span></div>
-              <div className="tt-row"><span className="tt-label">Air</span><span className="tt-val">{formatDecimal(obj.logistics.air)} L</span></div>
-              <div className="tt-row"><span className="tt-label">Mie Instan</span><span className="tt-val">{formatDecimal(obj.logistics.mie)} dus</span></div>
-            </>
+          <div className="tt-row"><span className="tt-label">Wilayah / Desa</span><span className="tt-val">{obj.desa || 'Teridentifikasi'}</span></div>
+          <div className="tt-row"><span className="tt-label">Kerusakan Fisik</span><span className="tt-val">{obj.count} unit bangunan</span></div>
+          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{formatInt(obj.population || obj.count * 4)} jiwa</span></div>
+          {obj.priority_score !== undefined && (
+            <div className="tt-row"><span className="tt-label">Skor Urgensi SDSS</span><span className="tt-val" style={{ color: 'var(--accent-emergency)' }}>{Number(obj.priority_score).toFixed(2)}</span></div>
           )}
+          <div className="tt-hint">Klik untuk melihat detail 17 item logistik</div>
         </div>
       )}
     </div>

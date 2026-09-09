@@ -117,7 +117,7 @@ def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
         headers = {'User-Agent': 'SDSS-Disaster-Logistics-Research/1.0'}
         for url in overpass_endpoints:
             try:
-                r = requests.get(url, params={'data': query}, headers=headers, timeout=2)
+                r = requests.get(url, params={'data': query}, headers=headers, timeout=4)
                 if r.status_code == 200:
                     data = r.json()
                     break
@@ -125,7 +125,6 @@ def fetch_buildings_near(lat, lon, radius_m=500, max_buildings=200):
                 continue
                 
         if not data:
-            print(f"  [OSM] Error fetching buildings: All endpoints failed or timed out.")
             return []
 
         buildings = []
