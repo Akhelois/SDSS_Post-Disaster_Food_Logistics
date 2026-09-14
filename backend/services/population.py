@@ -135,30 +135,9 @@ def fetch_worldpop_population(desa_name, polygon_coords):
         if not taskid:
             return None
 
-        # Quick polling (max 2 attempts x 1.5s) to avoid blocking main HTTP thread
-        for attempt in range(2):
-            time.sleep(1.5)
-            try:
-                task_r = requests.get(f"{WORLDPOP_TASK_URL}/{taskid}", timeout=3)
-                if task_r.status_code == 200:
-                    task_data = _safe_parse_json(task_r.text)
-                    if task_data and task_data.get("status") == "finished":
-                        total_pop = task_data.get("data", {}).get("total_population")
-                        if total_pop is not None and total_pop > 0:
-                            population = int(round(total_pop))
-                            with _cache_lock:
-                                if cache_key:
-                                    _population_cache[cache_key] = population
-                                _save_cache()
-                            print(f"[WorldPop] {desa_name}: {population} jiwa")
-                            return population
-            except Exception:
-                pass
-
-        # If task is still processing, launch background thread to finish fetching into cache for next refresh
         def _bg_fetch(tid, key, name):
-            for _ in range(10):
-                time.sleep(3)
+            for _ in range(12):
+                time.sleep(2.5)
                 try:
                     tr = requests.get(f"{WORLDPOP_TASK_URL}/{tid}", timeout=5)
                     td = _safe_parse_json(tr.text)
@@ -183,10 +162,6 @@ def fetch_worldpop_population(desa_name, polygon_coords):
 
 
 def get_population_for_desa(desa_name, polygon_coords=None):
-    """
-    Mengambil data populasi untuk satu desa.
-    Menggunakan cache terlebih dahulu, jika tidak ada maka query WorldPop API.
-    """
     if not desa_name:
         return None
 
@@ -194,8 +169,12 @@ def get_population_for_desa(desa_name, polygon_coords=None):
     if cache_key in _population_cache:
         return _population_cache[cache_key]
 
-    if polygon_coords:
-        return fetch_worldpop_population(desa_name, polygon_coords)
+    if polygon_coords and len(polygon_coords) >= 4:
+        if not hasattr(get_population_for_desa, '_queued'):
+            get_population_for_desa._queued = set()
+        if cache_key not in get_population_for_desa._queued and len(get_population_for_desa._queued) < 30:
+            get_population_for_desa._queued.add(cache_key)
+            threading.Thread(target=fetch_worldpop_population, args=(desa_name, polygon_coords), daemon=True).start()
 
     return None
 

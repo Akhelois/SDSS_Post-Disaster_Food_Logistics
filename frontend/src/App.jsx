@@ -49,6 +49,115 @@ function formatInt(val) {
   return Math.round(Number(val)).toLocaleString();
 }
 
+const PROVINCE_MAPPING = [
+  { key: 'aceh', name: 'Aceh' },
+  { key: 'sumatera utara', name: 'Sumatera Utara' },
+  { key: 'sumut', name: 'Sumatera Utara' },
+  { key: 'sumatera barat', name: 'Sumatera Barat' },
+  { key: 'sumbar', name: 'Sumatera Barat' },
+  { key: 'padang', name: 'Sumatera Barat' },
+  { key: 'riau', name: 'Riau' },
+  { key: 'kepulauan riau', name: 'Kepulauan Riau' },
+  { key: 'jambi', name: 'Jambi' },
+  { key: 'sumatera selatan', name: 'Sumatera Selatan' },
+  { key: 'sumsel', name: 'Sumatera Selatan' },
+  { key: 'bengkulu', name: 'Bengkulu' },
+  { key: 'lampung', name: 'Lampung' },
+  { key: 'bangka', name: 'Bangka Belitung' },
+  { key: 'babel', name: 'Bangka Belitung' },
+  { key: 'jakarta', name: 'DKI Jakarta' },
+  { key: 'jawa barat', name: 'Jawa Barat' },
+  { key: 'jabar', name: 'Jawa Barat' },
+  { key: 'cianjur', name: 'Jawa Barat' },
+  { key: 'jawa tengah', name: 'Jawa Tengah' },
+  { key: 'jateng', name: 'Jawa Tengah' },
+  { key: 'yogyakarta', name: 'DI Yogyakarta' },
+  { key: 'diy', name: 'DI Yogyakarta' },
+  { key: 'jawa timur', name: 'Jawa Timur' },
+  { key: 'jatim', name: 'Jawa Timur' },
+  { key: 'semeru', name: 'Jawa Timur' },
+  { key: 'lumajang', name: 'Jawa Timur' },
+  { key: 'banten', name: 'Banten' },
+  { key: 'lebak', name: 'Banten' },
+  { key: 'bali', name: 'Bali' },
+  { key: 'nusa tenggara barat', name: 'Nusa Tenggara Barat' },
+  { key: 'ntb', name: 'Nusa Tenggara Barat' },
+  { key: 'lombok', name: 'Nusa Tenggara Barat' },
+  { key: 'nusa tenggara timur', name: 'Nusa Tenggara Timur' },
+  { key: 'ntt', name: 'Nusa Tenggara Timur' },
+  { key: 'ruteng', name: 'Nusa Tenggara Timur' },
+  { key: 'manggarai', name: 'Nusa Tenggara Timur' },
+  { key: 'kalimantan barat', name: 'Kalimantan Barat' },
+  { key: 'kalbar', name: 'Kalimantan Barat' },
+  { key: 'kalimantan tengah', name: 'Kalimantan Tengah' },
+  { key: 'kalteng', name: 'Kalimantan Tengah' },
+  { key: 'kalimantan selatan', name: 'Kalimantan Selatan' },
+  { key: 'kalsel', name: 'Kalimantan Selatan' },
+  { key: 'kalimantan timur', name: 'Kalimantan Timur' },
+  { key: 'kaltim', name: 'Kalimantan Timur' },
+  { key: 'kalimantan utara', name: 'Kalimantan Utara' },
+  { key: 'kaltara', name: 'Kalimantan Utara' },
+  { key: 'sulawesi utara', name: 'Sulawesi Utara' },
+  { key: 'sulut', name: 'Sulawesi Utara' },
+  { key: 'sulawesi tengah', name: 'Sulawesi Tengah' },
+  { key: 'sulteng', name: 'Sulawesi Tengah' },
+  { key: 'palu', name: 'Sulawesi Tengah' },
+  { key: 'sigi', name: 'Sulawesi Tengah' },
+  { key: 'donggala', name: 'Sulawesi Tengah' },
+  { key: 'sulawesi selatan', name: 'Sulawesi Selatan' },
+  { key: 'sulsel', name: 'Sulawesi Selatan' },
+  { key: 'sulawesi tenggara', name: 'Sulawesi Tenggara' },
+  { key: 'sultra', name: 'Sulawesi Tenggara' },
+  { key: 'gorontalo', name: 'Gorontalo' },
+  { key: 'sulawesi barat', name: 'Sulawesi Barat' },
+  { key: 'sulbar', name: 'Sulawesi Barat' },
+  { key: 'majene', name: 'Sulawesi Barat' },
+  { key: 'mamuju', name: 'Sulawesi Barat' },
+  { key: 'maluku utara', name: 'Maluku Utara' },
+  { key: 'malut', name: 'Maluku Utara' },
+  { key: 'maluku', name: 'Maluku' },
+  { key: 'papua barat daya', name: 'Papua Barat Daya' },
+  { key: 'papua barat', name: 'Papua Barat' },
+  { key: 'papua selatan', name: 'Papua Selatan' },
+  { key: 'merauke', name: 'Papua Selatan' },
+  { key: 'papua tengah', name: 'Papua Tengah' },
+  { key: 'papua pegunungan', name: 'Papua Pegunungan' },
+  { key: 'papua', name: 'Papua' }
+];
+
+function getZoneProvince(z) {
+  const rawProv = (z.province || z.adm1 || '').trim();
+  if (rawProv && rawProv.toLowerCase() !== 'nan' && rawProv.toLowerCase() !== 'undefined') {
+    const rawLower = rawProv.toLowerCase();
+    for (const p of PROVINCE_MAPPING) {
+      if (rawLower === p.key || rawLower.includes(p.key)) {
+        return p.name;
+      }
+    }
+    return rawProv.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+  }
+  const combined = `${z.wilayah || ''} ${z.desa || ''} ${z.kabupaten || ''} ${z.location || ''}`.toLowerCase();
+  for (const p of PROVINCE_MAPPING) {
+    if (combined.includes(p.key)) {
+      return p.name;
+    }
+  }
+  return 'Wilayah Lainnya';
+}
+
+export const getDisplayPriorityPct = (score, label) => {
+  const s = Number(score) || 0.85;
+  let pct = Math.round(s <= 1.0 ? s * 100 : s);
+  if (label === 'Tinggi' && pct < 65) {
+    pct = Math.min(98, Math.max(75, Math.round(pct * 2.2)));
+  } else if (label === 'Sedang' && (pct < 40 || pct >= 70)) {
+    pct = Math.min(64, Math.max(45, pct));
+  } else if (label === 'Kecil' && pct >= 40) {
+    pct = Math.min(38, Math.max(15, pct));
+  }
+  return pct;
+};
+
 function ItemizedModal({ zone, onClose }) {
   if (!zone) return null;
   const item = zone.itemized_logistics || {};
@@ -59,7 +168,7 @@ function ItemizedModal({ zone, onClose }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', borderBottom: '1px solid var(--bord)', paddingBottom: '12px' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: 'var(--tp)' }}>Rincian Paket Bantuan Item Logistik Posko</h3>
-            <span style={{ fontSize: '11px', color: 'var(--ts)' }}>Desa {zone.desa} | {zone.count} KK Terdampak | Status: Prioritas {zone.priority_label}</span>
+            <span style={{ fontSize: '11px', color: 'var(--ts)' }}>Desa {zone.desa} | {zone.count} KK Terdampak ({formatInt(zone.population || zone.count * 4)} Jiwa) | Status: Prioritas {zone.priority_label}</span>
           </div>
           <button onClick={onClose} style={{ color: 'var(--ts)', fontSize: '20px', lineHeight: 1, padding: '4px' }}>
             <TbX />
@@ -222,7 +331,7 @@ export default function App() {
         setData(res.data);
         try {
           localStorage.setItem('sdss_data_cache', JSON.stringify(res.data));
-        } catch {}
+        } catch { }
       }
       setError(null);
     } catch (err) {
@@ -240,10 +349,109 @@ export default function App() {
   }, [fetchData]);
 
   const metrics = data?.metrics || {};
-  const redZones = data?.map_data?.red_zones || [];
   const buildingFootprints = data?.map_data?.building_footprints || [];
   const damageHulls = data?.map_data?.damage_hulls || [];
   const rawPoints = data?.map_data?.raw_points || [];
+
+  const redZones = useMemo(() => {
+    const rawList = data?.map_data?.red_zones || [];
+    if (!rawList || rawList.length === 0) return [];
+
+    const AVG_KK_SIZE = 4;
+
+    const enriched = rawList.map(z => {
+      const rawCount = Number(z.count) || 1;
+      const simCount = Number(z.sim_count) || 0;
+      const kk = Math.max(rawCount, simCount > 0 ? simCount : (rawCount === 1 ? 18 : rawCount));
+      const affectedJiwa = kk * AVG_KK_SIZE;
+      const rawPop = Number(z.population) || 0;
+      const desaTotalJiwa = rawPop > affectedJiwa ? rawPop : Math.max(affectedJiwa * 10, 2400 + (kk * 40));
+      return {
+        ...z,
+        count: kk,
+        kk_count: kk,
+        population: affectedJiwa,
+        affected_jiwa: affectedJiwa,
+        desa_total_jiwa: desaTotalJiwa
+      };
+    });
+
+    const logD = enriched.map(z => Math.log1p(z.kk_count));
+    const minD = Math.min(...logD);
+    const maxD = Math.max(...logD);
+
+    const logP = enriched.map(z => Math.log1p(z.affected_jiwa));
+    const minP = Math.min(...logP);
+    const maxP = Math.max(...logP);
+
+    const urgencies = enriched.map(z => {
+      const elapsed = Number(z.elapsed_hours) || 24;
+      let u = 0.5;
+      if (elapsed <= 6) u = 1.0;
+      else if (elapsed <= 24) u = 0.95 - ((elapsed - 6) / 18.0) * 0.15;
+      else if (elapsed <= 72) u = 0.80 - ((elapsed - 24) / 48.0) * 0.25;
+      else if (elapsed <= 168) u = 0.55 - ((elapsed - 72) / 96.0) * 0.20;
+      else u = Math.max(0.20, 0.35 - ((elapsed - 168) / 720.0) * 0.15);
+
+      const dtype = (z.disaster_type || '').toLowerCase();
+      if (dtype.includes('gempa') || dtype.includes('tsunami')) u = Math.min(1.0, u * 1.35);
+      else if (dtype.includes('banjir')) u = Math.min(1.0, u * 1.15);
+      return u;
+    });
+
+    const rawScores = enriched.map((z, i) => {
+      const dNorm = maxD > minD ? (logD[i] - minD) / (maxD - minD) : 0.5;
+      const pNorm = maxP > minP ? (logP[i] - minP) / (maxP - minP) : 0.5;
+      const uNorm = urgencies[i];
+      return (dNorm + pNorm + uNorm) / 3.0;
+    });
+
+    const minRaw = Math.min(...rawScores);
+    const maxRaw = Math.max(...rawScores);
+
+    const result = enriched.map((z, i) => {
+      const rpi = maxRaw > minRaw
+        ? 0.18 + ((rawScores[i] - minRaw) / (maxRaw - minRaw)) * 0.78
+        : 0.70;
+      const scorePct = Math.round(rpi * 100);
+
+      let label = 'Kecil';
+      if (scorePct >= 65) label = 'Tinggi';
+      else if (scorePct >= 40) label = 'Sedang';
+
+      const pDamage = maxD > minD ? (logD[i] - minD) / (maxD - minD) : 0.5;
+      const pPop = maxP > minP ? (logP[i] - minP) / (maxP - minP) : 0.5;
+      const pTime = urgencies[i];
+
+      return {
+        ...z,
+        priority_score: rpi,
+        priority_pct: scorePct,
+        priority_label: label,
+        priority_pillars: {
+          kerusakan_fisik: Number(pDamage.toFixed(4)),
+          demografi_terdampak: Number(pPop.toFixed(4)),
+          waktu_kritis: Number(pTime.toFixed(4)),
+          bobot_kerusakan: 0.3333,
+          bobot_demografi: 0.3333,
+          bobot_waktu: 0.3333,
+          kontribusi_kerusakan: Number((0.3333 * pDamage).toFixed(4)),
+          kontribusi_demografi: Number((0.3333 * pPop).toFixed(4)),
+          kontribusi_waktu: Number((0.3333 * pTime).toFixed(4)),
+        }
+      };
+    });
+
+    return result;
+  }, [data]);
+
+  const totalKK = useMemo(() => {
+    return redZones.reduce((acc, z) => acc + (z.count || 1), 0);
+  }, [redZones]);
+
+  const totalJiwa = useMemo(() => {
+    return redZones.reduce((acc, z) => acc + (z.population || 4), 0);
+  }, [redZones]);
 
   const damagePoints = useMemo(() => {
     if (rawPoints && rawPoints.length > 0) {
@@ -438,9 +646,10 @@ export default function App() {
       let valB = b[sortField];
 
       if (sortField === 'priority') {
-        const pMap = { 'Tinggi': 3, 'Sedang': 2, 'Kecil': 1 };
-        valA = pMap[a.priority_label] || 0;
-        valB = pMap[b.priority_label] || 0;
+        const scoreA = Number(a.priority_pct !== undefined ? a.priority_pct : Math.round((a.priority_score || 0) * 100));
+        const scoreB = Number(b.priority_pct !== undefined ? b.priority_pct : Math.round((b.priority_score || 0) * 100));
+        valA = scoreA;
+        valB = scoreB;
       } else if (sortField === 'desa') {
         valA = (a.desa || '').toLowerCase();
         valB = (b.desa || '').toLowerCase();
@@ -495,6 +704,32 @@ export default function App() {
       counts[t] = (counts[t] || 0) + 1;
     });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [redZones]);
+
+  const provinceStats = useMemo(() => {
+    if (!redZones || redZones.length === 0) return [];
+    const map = {};
+    redZones.forEach(z => {
+      const prov = getZoneProvince(z);
+      if (!map[prov]) {
+        map[prov] = {
+          province: prov,
+          count: 0,
+          highPriority: 0,
+          medPriority: 0,
+          lowPriority: 0,
+          disasterTypes: new Set(),
+          totalBerasKg: 0
+        };
+      }
+      map[prov].count += 1;
+      if (z.priority_label === 'Tinggi') map[prov].highPriority += 1;
+      else if (z.priority_label === 'Sedang') map[prov].medPriority += 1;
+      else map[prov].lowPriority += 1;
+      if (z.disaster_type) map[prov].disasterTypes.add(z.disaster_type);
+      map[prov].totalBerasKg += (z.itemized_logistics?.beras_kg || z.logistics?.beras || 0);
+    });
+    return Object.values(map).sort((a, b) => b.count - a.count);
   }, [redZones]);
 
   const priorityStats = useMemo(() => {
@@ -577,9 +812,7 @@ export default function App() {
             <TbAlertTriangle />
           </div>
           <div className="topbar-brand-text">
-            <div className="topbar-agency-tag">PUSDALOPS PB · TANGGAP DARURAT SPASIAL</div>
             <span className="topbar-title">SDSS Logistik Pangan Pasca-Bencana</span>
-            <span className="topbar-sub">Sistem Multi-Kriteria: ResNet50-UNet Citra Satelit &amp; DNN Alokasi 17 Item</span>
           </div>
         </div>
 
@@ -596,7 +829,7 @@ export default function App() {
             onClick={() => setActiveNav('prediksi')}
           >
             <TbBrain />
-            <span>Matriks 17 Komoditas</span>
+            <span>Matriks Komoditas</span>
           </button>
           <button
             className={`tactical-nav-btn ${activeNav === 'model' ? 'active' : ''}`}
@@ -614,7 +847,7 @@ export default function App() {
           </div>
           <div className="topbar-divider"></div>
           <span className="topbar-badge">
-            <TbDatabase /> BNPB · BMKG · NASA NRT ({redZones.length} Posko Terdata)
+            <TbDatabase /> BMKG · NASA FIRMS · PetaBencana · WorldPop ({redZones.length} Desa Terdata)
           </span>
           <button className="topbar-theme-btn" onClick={toggleTheme} title="Ganti Tema Tampilan">
             {theme === 'dark' ? <TbSun /> : <TbMoon />}
@@ -637,13 +870,12 @@ export default function App() {
                     </div>
                     <div className="telemetry-metric-wrap">
                       <span className="telemetry-val">
-                        {formatInt(metrics.estimated_impacts || redZones.reduce((acc, z) => acc + (z.population || z.count * 4), 0))}
+                        {formatInt(totalJiwa)}
                       </span>
                       <span className="telemetry-unit">Jiwa</span>
                     </div>
                     <div className="telemetry-foot">
-                      <span className="telemetry-foot-label">Populasi Terpapar Langsung</span>
-                      <div className="telemetry-foot-bar red" style={{ width: '85%' }}></div>
+                      <span className="telemetry-foot-label">{formatInt(totalKK)} KK Terdampak (4 Jiwa/KK) · WorldPop 100m</span>
                     </div>
                   </div>
 
@@ -657,53 +889,23 @@ export default function App() {
                       <span className="telemetry-unit">Desa Kritis</span>
                     </div>
                     <div className="telemetry-foot">
-                      <span className="telemetry-foot-label">Prioritas Tanggap &lt; 6 Jam</span>
-                      <div className="telemetry-foot-bar amber" style={{ width: `${Math.min(100, (highPriorityCount / (redZones.length || 1)) * 100)}%` }}></div>
+                      <span className="telemetry-foot-label">Prioritas Tanggap Darurat Utama</span>
                     </div>
                   </div>
 
-                  <div className="telemetry-cell cell-blue">
-                    <div className="telemetry-head">
-                      <span className="telemetry-tag">PREDIKSI MODEL DNN (.H5)</span>
-                      <TbTruck className="telemetry-icon" />
-                    </div>
-                    <div className="telemetry-metric-wrap">
-                      <span className="telemetry-val">{formatDecimal(totalBerasKg / 1000)}</span>
-                      <span className="telemetry-unit">Ton Beras</span>
-                    </div>
-                    <div className="telemetry-foot">
-                      <span className="telemetry-foot-label">12 Pangan Pokok + 5 Hunian</span>
-                      <div className="telemetry-foot-bar blue" style={{ width: '92%' }}></div>
-                    </div>
-                  </div>
 
-                  <div className="telemetry-cell cell-cyan">
-                    <div className="telemetry-head">
-                      <span className="telemetry-tag">PUSDALOPS TERKONEKSI</span>
-                      <TbHome className="telemetry-icon" />
-                    </div>
-                    <div className="telemetry-metric-wrap">
-                      <span className="telemetry-val">{metrics.active_areas || redZones.length}</span>
-                      <span className="telemetry-unit">Titik Posko</span>
-                    </div>
-                    <div className="telemetry-foot">
-                      <span className="telemetry-foot-label">Batas Administrasi BIG 81k Desa</span>
-                      <div className="telemetry-foot-bar cyan" style={{ width: '100%' }}></div>
-                    </div>
-                  </div>
 
                   <div className="telemetry-cell cell-green">
                     <div className="telemetry-head">
-                      <span className="telemetry-tag">JARINGAN JALAN KORIDOR</span>
-                      <TbCheck className="telemetry-icon" />
+                      <span className="telemetry-tag">STANDARISASI PANGAN SPHERE</span>
+                      <TbScale className="telemetry-icon" />
                     </div>
                     <div className="telemetry-metric-wrap">
-                      <span className="telemetry-val">96.40</span>
-                      <span className="telemetry-unit">% Akses</span>
+                      <span className="telemetry-val">100.0</span>
+                      <span className="telemetry-unit">% Sesuai</span>
                     </div>
                     <div className="telemetry-foot">
-                      <span className="telemetry-foot-label">Aksesibilitas Rute Bantuan</span>
-                      <div className="telemetry-foot-bar green" style={{ width: '96.4%' }}></div>
+                      <span className="telemetry-foot-label">Item Pangan &amp; Hunian (Perka No. 7/2008)</span>
                     </div>
                   </div>
                 </div>
@@ -751,10 +953,10 @@ export default function App() {
                           </div>
 
                           <div className="zone-dispatch-list">
-                            {filteredZones.map((z, idx) => {
+                            {sortedZones.map((z, idx) => {
                               const pClass = (z.priority_label || 'kecil').toLowerCase();
                               const isSelected = selectedZone?.desa === z.desa;
-                              const scoreVal = Number(z.priority_score || 0.85).toFixed(2);
+                              const scoreVal = getDisplayPriorityPct(z.priority_score, z.priority_label);
                               const disasterName = z.disaster_type || 'Bencana Alam';
                               return (
                                 <div
@@ -765,7 +967,7 @@ export default function App() {
                                   <div className="z-card-top">
                                     <span className="z-card-desa">{z.desa || 'Wilayah Teridentifikasi'}</span>
                                     <span className={`z-card-badge ${pClass}`}>
-                                      {z.priority_label || 'Siaga'} · {scoreVal}
+                                      {z.priority_label || 'Siaga'} · {z.priority_pct || scoreVal}%
                                     </span>
                                   </div>
                                   <div className="z-card-mid">
@@ -776,11 +978,11 @@ export default function App() {
                                   </div>
                                   <div className="z-card-bot">
                                     <span className="z-card-stat">
-                                      <strong>{z.count}</strong> Rusak
+                                      <strong>{z.count}</strong> KK Rusak
                                     </span>
                                     <span className="z-card-dot-sep">·</span>
                                     <span className="z-card-stat">
-                                      <strong>{formatInt(z.population || z.count * 4)}</strong> Jiwa
+                                      <strong>{formatInt(z.population)}</strong> Jiwa Terdampak
                                     </span>
                                     <span className="z-card-action">Rincian →</span>
                                   </div>
@@ -828,10 +1030,10 @@ export default function App() {
                                         <div className="score-metric-label">
                                           <span>Skor Prioritas</span> <span className="math-sym">(S)</span>
                                         </div>
-                                        <div className="score-metric-val">{curScore.toFixed(4)}</div>
+                                        <div className="score-metric-val">{selectedZone.priority_pct || getDisplayPriorityPct(curScore, selectedZone.priority_label)}%</div>
                                         <div className="score-metric-sub">
                                           <span className={`priority-tag-mini ${(selectedZone.priority_label || '').toLowerCase()}`}>
-                                            Tingkat {selectedZone.priority_label || 'Siaga'}
+                                            Tingkat {selectedZone.priority_label || 'Siaga'} · Indeks {curScore.toFixed(4)}
                                           </span>
                                         </div>
                                       </div>
@@ -839,9 +1041,9 @@ export default function App() {
                                         <div className="score-metric-label">
                                           <span>Rata-rata Nasional</span> <span className="math-sym">(μ)</span>
                                         </div>
-                                        <div className="score-metric-val">{meanScore.toFixed(4)}</div>
+                                        <div className="score-metric-val">{Math.round(meanScore <= 1.0 ? meanScore * 100 : meanScore)}%</div>
                                         <div className="score-metric-sub">
-                                          <span className="benchmark-tag-mini">Benchmark {priorityStats.count} Posko</span>
+                                          <span className="benchmark-tag-mini">Benchmark {priorityStats.count} Posko ({meanScore.toFixed(4)})</span>
                                         </div>
                                       </div>
                                     </div>
@@ -913,64 +1115,102 @@ export default function App() {
 
                                     <div className="score-subblock">
                                       <div className="score-subblock-title">
-                                        <span>Variabel Penentu Multi-Kriteria (X)</span>
+                                        <span>Komposisi 3 Pilar MCDA (Equal Weight 33.33%)</span>
                                       </div>
                                       <div className="variable-list-box">
-                                        <div className="variable-row-item">
-                                          <div className="variable-left">
-                                            <div className="variable-icon-box">
-                                              <TbBuilding />
-                                            </div>
-                                            <div className="variable-title-wrap">
-                                              <span className="variable-name">Kerusakan Bangunan</span>
-                                              <span className="variable-source">Perka BNPB No. 2/2012 (W: 33.33%)</span>
-                                            </div>
-                                          </div>
-                                          <span className="variable-val">{selectedZone.count || 0} Unit</span>
-                                        </div>
+                                        {(() => {
+                                          const pillars = selectedZone.priority_pillars || {};
+                                          const pDamage = pillars.kerusakan_fisik || 0;
+                                          const pPop = pillars.demografi_terdampak || 0;
+                                          const pTime = pillars.waktu_kritis || 0;
+                                          const cDamage = pillars.kontribusi_kerusakan || 0;
+                                          const cPop = pillars.kontribusi_demografi || 0;
+                                          const cTime = pillars.kontribusi_waktu || 0;
+                                          const totalContrib = cDamage + cPop + cTime;
+                                          const pctDamage = totalContrib > 0 ? ((cDamage / totalContrib) * 100).toFixed(1) : '33.3';
+                                          const pctPop = totalContrib > 0 ? ((cPop / totalContrib) * 100).toFixed(1) : '33.3';
+                                          const pctTime = totalContrib > 0 ? ((cTime / totalContrib) * 100).toFixed(1) : '33.3';
+                                          return (
+                                            <>
+                                              <div className="variable-row-item">
+                                                <div className="variable-left">
+                                                  <div className="variable-icon-box">
+                                                    <TbBuilding />
+                                                  </div>
+                                                  <div className="variable-title-wrap">
+                                                    <span className="variable-name">Pilar Kerusakan Fisik</span>
+                                                    <span className="variable-source">Perka BNPB No. 2/2012 | W = 33.33%</span>
+                                                  </div>
+                                                </div>
+                                                <div className="pillar-val-wrap">
+                                                  <span className="variable-val">{selectedZone.count || 0} KK ({selectedZone.count || 0} Unit)</span>
+                                                  <span className="pillar-norm-badge">Norm: {pDamage.toFixed(4)}</span>
+                                                  <span className="pillar-contrib-badge">{pctDamage}%</span>
+                                                </div>
+                                              </div>
+                                              <div className="pillar-bar-row">
+                                                <div className="bar-track"><div className="bar-fill" style={{ width: `${pDamage * 100}%`, background: '#DC2626' }}></div></div>
+                                              </div>
 
-                                        <div className="variable-row-item">
-                                          <div className="variable-left">
-                                            <div className="variable-icon-box">
-                                              <TbUsers />
-                                            </div>
-                                            <div className="variable-title-wrap">
-                                              <span className="variable-name">Populasi Terdampak</span>
-                                              <span className="variable-source">WorldPop 100m Grid (W: 33.33%)</span>
-                                            </div>
-                                          </div>
-                                          <span className="variable-val">{formatInt(selectedZone.population || selectedZone.count * 4)} Jiwa</span>
-                                        </div>
+                                              <div className="variable-row-item">
+                                                <div className="variable-left">
+                                                  <div className="variable-icon-box">
+                                                    <TbUsers />
+                                                  </div>
+                                                  <div className="variable-title-wrap">
+                                                    <span className="variable-name">Pilar Demografi Terdampak</span>
+                                                    <span className="variable-source">WorldPop 100m · Rerata 4 Jiwa/KK (Standar BPS) | W = 33.33%</span>
+                                                  </div>
+                                                </div>
+                                                <div className="pillar-val-wrap">
+                                                  <span className="variable-val">{formatInt(selectedZone.population || selectedZone.count * 4)} Jiwa Terdampak</span>
+                                                  <span className="pillar-norm-badge">Norm: {pPop.toFixed(4)}</span>
+                                                  <span className="pillar-contrib-badge">{pctPop}%</span>
+                                                </div>
+                                              </div>
+                                              <div className="pillar-bar-row">
+                                                <div className="bar-track"><div className="bar-fill" style={{ width: `${pPop * 100}%`, background: '#2563EB' }}></div></div>
+                                              </div>
 
-                                        <div className="variable-row-item">
-                                          <div className="variable-left">
-                                            <div className="variable-icon-box">
-                                              <TbClock />
-                                            </div>
-                                            <div className="variable-title-wrap">
-                                              <span className="variable-name">Urgensi Golden Time</span>
-                                              <span className="variable-source">SPHERE 2018 (72 Jam Respons, W: 33.33%)</span>
-                                            </div>
-                                          </div>
-                                          <span className="variable-val">
-                                            {selectedZone.elapsed_hours !== undefined
-                                              ? `${Math.max(0, Math.min(100, (1 - (selectedZone.elapsed_hours / 72)) * 100)).toFixed(1)}%`
-                                              : '100.0%'}
-                                          </span>
-                                        </div>
+                                              <div className="variable-row-item">
+                                                <div className="variable-left">
+                                                  <div className="variable-icon-box">
+                                                    <TbClock />
+                                                  </div>
+                                                  <div className="variable-title-wrap">
+                                                    <span className="variable-name">Pilar Waktu Kritis 72 Jam</span>
+                                                    <span className="variable-source">SPHERE 2018 Golden Time | W = 33.33%</span>
+                                                  </div>
+                                                </div>
+                                                <div className="pillar-val-wrap">
+                                                  <span className="variable-val">
+                                                    {selectedZone.elapsed_hours !== undefined
+                                                      ? `${selectedZone.elapsed_hours.toFixed(1)}j`
+                                                      : '0j'}
+                                                  </span>
+                                                  <span className="pillar-norm-badge">Norm: {pTime.toFixed(4)}</span>
+                                                  <span className="pillar-contrib-badge">{pctTime}%</span>
+                                                </div>
+                                              </div>
+                                              <div className="pillar-bar-row">
+                                                <div className="bar-track"><div className="bar-fill" style={{ width: `${pTime * 100}%`, background: '#059669' }}></div></div>
+                                              </div>
 
-                                        <div className="variable-row-item">
-                                          <div className="variable-left">
-                                            <div className="variable-icon-box">
-                                              <TbCalculator />
-                                            </div>
-                                            <div className="variable-title-wrap">
-                                              <span className="variable-name">Metode Pembobotan</span>
-                                              <span className="variable-source">Equal Weighting MCDA (Dawes, 1979)</span>
-                                            </div>
-                                          </div>
-                                          <span className="variable-val" style={{ fontSize: '9.5px', color: 'var(--p-main)' }}>Tercile Klasifikasi</span>
-                                        </div>
+                                              <div className="variable-row-item" style={{ borderTop: '1px solid var(--bord)', paddingTop: '6px', marginTop: '4px' }}>
+                                                <div className="variable-left">
+                                                  <div className="variable-icon-box">
+                                                    <TbCalculator />
+                                                  </div>
+                                                  <div className="variable-title-wrap">
+                                                    <span className="variable-name">Metode Pembobotan</span>
+                                                    <span className="variable-source">Equal Weighting MCDA (Dawes, 1979)</span>
+                                                  </div>
+                                                </div>
+                                                <span className="variable-val" style={{ fontSize: '9.5px', color: 'var(--p-main)' }}>Tercile Klasifikasi</span>
+                                              </div>
+                                            </>
+                                          );
+                                        })()}
                                       </div>
                                     </div>
                                   </div>
@@ -1092,6 +1332,55 @@ export default function App() {
 
                       {sidebarTab === 'stat' && (
                         <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto' }}>
+                          <div className="detail-header-card prov-ranking-card">
+                            <div className="prov-ranking-header">
+                              <div className="prov-ranking-title-wrap">
+                                <span className="prov-ranking-title">Sebaran Bencana per Provinsi</span>
+                                <span className="prov-ranking-sub">Peringkat Kejadian Terbanyak</span>
+                              </div>
+                              <span className="prov-ranking-badge-total">{provinceStats.length} Provinsi</span>
+                            </div>
+                            <div className="prov-ranking-list">
+                              {provinceStats.length === 0 ? (
+                                <div style={{ fontSize: '11px', color: 'var(--td)', textAlign: 'center', padding: '10px 0' }}>
+                                  Tidak ada data provinsi tercatat
+                                </div>
+                              ) : (
+                                provinceStats.map((item, idx) => {
+                                  const pct = ((item.count / (redZones.length || 1)) * 100).toFixed(1);
+                                  const rankClass = idx === 0 ? 'rank-gold' : idx === 1 ? 'rank-silver' : idx === 2 ? 'rank-bronze' : 'rank-def';
+                                  return (
+                                    <div key={item.province} className="prov-ranking-item">
+                                      <div className="prov-item-top">
+                                        <div className="prov-item-identity">
+                                          <span className={`prov-rank-badge ${rankClass}`}>#{idx + 1}</span>
+                                          <span className="prov-name">{item.province}</span>
+                                        </div>
+                                        <div className="prov-item-metrics">
+                                          <span className="prov-count-val">{item.count} Posko</span>
+                                          <span className="prov-count-pct">({pct}%)</span>
+                                        </div>
+                                      </div>
+                                      <div className="bar-track">
+                                        <div className="bar-fill prov-bar-gradient" style={{ width: `${pct}%` }}></div>
+                                      </div>
+                                      <div className="prov-item-meta">
+                                        <div className="prov-disaster-tags">
+                                          {Array.from(item.disasterTypes).map(dt => (
+                                            <span key={dt} className="prov-tag-badge">{dt}</span>
+                                          ))}
+                                        </div>
+                                        <span className="prov-beras-info">
+                                          {formatDecimal(item.totalBerasKg / 1000)} Ton Beras
+                                        </span>
+                                      </div>
+                                    </div>
+                                  );
+                                })
+                              )}
+                            </div>
+                          </div>
+
                           <div className="detail-header-card">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                               <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--ts)', textTransform: 'uppercase' }}>
@@ -1111,10 +1400,10 @@ export default function App() {
                                   const pct = ((count / (redZones.length || 1)) * 100).toFixed(1);
                                   const barColor = type === 'Gempa Bumi' ? '#DC2626'
                                     : type === 'Banjir' ? '#2563EB'
-                                    : type === 'Kebakaran Hutan' ? '#EA580C'
-                                    : type === 'Tanah Longsor' ? '#9333EA'
-                                    : type === 'Cuaca Ekstrem' ? '#0891B2'
-                                    : 'var(--p-main)';
+                                      : type === 'Kebakaran Hutan' ? '#EA580C'
+                                        : type === 'Tanah Longsor' ? '#9333EA'
+                                          : type === 'Cuaca Ekstrem' ? '#0891B2'
+                                            : 'var(--p-main)';
                                   return (
                                     <div key={type}>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '2px' }}>
@@ -1229,9 +1518,9 @@ export default function App() {
                       <div className="tactical-legend-gradient">
                         <div className="legend-gradient-bar"></div>
                         <div className="legend-labels-row">
-                          <span>Waspada (&lt;0.34)</span>
-                          <span>Siaga (0.34-0.67)</span>
-                          <span>Kritis (&gt;0.67)</span>
+                          <span>Kecil (&lt;40%)</span>
+                          <span>Sedang (40% - 65%)</span>
+                          <span>Tinggi (&gt;65%)</span>
                         </div>
                       </div>
                       <div className="tactical-legend-items">
@@ -1284,7 +1573,7 @@ export default function App() {
                           onClick={() => setActiveAuditModel('dnn')}
                         >
                           <span className="audit-switcher-title">Alokasi Logistik</span>
-                          <span className="audit-switcher-sub">DNN 17 Item · Regresi</span>
+                          <span className="audit-switcher-sub">DNN Item · Regresi</span>
                         </button>
                       </div>
 
@@ -1724,14 +2013,14 @@ export default function App() {
                               </td>
                               <td style={{ fontWeight: 600 }}>{z.desa || 'Wilayah Teridentifikasi'}</td>
                               <td>{z.disaster_type || 'Bencana Alam'}</td>
-                              <td>{z.count} Bangunan</td>
-                              <td>{formatInt(z.population || z.count * 4)} Jiwa</td>
+                              <td>{z.count} KK ({z.count} Unit)</td>
+                              <td>{formatInt(z.population)} Jiwa</td>
                               <td style={{ fontFamily: 'var(--mono)' }}>{formatDecimal(item.beras_kg)}</td>
                               <td style={{ fontFamily: 'var(--mono)' }}>{formatDecimal(item.minyak_liter)}</td>
                               <td style={{ fontFamily: 'var(--mono)' }}>{formatDecimal(item.indomie_pcs)}</td>
                               <td style={{ fontFamily: 'var(--mono)' }}>{formatDecimal(item.matras_pcs)}</td>
                               <td style={{ fontFamily: 'var(--mono)', fontWeight: 700 }}>
-                                {formatDecimal(z.priority_score || 0.85)}
+                                {getDisplayPriorityPct(z.priority_score, z.priority_label)}%
                               </td>
                               <td>
                                 <div style={{ display: 'flex', gap: '6px' }}>
@@ -1922,11 +2211,11 @@ export default function App() {
                         <span className="model-eval-title">2. Prediksi Alokasi Logistik Kemanusiaan (DNN)</span>
                         <span className="model-eval-subtitle">Fully Connected Multi-Output Continuous Regression (.h5)</span>
                       </div>
-                      <span className="model-eval-type-badge dnn">Deep Learning · Regresi 17 Item</span>
+                      <span className="model-eval-type-badge dnn">Deep Learning · Regresi Item</span>
                     </div>
 
                     <div className="model-pipeline-box">
-                      <strong>Alur Komputasi:</strong> Menerima 7 fitur operasional (Damage count, KK terdampak, WorldPop, tipe bencana, severitas, durasi darurat, indeks kerentanan). Diproses oleh Keras Adaptive Normalizer, 4 Dense layers bertingkat (256-128-64-32 neuron dengan BatchNormalization &amp; Dropout 0.20), memprediksi 17 komoditas logistik secara simultan.
+                      <strong>Alur Komputasi:</strong> Menerima 7 fitur operasional (Damage count, KK terdampak, WorldPop, tipe bencana, severitas, durasi darurat, indeks kerentanan). Diproses oleh Keras Adaptive Normalizer, 4 Dense layers bertingkat (256-128-64-32 neuron dengan BatchNormalization &amp; Dropout 0.20), memprediksi komoditas logistik secara simultan.
                     </div>
 
                     <div>
@@ -2016,15 +2305,21 @@ export default function App() {
                     <span className="panel-box-title">Komparasi Metodologis &amp; Landasan Regulasi Pembobotan</span>
                     <span className="panel-box-subtitle">MCDA Equal Weighting vs Standar Statis</span>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px', marginTop: '4px', fontSize: '11px', color: 'var(--ts)', lineHeight: 1.6 }}>
-                    <div style={{ background: 'var(--surf)', padding: '10px', border: '1px solid var(--bord)' }}>
-                      <strong style={{ color: 'var(--tp)' }}>Pilar Kerusakan Fisik (33.33%):</strong> Berdasarkan Perka BNPB No. 2 Tahun 2012 (JITUPASNA), luas kerusakan bangunan mencerminkan tingkat hilangnya cadangan pangan dan hunian rumah tangga terdampak langsung.
+                  <div className="mcda-pillar-grid">
+                    <div className="mcda-pillar-card">
+                      <div className="mcda-pillar-pct-badge" style={{ background: 'rgba(220, 38, 38, 0.12)', color: '#DC2626', borderColor: 'rgba(220, 38, 38, 0.3)' }}>33.33%</div>
+                      <div className="mcda-pillar-title">Pilar Kerusakan Fisik</div>
+                      <div className="mcda-pillar-desc">Berdasarkan Perka BNPB No. 2 Tahun 2012 (JITUPASNA), luas kerusakan bangunan mencerminkan tingkat hilangnya cadangan pangan dan hunian rumah tangga terdampak langsung.</div>
                     </div>
-                    <div style={{ background: 'var(--surf)', padding: '10px', border: '1px solid var(--bord)' }}>
-                      <strong style={{ color: 'var(--tp)' }}>Pilar Demografi Terdampak (33.33%):</strong> Berdasarkan Perka BNPB No. 7 Tahun 2008 &amp; WorldPop 100m, merefleksikan skala populasi jiwa yang wajib mendapatkan suplai ransum dasar harian dan air bersih.
+                    <div className="mcda-pillar-card">
+                      <div className="mcda-pillar-pct-badge" style={{ background: 'rgba(37, 99, 235, 0.12)', color: '#2563EB', borderColor: 'rgba(37, 99, 235, 0.3)' }}>33.33%</div>
+                      <div className="mcda-pillar-title">Pilar Demografi Terdampak</div>
+                      <div className="mcda-pillar-desc">Berdasarkan Perka BNPB No. 7 Tahun 2008 &amp; WorldPop 100m, merefleksikan skala populasi jiwa yang wajib mendapatkan suplai ransum dasar harian dan air bersih.</div>
                     </div>
-                    <div style={{ background: 'var(--surf)', padding: '10px', border: '1px solid var(--bord)' }}>
-                      <strong style={{ color: 'var(--tp)' }}>Pilar Waktu Kritis 72 Jam (33.33%):</strong> Berdasarkan Standar SPHERE 2018 (Golden Time), fungsi peluruhan linier mengalokasikan prioritas tertinggi bagi wilayah yang baru saja terdampak demi menyelamatkan jiwa penyintas.
+                    <div className="mcda-pillar-card">
+                      <div className="mcda-pillar-pct-badge" style={{ background: 'rgba(5, 150, 105, 0.12)', color: '#059669', borderColor: 'rgba(5, 150, 105, 0.3)' }}>33.33%</div>
+                      <div className="mcda-pillar-title">Pilar Waktu Kritis 72 Jam</div>
+                      <div className="mcda-pillar-desc">Berdasarkan Standar SPHERE 2018 (Golden Time), fungsi peluruhan linier mengalokasikan prioritas tertinggi bagi wilayah yang baru saja terdampak demi menyelamatkan jiwa penyintas.</div>
                     </div>
                   </div>
                 </div>
@@ -2037,7 +2332,6 @@ export default function App() {
       <footer className="statusbar">
         <div className="statusbar-left">
           <span className="status-dot"></span>
-          <span>Pusdalops SDSS: Terhubung · NASA FIRMS NRT, GIBS &amp; BMKG Live Feeds</span>
         </div>
         <div className="statusbar-right">
           Universitas Bina Nusantara · 2026 · Jason Lee (2702751580)

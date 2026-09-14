@@ -10,8 +10,8 @@ export default function LoadingOverlay() {
         </div>
         <div className="loader"></div>
         <div className="loading-text">
-          <strong>Menganalisis Citra Satelit</strong>
-          Menghitung rute distribusi bantuan...
+          <strong>Menganalisis Citra Satelit &amp; Telemetri Bencana</strong>
+          Mengalkulasi 17 komoditas logistik darurat...
         </div>
       </div>
     </div>

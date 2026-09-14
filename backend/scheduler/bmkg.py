@@ -108,56 +108,73 @@ def check_gempa():
     processed_events = load_processed_events()
     new_images = False
 
-    try:
-        response = requests.get(BMKG_GEMPA_URL, headers=HEADERS, timeout=15)
-        if response.status_code == 200:
-            data = response.json()
-            quakes = data.get("Infogempa", {}).get("gempa", [])
-            new_count = 0
-            skip_count = 0
+    endpoints = [
+        "https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json",
+        BMKG_GEMPA_URL,
+        "https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json"
+    ]
 
-            for quake in reversed(quakes):
-                event_id = quake.get("DateTime")
+    all_quakes = []
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/json"
+    }
 
-                if event_id not in processed_events:
-                    magnitude = float(quake.get("Magnitude", 0))
-                    coords = quake.get("Coordinates", "0,0").split(",")
-                    lat, lon = float(coords[0]), float(coords[1])
-                    wilayah = quake.get("Wilayah", "")
+    for ep in endpoints:
+        try:
+            res = requests.get(ep, headers=headers, timeout=12)
+            if res.status_code == 200:
+                data = res.json()
+                infogempa = data.get("Infogempa", {})
+                g = infogempa.get("gempa", [])
+                if isinstance(g, dict):
+                    all_quakes.append(g)
+                elif isinstance(g, list):
+                    all_quakes.extend(g)
+        except Exception as e:
+            print(f"[Gempa] Error fetching {ep}: {e}")
 
-                    processed_events.add(event_id)
-                    save_processed_events(processed_events)
+    new_count = 0
+    for quake in all_quakes:
+        dt = quake.get("DateTime") or f"{quake.get('Tanggal', '')} {quake.get('Jam', '')}".strip()
+        coords_str = quake.get("Coordinates", "0,0")
+        event_id = f"bmkg_{dt}_{coords_str}".replace(" ", "_")
 
-                    if magnitude >= MIN_MAGNITUDE:
-                        new_count += 1
-                        print(f"\n[{now()}] [!] GEMPA M{magnitude} di {wilayah}")
-                        write_event_flag({
-                            "type": "Gempa Bumi",
-                            "magnitude": magnitude,
-                            "wilayah": wilayah,
-                            "lat": lat, "lon": lon
-                        })
-                        if is_residential_area(lat, lon):
-                            write_event_to_geojson(lat, lon, "Gempa Bumi", wilayah,
-                                                   severity="Severe", event_id=event_id,
-                                                   event_date=quake.get("DateTime"))
-                            count = scan_disaster_area_nasa(
-                                lat, lon, magnitude, event_id, wilayah,
-                                disaster_type="Gempa Bumi"
-                            )
-                            if count > 0:
-                                new_images = True
-                        else:
-                            print(f"Skip: bukan daerah permukiman")
-                    else:
-                        skip_count += 1
+        if event_id not in processed_events:
+            try:
+                mag_str = str(quake.get("Magnitude", 0)).replace(",", ".")
+                magnitude = float(mag_str)
+                coords = coords_str.split(",")
+                lat, lon = float(coords[0]), float(coords[1])
+                wilayah = quake.get("Wilayah", "")
+            except Exception:
+                continue
 
-            print(f"[Gempa] {len(quakes)} gempa ditemukan, {new_count} baru M>={MIN_MAGNITUDE}, {skip_count} kecil di-skip")
-        else:
-            print(f"[Gempa] HTTP {response.status_code}")
-    except Exception as e:
-        print(f"[Gempa] Error: {e}")
+            processed_events.add(event_id)
+            save_processed_events(processed_events)
 
+            if magnitude >= 4.0 or quake.get("Dirasakan"):
+                new_count += 1
+                print(f"\n[{now()}] [!] GEMPA M{magnitude} di {wilayah}")
+                write_event_flag({
+                    "type": "Gempa Bumi",
+                    "magnitude": magnitude,
+                    "wilayah": wilayah,
+                    "lat": lat, "lon": lon
+                })
+                sev = "Extreme" if magnitude >= 6.0 else ("Severe" if magnitude >= 5.0 else "Moderate")
+                write_event_to_geojson(lat, lon, "Gempa Bumi", wilayah,
+                                       severity=sev, event_id=event_id,
+                                       event_date=dt)
+                if magnitude >= MIN_MAGNITUDE:
+                    count = scan_disaster_area_nasa(
+                        lat, lon, magnitude, event_id, wilayah,
+                        disaster_type="Gempa Bumi"
+                    )
+                    if count > 0:
+                        new_images = True
+
+    print(f"[Gempa Real-Time] {len(all_quakes)} data gempa diperiksa, {new_count} gempa baru diintegrasikan")
     return new_images
 
 

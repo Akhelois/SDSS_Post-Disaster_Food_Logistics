@@ -22,39 +22,48 @@ def desa_to_polygon(geom, simplify_tol=0.0005, shrink_m=50):
 
 
 def remove_overlaps(zone_list):
+    if len(zone_list) <= 1:
+        return zone_list
+
     geoms = []
-    valid_indices = []
-    for i, z in enumerate(zone_list):
+    valid = []
+    for z in zone_list:
         try:
             poly = ShapelyPolygon(z['polygon'])
             if poly.is_valid and not poly.is_empty:
                 geoms.append(poly)
-                valid_indices.append(i)
+                valid.append(z)
         except Exception:
             continue
 
-    if len(geoms) <= 1:
+    if not geoms:
         return zone_list
 
+    from shapely.strtree import STRtree
+    tree = STRtree(geoms)
     result = []
-    claimed = None
-    for idx, gi in enumerate(geoms):
-        if claimed is None:
-            cleaned = gi
-        else:
-            cleaned = gi.difference(claimed)
-        if cleaned.is_empty:
-            continue
-        if cleaned.geom_type == 'MultiPolygon':
-            cleaned = max(cleaned.geoms, key=lambda p: p.area)
-        if cleaned.is_empty or cleaned.geom_type != 'Polygon':
-            continue
-        z = zone_list[valid_indices[idx]].copy()
-        z['polygon'] = [[round(c[0], 6), round(c[1], 6)] for c in cleaned.exterior.coords]
-        result.append(z)
-        if claimed is None:
-            claimed = cleaned
-        else:
-            claimed = claimed.union(cleaned)
+
+    for idx, (poly, z) in enumerate(zip(geoms, valid)):
+        overlapping = [i for i in tree.query(poly) if i < idx]
+        cleaned = poly
+        for prev_idx in overlapping:
+            prev_poly = geoms[prev_idx]
+            if cleaned.intersects(prev_poly):
+                try:
+                    diff = cleaned.difference(prev_poly)
+                    if diff.geom_type == 'MultiPolygon':
+                        diff = max(diff.geoms, key=lambda p: p.area)
+                    if not diff.is_empty and diff.geom_type == 'Polygon':
+                        cleaned = diff
+                    else:
+                        cleaned = None
+                        break
+                except Exception:
+                    pass
+
+        if cleaned is not None and not cleaned.is_empty and cleaned.geom_type == 'Polygon':
+            item = z.copy()
+            item['polygon'] = [[round(c[0], 6), round(c[1], 6)] for c in cleaned.exterior.coords]
+            result.append(item)
 
     return result

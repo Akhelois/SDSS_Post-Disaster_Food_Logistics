@@ -71,7 +71,7 @@ const INITIAL_VIEW_STATE = {
 
 export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomChange, onPolygonClick }) {
   const [mapMode, setMapMode] = useState(theme);
-  
+
   useEffect(() => {
     setMapMode(theme);
   }, [theme]);
@@ -210,7 +210,7 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
 
       <DeckGL
         viewState={viewState}
-        onViewStateChange={({viewState}) => {
+        onViewStateChange={({ viewState }) => {
           const minLng = 94.0, maxLng = 141.0;
           const minLat = -11.0, maxLat = 6.0;
           viewState.longitude = Math.max(minLng, Math.min(maxLng, viewState.longitude));
@@ -239,12 +239,12 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
           </div>
           <div className="tt-divider" />
           <div className="tt-row"><span className="tt-label">Wilayah / Desa</span><span className="tt-val">{obj.desa || 'Teridentifikasi'}</span></div>
-          <div className="tt-row"><span className="tt-label">Kerusakan Fisik</span><span className="tt-val">{obj.count} unit bangunan</span></div>
-          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{formatInt(obj.population || obj.count * 4)} jiwa</span></div>
+          <div className="tt-row"><span className="tt-label">Kerusakan Fisik</span><span className="tt-val">{obj.count} KK ({obj.count} unit)</span></div>
+          <div className="tt-row"><span className="tt-label">Est. Terdampak</span><span className="tt-val">{formatInt(Math.max(obj.population || 0, (obj.count || 1) * 4))} jiwa (4 jiwa/KK)</span></div>
           {obj.priority_score !== undefined && (
-            <div className="tt-row"><span className="tt-label">Skor Urgensi SDSS</span><span className="tt-val" style={{ color: 'var(--accent-emergency)' }}>{Number(obj.priority_score).toFixed(2)}</span></div>
+            <div className="tt-row"><span className="tt-label">Skor Urgensi SDSS</span><span className="tt-val" style={{ color: 'var(--accent-emergency)' }}>{obj.priority_pct ? `${obj.priority_pct}%` : `${Math.round(Number(obj.priority_score) * 100)}%`}</span></div>
           )}
-          <div className="tt-hint">Klik untuk melihat detail 17 item logistik</div>
+          <div className="tt-hint">Klik untuk melihat detail item logistik</div>
         </div>
       )}
     </div>

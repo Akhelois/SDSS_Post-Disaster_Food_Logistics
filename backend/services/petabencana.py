@@ -70,3 +70,35 @@ def fetch_petabencana_reports(hours=72):
     except Exception as e:
         print(f"Error fetching PetaBencana: {e}")
         return pd.DataFrame()
+
+
+def check_petabencana_realtime():
+    from scheduler.runner import write_event_to_geojson, load_processed_events, save_processed_events
+    processed = load_processed_events()
+    df_pb = fetch_petabencana_reports(hours=72)
+    if df_pb.empty:
+        return False
+
+    new_count = 0
+    for _, row in df_pb.iterrows():
+        event_id = f"petabencana_{round(row['lat'], 4)}_{round(row['lon'], 4)}_{str(row['event_date'])[:10]}"
+        if event_id in processed:
+            continue
+
+        processed.add(event_id)
+        save_processed_events(processed)
+
+        write_event_to_geojson(
+            lat=float(row['lat']),
+            lon=float(row['lon']),
+            disaster_type=str(row['disaster_type']),
+            wilayah=str(row['wilayah']),
+            severity="Severe",
+            event_id=event_id,
+            event_date=str(row['event_date'])
+        )
+        new_count += 1
+
+    if new_count > 0:
+        print(f"[PetaBencana Real-Time] {new_count} laporan bencana baru berhasil diintegrasikan")
+    return new_count > 0

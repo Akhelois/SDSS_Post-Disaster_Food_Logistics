@@ -8,3 +8,7 @@
 /backend/model/checkpoints/
 /backend/model/*.h5
 /agent/
+*.parquet
+*.pyc
+__pycache__/
+**/__pycache__/

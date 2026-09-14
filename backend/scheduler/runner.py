@@ -86,20 +86,11 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
         try:
             gdf_desa = services.load_desa_boundaries()
             if gdf_desa is not None:
-                pt = Point(lon, lat)
-                pt_gdf = gpd.GeoDataFrame(geometry=[pt], crs="EPSG:4326").to_crs(epsg=3857)
-
-                from scheduler.bmkg import _get_desa_proj
-                desa_proj = _get_desa_proj()
-                if desa_proj is None:
-                    desa_proj = gdf_desa.to_crs(epsg=3857)
-
-                distances = desa_proj.geometry.distance(pt_gdf.geometry.iloc[0])
-                nearest_idx = distances.idxmin()
+                dists = (gdf_desa.geometry.centroid.x - lon)**2 + (gdf_desa.geometry.centroid.y - lat)**2
+                nearest_idx = dists.idxmin()
                 nearest_desa = gdf_desa.iloc[nearest_idx]
 
                 centroid = nearest_desa.geometry.centroid
-
                 snapped_lon, snapped_lat = services.snap_to_road(centroid.x, centroid.y, max_snap_m=5000)
                 final_lon, final_lat = round(snapped_lon, 6), round(snapped_lat, 6)
 
@@ -108,7 +99,12 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
         except Exception as e:
             print(f"[{now()}] Gagal snap spasial ke permukiman: {e}")
 
-        source_label = "NASA FIRMS" if "nasa" in event_id.lower() else "BMKG"
+        if "nasa" in event_id.lower():
+            source_label = "NASA FIRMS"
+        elif "petabencana" in event_id.lower():
+            source_label = "PetaBencana"
+        else:
+            source_label = "BMKG"
 
         props = {
             "confidence": confidence,
@@ -143,10 +139,12 @@ def write_event_to_geojson(lat, lon, disaster_type, wilayah, severity="Moderate"
 def check_all_sources():
     from scheduler.bmkg import check_gempa, check_cuaca_ekstrem
     from services.nasa_earthdata import check_nasa_wildfires
+    from services.petabencana import check_petabencana_realtime
     
     new_from_gempa = check_gempa()
     new_from_cuaca = check_cuaca_ekstrem()
     new_from_nasa = check_nasa_wildfires()
+    new_from_pb = check_petabencana_realtime()
 
-    if new_from_gempa or new_from_cuaca or new_from_nasa:
+    if new_from_gempa or new_from_cuaca or new_from_nasa or new_from_pb:
         run_pipeline()

@@ -36,14 +36,8 @@ _dashboard_cache = {
 }
 
 gdf_desa = load_desa_boundaries()
-gdf_desa_proj = None
 if gdf_desa is not None and not gdf_desa.empty:
     print(f"Shapefile loaded: {len(gdf_desa)} desa polygons")
-    adm_cols = [c for c in gdf_desa.columns if c.startswith('ADM')]
-    try:
-        gdf_desa_proj = gdf_desa[adm_cols + ['geometry']].to_crs(epsg=3857)
-    except Exception as e:
-        print(f"Error pre-projecting gdf_desa: {e}")
 else:
     print("Shapefile batas desa TIDAK DITEMUKAN - menggunakan fallback mode")
 
@@ -60,43 +54,14 @@ def get_dashboard_data():
     if _dashboard_cache["data"] is not None:
         if _dashboard_cache["mtime"] >= current_mtime:
             return _dashboard_cache["data"]
-        if now_ts - _dashboard_cache.get("last_calc", 0) < 30:
+        if now_ts - _dashboard_cache.get("last_calc", 0) < 10:
             return _dashboard_cache["data"]
 
     df_raw = load_geodata(OUTPUT_GEOJSON)
     if df_raw is None or df_raw.empty:
         return {"error": "standby"}
 
-    if gdf_desa is not None and not gdf_desa.empty:
-        if 'source' not in df_raw.columns:
-            df_raw['source'] = 'Satelit'
-        is_bmkg = df_raw['source'].fillna('') == 'BMKG'
-        df_bmkg = df_raw[is_bmkg].copy()
-        df_satelit = df_raw[~is_bmkg].copy()
-
-        if not df_satelit.empty:
-            gdf_points = gpd.GeoDataFrame(
-                df_satelit,
-                geometry=[Point(lon, lat) for lon, lat in zip(df_satelit['lon'], df_satelit['lat'])],
-                crs="EPSG:4326"
-            )
-            joined = gpd.sjoin(gdf_points, gdf_desa[['geometry']], how='inner', predicate='within')
-            df_satelit = df_satelit.loc[df_satelit.index.isin(joined.index.unique())].copy()
-
-            if not df_satelit.empty and not df_bmkg.empty:
-                valid_sat_indices = []
-                bmkg_points = MultiPoint([Point(lon, lat) for lon, lat in zip(df_bmkg['lon'], df_bmkg['lat'])])
-                for idx, row in df_satelit.iterrows():
-                    pt = Point(row['lon'], row['lat'])
-                    if pt.distance(bmkg_points) <= 0.5:
-                        valid_sat_indices.append(idx)
-                df_satelit = df_satelit.loc[valid_sat_indices].copy()
-            elif df_bmkg.empty:
-                df_satelit = pd.DataFrame(columns=df_satelit.columns)
-
-        df_raw = pd.concat([df_bmkg, df_satelit], ignore_index=True)
-
-    _pb_cache_ttl = 300
+    _pb_cache_ttl = 120
     try:
         now_ts = time.time()
         if (not hasattr(app, '_pb_cache') or
@@ -124,27 +89,31 @@ def get_dashboard_data():
     desa_col = None
     if gdf_desa is not None and not gdf_desa.empty:
         adm_cols = [c for c in gdf_desa.columns if c.startswith('ADM')]
-        if adm_cols:
-            gdf_points_proj = gpd.GeoDataFrame(
-                df_raw,
-                geometry=[Point(lon, lat) for lon, lat in zip(df_raw['lon'], df_raw['lat'])],
-                crs="EPSG:4326"
-            ).to_crs(epsg=3857)
-            if gdf_desa_proj is not None:
-                joined = gpd.sjoin_nearest(gdf_points_proj, gdf_desa_proj, how='left', max_distance=55000)
-            else:
-                joined = gpd.sjoin_nearest(gdf_points_proj, gdf_desa[adm_cols + ['geometry']].to_crs(epsg=3857), how='left', max_distance=55000)
-            joined = joined[~joined.index.duplicated(keep='first')]
-            if 'index_right' in joined.columns:
-                df_raw['_desa_idx'] = joined['index_right'].values
-            for col in adm_cols:
-                if col in joined.columns:
-                    df_raw[col] = joined[col].values
-            desa_col = next(
-                (c for c in ['ADM4_EN', 'ADM3_EN', 'ADM2_EN']
-                 if c in df_raw.columns and df_raw[c].notna().any()),
-                None
-            )
+        cols_to_join = ['geometry'] + adm_cols
+
+        gdf_points = gpd.GeoDataFrame(
+            df_raw,
+            geometry=[Point(lon, lat) for lon, lat in zip(df_raw['lon'], df_raw['lat'])],
+            crs="EPSG:4326"
+        )
+        clean_pts = gdf_points[[c for c in gdf_points.columns if c not in adm_cols and c != 'index_right']]
+        joined = gpd.sjoin(clean_pts, gdf_desa[cols_to_join], how='left', predicate='within')
+        joined = joined[~joined.index.duplicated(keep='first')]
+
+        if 'source' not in joined.columns:
+            joined['source'] = 'Satelit'
+
+        mask_keep = (joined['source'].isin(['BMKG', 'PetaBencana'])) | joined['index_right'].notna()
+        df_raw = joined[mask_keep].copy()
+
+        if 'index_right' in df_raw.columns:
+            df_raw['_desa_idx'] = df_raw['index_right']
+
+        desa_col = next(
+            (c for c in ['ADM4_EN', 'ADM3_EN', 'ADM2_EN']
+             if c in df_raw.columns and df_raw[c].notna().any()),
+            None
+        )
 
     if not desa_col:
         if 'wilayah' in df_raw.columns and df_raw['wilayah'].notna().any():
@@ -173,6 +142,8 @@ def get_dashboard_data():
         }
         if 'ADM2_EN' in df_valid.columns:
             agg_dict['adm2'] = ('ADM2_EN', 'first')
+        if 'ADM1_EN' in df_valid.columns:
+            agg_dict['adm1'] = ('ADM1_EN', 'first')
         if 'disaster_type' in df_valid.columns:
             agg_dict['disaster_type'] = ('disaster_type', lambda x: next((v for v in x if pd.notna(v) and str(v).strip() != ''), None))
         if 'source' in df_valid.columns:
@@ -233,11 +204,11 @@ def get_dashboard_data():
 
                 n_clusters = max(1, min(6, sim_count // 15))
 
-                base_spread = 0.006 * (1.0 - avg_conf * 0.5)  # ~300-600m
+                base_spread = 0.006 * (1.0 - avg_conf * 0.5)
 
                 base_lon, base_lat = raw_pts[0][0], raw_pts[0][1]
                 for ci in range(n_clusters):
-                    angle = (ci / max(n_clusters, 1)) * 2 * np.pi  # Distribusi merata
+                    angle = (ci / max(n_clusters, 1)) * 2 * np.pi
                     dist = base_spread * (0.5 + avg_conf)
                     cx = base_lon + dist * np.cos(angle) + np.random.normal(0, 0.001)
                     cy = base_lat + dist * np.sin(angle) + np.random.normal(0, 0.001)
@@ -259,13 +230,8 @@ def get_dashboard_data():
                 building_polys = []
                 from core.disaster import _building_cache
                 cache_key = (round(zone_lat, 3), round(zone_lon, 3))
-                
                 if cache_key in _building_cache:
-                    building_polys = get_buildings_for_zone(raw_pts, zone_lat, zone_lon)
-                else:
-                    if getattr(app, "overpass_fetches", 0) < 2:
-                        building_polys = get_buildings_for_zone(raw_pts, zone_lat, zone_lon)
-                        app.overpass_fetches = getattr(app, "overpass_fetches", 0) + 1
+                    building_polys = _building_cache[cache_key]
 
                 damage_polygon_coords = []
                 try:
@@ -286,11 +252,18 @@ def get_dashboard_data():
                     zone_event_date = pd.to_datetime(row['event_date'])
                     zone_elapsed_hours = (now - zone_event_date).total_seconds() / 3600.0
 
+                desa_row = gdf_desa.iloc[desa_idx]
+                prov_name = str(desa_row.get('ADM1_EN', '')) if pd.notna(desa_row.get('ADM1_EN')) else ''
+                if not prov_name or prov_name == 'nan':
+                    prov_name = str(row.get('adm1', '')) if pd.notna(row.get('adm1')) else ''
+
                 rz_data.append({
                     "polygon": polygon,
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(row['desa']),
-                    "adm2": str(row.get('adm2', '')) if pd.notna(row.get('adm2')) else '',
+                    "province": prov_name,
+                    "adm1": prov_name,
+                    "adm2": str(row.get('adm2', '')) if pd.notna(row.get('adm2')) else (str(desa_row.get('ADM2_EN', '')) if pd.notna(desa_row.get('ADM2_EN')) else ''),
                     "count": damage_count,
                     "sim_count": sim_count,
                     "disaster_type": disaster_type,
@@ -411,10 +384,18 @@ def get_dashboard_data():
                     is_bmkg = any('bmkg' in v for v in sources)
                     has_pb = any('petabencana' in v for v in sources)
 
+                prov_fallback = ''
+                if 'ADM1_EN' in group.columns and group['ADM1_EN'].notna().any():
+                    prov_fallback = str(group['ADM1_EN'].dropna().iloc[0])
+                if not prov_fallback or prov_fallback == 'nan':
+                    prov_fallback = str(group['island'].iloc[0]).capitalize() if 'island' in group.columns else ''
+
                 rz_data.append({
                     "polygon": polygon,
                     "damage_polygon": damage_polygon_coords,
                     "desa": str(name),
+                    "province": prov_fallback,
+                    "adm1": prov_fallback,
                     "count": damage_count,
                     "sim_count": damage_count,
                     "disaster_type": disaster_type,
@@ -436,7 +417,8 @@ def get_dashboard_data():
 
     rz_data = calculate_priority_scores(rz_data)
 
-    from services.itemized_logistics import predict_itemized_logistics
+    from services.itemized_logistics import predict_itemized_logistics_batch
+    batch_records = []
     for z in rz_data:
         sc = z.get('sim_count', z.get('count', 1))
         pop = z.get('population', sc * 4)
@@ -444,15 +426,19 @@ def get_dashboard_data():
         severity = 4 if z.get('has_bmkg') else (3 if z.get('has_petabencana') else 2)
         duration = max(3, min(30, int(7 + (sc / 10))))
         vuln = min(1.0, 0.3 + (sc / 200.0) + (0.1 if elapsed > 48 else 0))
-        z['itemized_logistics'] = predict_itemized_logistics(
-            damage_count=sc,
-            affected_kk=sc,
-            total_population=pop,
-            disaster_type=z.get('disaster_type', 'Bencana Alam'),
-            severity_level=severity,
-            emergency_duration=duration,
-            vulnerability_idx=round(vuln, 3)
-        )
+        batch_records.append({
+            'damage_count': sc,
+            'affected_kk': sc,
+            'total_population': pop,
+            'disaster_type': z.get('disaster_type', 'Bencana Alam'),
+            'severity_level': severity,
+            'emergency_duration': duration,
+            'vulnerability_idx': round(vuln, 3)
+        })
+
+    batch_preds = predict_itemized_logistics_batch(batch_records)
+    for z, pred in zip(rz_data, batch_preds):
+        z['itemized_logistics'] = pred
 
     disaster_types = list(set(r['disaster_type'] for r in rz_data if 'disaster_type' in r))
     disaster_summary = ', '.join(sorted(disaster_types)) if disaster_types else 'Bencana Alam'
@@ -466,24 +452,10 @@ def get_dashboard_data():
         "lauk": total_damage * LOGISTIK_PER_KK['Lauk Kaleng (paket)'],
     }
 
-    valid_polys = []
-    for z in rz_data:
-        try:
-            valid_polys.append(Polygon(z['polygon']).buffer(0.0002))
-        except Exception:
-            pass
-
-    filtered_points = []
-    if valid_polys:
-        try:
-            from shapely.prepared import prep
-            union_prep = prep(unary_union(valid_polys))
-            for lon, lat in zip(df_raw['lon'], df_raw['lat']):
-                if union_prep.contains(Point(lon, lat)):
-                    filtered_points.append({"lon": round(lon, 6), "lat": round(lat, 6)})
-        except Exception:
-            for lon, lat in zip(df_raw['lon'], df_raw['lat']):
-                filtered_points.append({"lon": round(lon, 6), "lat": round(lat, 6)})
+    filtered_points = [
+        {"lon": round(float(lon), 6), "lat": round(float(lat), 6)}
+        for lon, lat in zip(df_raw['lon'], df_raw['lat'])
+    ]
 
     response_data = {
         "disaster_info": {
@@ -493,7 +465,8 @@ def get_dashboard_data():
         "metrics": {
             "active_areas": len({z['desa'] for z in rz_data}),
             "total_damage": total_damage,
-            "estimated_impacts": total_damage * 4,
+            "total_kk": total_damage,
+            "estimated_impacts": sum(z.get('population', z.get('count', 1) * 4) for z in rz_data),
         },
         "total_logistics": total_logistics,
         "map_data": {

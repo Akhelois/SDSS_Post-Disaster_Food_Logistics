@@ -115,6 +115,12 @@ def load_geodata(path):
 
 @lru_cache(maxsize=1)
 def load_desa_boundaries():
+    parquet_path = os.path.splitext(DESA_SHP)[0] + '.parquet'
+    if os.path.exists(parquet_path):
+        try:
+            return gpd.read_parquet(parquet_path)
+        except Exception:
+            pass
     if os.path.exists(DESA_SHP):
         try:
             return gpd.read_file(DESA_SHP).to_crs(epsg=4326)

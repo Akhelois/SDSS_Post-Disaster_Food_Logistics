@@ -1,66 +1,6 @@
-import json
-import os
 import numpy as np
-import pandas as pd
-
-from config import LOGISTIK_PER_KK
-from services.population import get_population_for_desa
-
-
-def merge_nearby_hubs(cc, min_dist_m):
-    min_dist_deg = min_dist_m / 111320
-    coords = cc[['safe_lat', 'safe_lon']].values
-    merged, used = [], set()
-    for i in range(len(coords)):
-        if i in used:
-            continue
-        group = [i]
-        for j in range(i + 1, len(coords)):
-            if j not in used:
-                same_island = cc.iloc[i]['island'] == cc.iloc[j]['island']
-                dist = np.sqrt((coords[i][0] - coords[j][0]) ** 2 + (coords[i][1] - coords[j][1]) ** 2)
-                if dist < min_dist_deg and same_island:
-                    group.append(j)
-                    used.add(j)
-        used.add(i)
-        rows = cc.iloc[group]
-        all_desa = set()
-        for dl in rows['desa_list'].dropna():
-            for d in str(dl).split(', '):
-                d = d.strip()
-                if d and d != 'Tidak Diketahui':
-                    all_desa.add(d)
-        best_hub = rows.loc[rows['jumlah_red'].idxmax()]
-        merged.append({
-            'safe_lat': best_hub['safe_lat'],
-            'safe_lon': best_hub['safe_lon'],
-            'desa_list': ', '.join(sorted(all_desa)) if all_desa else '',
-            'jumlah_red': int(rows['jumlah_red'].sum()),
-            'avg_confidence': float(rows['avg_confidence'].max()),
-            'island': str(rows['island'].iloc[0]),
-            'cluster_ids': list(rows['cluster_id'])
-        })
-    return pd.DataFrame(merged).reset_index().rename(columns={'index': 'hub_id'})
-
 
 def calculate_priority_scores(zones):
-    """
-    Multi-Criteria Priority Scoring untuk distribusi logistik pasca-bencana.
-
-    PARAMETER (sumber resmi):
-    1. Damage Density    -- Perka BNPB No. 2/2012 (JITUPASNA: jumlah kerusakan bangunan)
-    2. Population        -- WorldPop (University of Southampton, 100m gridded population)
-    3. Temporal Urgency  -- Sphere Handbook 2018, Ch.6 (Golden Time 72 jam respons darurat)
-
-    BOBOT (tetap/deterministik):
-    Equal weighting method (Dawes, 1979) -- masing-masing 1/3.
-
-    NORMALISASI:
-    Min-max normalization per pilar, lalu skor akhir = weighted sum.
-
-    KATEGORI PRIORITAS:
-    3 level: Tinggi, Sedang, Kecil -- berdasarkan distribusi skor tercile.
-    """
     if not zones:
         return zones
 
@@ -75,19 +15,15 @@ def calculate_priority_scores(zones):
         desa_name = z.get('desa', '')
         polygon = z.get('polygon', [])
 
-        wp_pop = get_population_for_desa(desa_name, polygon)
+        # Affected population calculation
         affected_est = max(count * AVG_KK_SIZE, AVG_KK_SIZE)
-        if wp_pop and wp_pop > 0:
-            z['population'] = min(wp_pop, max(affected_est, int(count * 4.5)))
-            z['pop_source'] = 'WorldPop'
-        else:
-            z['population'] = affected_est
-            z['pop_source'] = 'Estimasi KK'
+        z['population'] = affected_est
+        z['pop_source'] = 'Estimasi KK'
 
         densities.append(count)
         populations.append(z['population'])
 
-        elapsed = z.get('elapsed_hours', 0)
+        elapsed = z.get('elapsed_hours', 24)
         if elapsed <= 0:
             urgency = 1.0
         elif elapsed <= 6:
@@ -102,6 +38,7 @@ def calculate_priority_scores(zones):
             urgency = max(0.20, 0.35 - ((elapsed - 168) / 720.0) * 0.15)
         urgencies.append(round(urgency, 4))
 
+    # Log-transform for heavy-tailed disaster impact (CRED EM-DAT / BNPB)
     log_d = [np.log1p(c) for c in densities]
     log_p = [np.log1p(p) for p in populations]
 
@@ -125,6 +62,7 @@ def calculate_priority_scores(zones):
     min_s = min(raw_scores)
     max_s = max(raw_scores)
 
+    # Scale to operational range [0.15, 0.98]
     for i, z in enumerate(zones):
         if max_s > min_s:
             scaled_score = 0.15 + ((raw_scores[i] - min_s) / (max_s - min_s)) * 0.83
@@ -162,3 +100,13 @@ def calculate_priority_scores(zones):
 
     return zones
 
+# Test edge cases
+print("1. Empty list:", calculate_priority_scores([]))
+single = calculate_priority_scores([{'desa': 'Solo', 'count': 5, 'elapsed_hours': 10}])
+print("2. Single item:", single[0]['priority_score'], single[0]['priority_label'])
+two = calculate_priority_scores([
+    {'desa': 'A', 'count': 10, 'elapsed_hours': 10},
+    {'desa': 'B', 'count': 1, 'elapsed_hours': 100}
+])
+print("3. Two items A:", two[0]['priority_score'], two[0]['priority_label'])
+print("   Two items B:", two[1]['priority_score'], two[1]['priority_label'])
