@@ -17,20 +17,6 @@ function formatInt(val) {
 }
 
 const MAP_STYLES = {
-  satellite: {
-    version: 8,
-    sources: {
-      'basemap': {
-        type: 'raster',
-        tiles: [
-          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        ],
-        tileSize: 256,
-        attribution: '&copy; NASA Earthdata / Esri World Imagery'
-      }
-    },
-    layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
-  },
   light: {
     version: 8,
     sources: {
@@ -47,14 +33,30 @@ const MAP_STYLES = {
     },
     layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
   },
-  dark: {
+  satellite: {
     version: 8,
     sources: {
       'basemap': {
         type: 'raster',
-        tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        ],
         tileSize: 256,
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+        attribution: '&copy; Esri World Imagery / NASA'
+      }
+    },
+    layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
+  },
+  street: {
+    version: 8,
+    sources: {
+      'basemap': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+        ],
+        tileSize: 256,
+        attribution: '&copy; Esri & OpenStreetMap'
       }
     },
     layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
@@ -69,14 +71,14 @@ const INITIAL_VIEW_STATE = {
   bearing: 0
 };
 
-export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomChange, onPolygonClick }) {
-  const [mapMode, setMapMode] = useState(theme);
+export default function DeckMap({ flyToTarget, layers, theme = 'light', onZoomChange, onPolygonClick }) {
+  const [mapMode, setMapMode] = useState('light');
 
   useEffect(() => {
-    setMapMode(theme);
+    setMapMode(theme || 'light');
   }, [theme]);
 
-  const currentStyle = MAP_STYLES[mapMode] || MAP_STYLES.dark;
+  const currentStyle = MAP_STYLES[mapMode] || MAP_STYLES.light;
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [tooltip, setTooltip] = useState(null);
   const tooltipRef = useRef(null);
@@ -153,44 +155,15 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
         top: '12px',
         right: '12px',
         zIndex: 10,
-        backgroundColor: 'rgba(15, 23, 42, 0.85)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(8px)',
         padding: '4px',
-        borderRadius: '0px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '4px',
+        border: '1px solid #CBD5E1',
+        boxShadow: '0 2px 8px rgba(15, 23, 42, 0.12)',
         display: 'flex',
         gap: '4px'
       }}>
-        <button
-          onClick={() => setMapMode('satellite')}
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            border: 'none',
-            borderRadius: '0px',
-            cursor: 'pointer',
-            backgroundColor: mapMode === 'satellite' ? '#38bdf8' : 'transparent',
-            color: mapMode === 'satellite' ? '#0f172a' : '#94a3b8'
-          }}
-        >
-          Satelit NASA
-        </button>
-        <button
-          onClick={() => setMapMode('dark')}
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            border: 'none',
-            borderRadius: '0px',
-            cursor: 'pointer',
-            backgroundColor: mapMode === 'dark' ? '#38bdf8' : 'transparent',
-            color: mapMode === 'dark' ? '#0f172a' : '#94a3b8'
-          }}
-        >
-          Peta Gelap
-        </button>
         <button
           onClick={() => setMapMode('light')}
           style={{
@@ -198,13 +171,46 @@ export default function DeckMap({ flyToTarget, layers, theme = 'dark', onZoomCha
             fontSize: '0.75rem',
             fontWeight: 600,
             border: 'none',
-            borderRadius: '0px',
+            borderRadius: '3px',
             cursor: 'pointer',
-            backgroundColor: mapMode === 'light' ? '#38bdf8' : 'transparent',
-            color: mapMode === 'light' ? '#0f172a' : '#94a3b8'
+            backgroundColor: mapMode === 'light' ? '#2563EB' : 'transparent',
+            color: mapMode === 'light' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
           }}
         >
           Peta Terang
+        </button>
+        <button
+          onClick={() => setMapMode('satellite')}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: mapMode === 'satellite' ? '#2563EB' : 'transparent',
+            color: mapMode === 'satellite' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          Satelit Resolusi Tinggi
+        </button>
+        <button
+          onClick={() => setMapMode('street')}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: mapMode === 'street' ? '#2563EB' : 'transparent',
+            color: mapMode === 'street' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          Peta Topografi
         </button>
       </div>
 

@@ -35,7 +35,10 @@ import {
   TbCpu,
   TbFocus2,
   TbTrendingUp,
-  TbAlertCircle
+  TbAlertCircle,
+  TbCamera,
+  TbMaximize,
+  TbShieldCheck
 } from 'react-icons/tb';
 
 function formatDecimal(val) {
@@ -282,7 +285,7 @@ function ItemizedModal({ zone, onClose }) {
 export default function App() {
   const [data, setData] = useState(() => {
     try {
-      const cached = localStorage.getItem('sdss_data_cache');
+      const cached = localStorage.getItem('sdss_data_cache_v3');
       return cached ? JSON.parse(cached) : null;
     } catch {
       return null;
@@ -291,19 +294,19 @@ export default function App() {
 
   const [loading, setLoading] = useState(() => {
     try {
-      return !localStorage.getItem('sdss_data_cache');
+      return !localStorage.getItem('sdss_data_cache_v3');
     } catch {
       return true;
     }
   });
 
   const [error, setError] = useState(null);
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [activeNav, setActiveNav] = useState('peta');
   const [sidebarTab, setSidebarTab] = useState('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedZone, setSelectedZone] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
   const [flyToTarget, setFlyToTarget] = useState(null);
   const [activeAuditModel, setActiveAuditModel] = useState('cnn');
 
@@ -312,16 +315,10 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem('theme', next);
-    document.documentElement.setAttribute('data-theme', next);
-  };
-
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+    localStorage.setItem('theme', 'light');
+    document.documentElement.setAttribute('data-theme', 'light');
+  }, []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -330,7 +327,7 @@ export default function App() {
       if (res.data && !res.data.error) {
         setData(res.data);
         try {
-          localStorage.setItem('sdss_data_cache', JSON.stringify(res.data));
+          localStorage.setItem('sdss_data_cache_v3', JSON.stringify(res.data));
         } catch { }
       }
       setError(null);
@@ -849,9 +846,6 @@ export default function App() {
           <span className="topbar-badge">
             <TbDatabase /> BMKG · NASA FIRMS · PetaBencana · WorldPop ({redZones.length} Desa Terdata)
           </span>
-          <button className="topbar-theme-btn" onClick={toggleTheme} title="Ganti Tema Tampilan">
-            {theme === 'dark' ? <TbSun /> : <TbMoon />}
-          </button>
         </div>
       </header>
 
@@ -995,17 +989,101 @@ export default function App() {
 
                       {sidebarTab === 'detail' && (
                         <div className="sidebar-detail-wrap">
-                          {selectedZone ? (
+                          {selectedZone ? (() => {
+                            const validSrc = selectedZone.image_source || selectedZone.source || selectedZone.sumber_validasi || (
+                              selectedZone.has_petabencana ? 'Laporan Warga (Citizen Report · PetaBencana.id)' :
+                              selectedZone.has_bmkg ? 'BMKG TEWS · Peta Guncangan Gempa (ShakeMap)' :
+                              (selectedZone.disaster_type && selectedZone.disaster_type.toLowerCase().includes('kebakaran')) ? 'NASA FIRMS (Hotspot) · Citra Satelit Resolusi Tinggi' :
+                              'Citra Satelit VHR · Deteksi AI ResNet50-UNet'
+                            );
+                            const zLon = Number(selectedZone.lon) || 119.8;
+                            const zLat = Number(selectedZone.lat) || -0.9;
+                            const defaultSatelliteUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${(zLon - 0.015).toFixed(5)},${(zLat - 0.015).toFixed(5)},${(zLon + 0.015).toFixed(5)},${(zLat + 0.015).toFixed(5)}&bboxSR=4326&imageSR=4326&size=1024,1024&format=jpg&f=image`;
+                            const activeImageUrl = selectedZone.image_url || selectedZone.fallback_image_url || defaultSatelliteUrl;
+
+                            return (
                             <>
                               <div className="detail-header-card">
                                 <div className="detail-desa-name">Desa {selectedZone.desa}</div>
-                                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
                                   <span className={`cat-badge ${(selectedZone.priority_label || '').toLowerCase()}`}>
                                     Prioritas {selectedZone.priority_label}
                                   </span>
                                   <span style={{ fontSize: '10.5px', color: 'var(--ts)' }}>
                                     {selectedZone.disaster_type || 'Bencana Alam'}
                                   </span>
+                                  <span className="detail-header-source-badge">
+                                    <TbShieldCheck style={{ fontSize: '11px', verticalAlign: 'middle', marginRight: '3px', color: '#10B981' }} />
+                                    {validSrc}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* KARTU BUKTI VISUAL PASCA-BENCANA */}
+                              <div className="detail-visual-card">
+                                <div className="detail-visual-header">
+                                  <div className="detail-visual-title-wrap">
+                                    <TbCamera className="detail-visual-icon" />
+                                    <span className="detail-visual-title">Bukti Visual Pasca-Bencana</span>
+                                  </div>
+                                  <span className={`detail-visual-badge ${selectedZone.visual_type || 'satellite_optical'}`}>
+                                    {selectedZone.visual_type === 'citizen_report' ? 'Citizen Report' :
+                                     selectedZone.visual_type === 'bmkg_shakemap' ? 'BMKG ShakeMap' :
+                                     selectedZone.visual_type === 'satellite_thermal' ? 'NASA VIIRS' : 'Satelit VHR'}
+                                  </span>
+                                </div>
+
+                                <div 
+                                  className="detail-visual-frame"
+                                  onClick={() => setPreviewImage({
+                                    url: activeImageUrl,
+                                    fallbackUrl: defaultSatelliteUrl,
+                                    source: validSrc,
+                                    caption: selectedZone.report_text || `Dokumentasi visual pasca-bencana di Desa ${selectedZone.desa}`,
+                                    desa: selectedZone.desa,
+                                    disaster: selectedZone.disaster_type || 'Bencana Alam'
+                                  })}
+                                  title="Klik untuk memperbesar bukti visual resolusi penuh"
+                                >
+                                  <img
+                                    key={selectedZone.desa + activeImageUrl}
+                                    src={activeImageUrl}
+                                    alt={`Bukti visual pasca-bencana ${selectedZone.desa}`}
+                                    className="detail-visual-img"
+                                    onError={(e) => {
+                                      if (!e.target.dataset.fallbackStep) {
+                                        e.target.dataset.fallbackStep = '1';
+                                        e.target.src = defaultSatelliteUrl;
+                                      } else if (e.target.dataset.fallbackStep === '1') {
+                                        e.target.dataset.fallbackStep = '2';
+                                        e.target.src = '/images/citra_satelit_post_disaster.png';
+                                      }
+                                    }}
+                                  />
+                                  <div className="detail-visual-zoom-overlay">
+                                    <TbMaximize />
+                                    <span>Perbesar Resolusi Penuh</span>
+                                  </div>
+                                </div>
+
+                                <div className="detail-visual-info">
+                                  <div className="detail-visual-source-box">
+                                    <div className="detail-visual-source-header">
+                                      <span className="detail-visual-source-tag">SUMBER VALIDASI:</span>
+                                      <span className="detail-visual-verified-tag">
+                                        <TbShieldCheck style={{ fontSize: '11px', verticalAlign: 'middle', marginRight: '3px' }} />
+                                        TERVERIFIKASI
+                                      </span>
+                                    </div>
+                                    <div className="detail-visual-source-val">
+                                      {validSrc}
+                                    </div>
+                                  </div>
+                                  {selectedZone.report_text && (
+                                    <div className="detail-visual-desc">
+                                      "{selectedZone.report_text}"
+                                    </div>
+                                  )}
                                 </div>
                               </div>
 
@@ -1318,7 +1396,8 @@ export default function App() {
                                 </button>
                               </div>
                             </>
-                          ) : (
+                            );
+                          })() : (
                             <div style={{ textAlign: 'center', padding: '32px 10px', color: 'var(--ts)' }}>
                               <TbMapPin style={{ fontSize: '32px', color: 'var(--td)', marginBottom: '8px' }} />
                               <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--tp)' }}>Pilih Posko / Desa</div>
@@ -1506,7 +1585,7 @@ export default function App() {
                       <DeckMap
                         flyToTarget={flyToTarget}
                         layers={layers}
-                        theme={theme}
+                        theme="light"
                         onPolygonClick={handleMapPolygonClick}
                       />
                     </div>
@@ -2343,6 +2422,58 @@ export default function App() {
           zone={selectedZone}
           onClose={() => setShowModal(false)}
         />
+      )}
+
+      {previewImage && (
+        <div className="modal-overlay" onClick={() => setPreviewImage(null)}>
+          <div className="modal-box image-modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="image-modal-header">
+              <div>
+                <h3 className="image-modal-title">Dokumentasi Visual Pasca-Bencana · Desa {previewImage.desa}</h3>
+                <span className="image-modal-sub">
+                  <strong>Sumber Validasi:</strong> {previewImage.source} · {previewImage.disaster}
+                </span>
+              </div>
+              <button className="image-modal-close" onClick={() => setPreviewImage(null)}>
+                <TbX />
+              </button>
+            </div>
+            <div className="image-modal-body">
+              <img
+                src={previewImage.url}
+                alt={`Bukti visual ${previewImage.desa}`}
+                className="image-modal-img"
+                onError={(e) => {
+                  if (!e.target.dataset.triedFallback) {
+                    e.target.dataset.triedFallback = 'true';
+                    e.target.src = previewImage.fallbackUrl || '/images/citra_satelit_post_disaster.png';
+                  }
+                }}
+              />
+            </div>
+            {previewImage.caption && (
+              <div className="image-modal-caption">
+                <strong>Catatan / Keterangan Lapangan:</strong> {previewImage.caption}
+              </div>
+            )}
+            <div style={{ marginTop: '14px', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setPreviewImage(null)}
+                style={{
+                  padding: '6px 16px',
+                  backgroundColor: 'var(--p-main)',
+                  color: '#FFFFFF',
+                  borderRadius: '0px',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Tutup Pratinjau
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

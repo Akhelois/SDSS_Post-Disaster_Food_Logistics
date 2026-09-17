@@ -2230,3 +2230,294 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+/* ==========================================================================
+   BUKTI VISUAL PASCA-BENCANA (POST-DISASTER VISUAL EVIDENCE) - LIGHT THEME
+   ========================================================================== */
+
+.detail-visual-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.detail-visual-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-visual-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-visual-icon {
+  font-size: 15px;
+  color: var(--accent-emergency, #EA580C);
+}
+
+.detail-visual-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F172A;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.detail-visual-badge {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #CBD5E1;
+  background: #F1F5F9;
+  color: #334155;
+}
+
+.detail-visual-badge.citizen_report {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.detail-visual-badge.bmkg_shakemap {
+  background: rgba(239, 68, 68, 0.12);
+  color: #DC2626;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.detail-visual-badge.satellite_thermal {
+  background: rgba(245, 158, 11, 0.12);
+  color: #D97706;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.detail-visual-badge.satellite_optical,
+.detail-visual-badge.optical {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563EB;
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.detail-visual-frame {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  cursor: pointer;
+}
+
+.detail-visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.detail-visual-frame:hover .detail-visual-img {
+  transform: scale(1.04);
+}
+
+.detail-visual-zoom-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.85) 100%);
+  color: #FFFFFF;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.detail-visual-frame:hover .detail-visual-zoom-overlay {
+  opacity: 1;
+}
+
+.detail-visual-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-header-source-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #059669;
+  background: rgba(5, 150, 105, 0.1);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.detail-visual-source-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-visual-source-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-visual-source-tag {
+  color: #64748B;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.detail-visual-verified-tag {
+  font-family: var(--mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  color: #059669;
+  background: rgba(5, 150, 105, 0.12);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.detail-visual-source-val {
+  color: #0F172A;
+  font-weight: 700;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.detail-visual-desc {
+  font-size: 10.5px;
+  color: #334155;
+  background: #F1F5F9;
+  padding: 8px 10px;
+  border-radius: 3px;
+  border-left: 3px solid var(--accent-emergency, #EA580C);
+  border-top: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  font-style: italic;
+  line-height: 1.5;
+  max-height: 70px;
+  overflow-y: auto;
+}
+
+/* Lightbox / Full Image Modal - Light Theme */
+.image-modal-box {
+  max-width: 820px;
+  width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  border-radius: 4px;
+}
+
+.image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.image-modal-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.image-modal-sub {
+  font-size: 11px;
+  color: #475569;
+  display: block;
+  margin-top: 4px;
+}
+
+.image-modal-close {
+  color: #64748B;
+  font-size: 20px;
+  cursor: pointer;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 4px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.image-modal-close:hover {
+  color: #0F172A;
+  background: #E2E8F0;
+}
+
+.image-modal-body {
+  width: 100%;
+  max-height: 60vh;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #E2E8F0;
+}
+
+.image-modal-img {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  display: block;
+}
+
+.image-modal-caption {
+  margin-top: 12px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #1E293B;
+  background: #F8FAFC;
+  padding: 10px 12px;
+  border-radius: 3px;
+  border-left: 3px solid var(--p-main, #2563EB);
+  border-top: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+
