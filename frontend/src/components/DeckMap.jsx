@@ -1,0 +1,288 @@
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import DeckGL from '@deck.gl/react';
+import { FlyToInterpolator } from '@deck.gl/core';
+import { Map } from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
+function formatDecimal(val) {
+  if (val === null || val === undefined || isNaN(val)) return '0';
+  const num = Number(val);
+  if (Number.isInteger(num)) return num.toString();
+  return (Math.floor(num * 100) / 100).toFixed(2);
+}
+
+function formatInt(val) {
+  if (val === null || val === undefined || isNaN(val)) return '0';
+  return Math.round(Number(val)).toLocaleString('id-ID');
+}
+
+const MAP_STYLES = {
+  light: {
+    version: 8,
+    sources: {
+      'basemap': {
+        type: 'raster',
+        tiles: [
+          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        ],
+        tileSize: 256,
+        attribution: '&copy; OpenStreetMap contributors'
+      }
+    },
+    layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
+  },
+  satellite: {
+    version: 8,
+    sources: {
+      'basemap': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        ],
+        tileSize: 256,
+        attribution: '&copy; Esri World Imagery / NASA'
+      }
+    },
+    layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
+  },
+  street: {
+    version: 8,
+    sources: {
+      'basemap': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+        ],
+        tileSize: 256,
+        attribution: '&copy; Esri & OpenStreetMap'
+      }
+    },
+    layers: [{ id: 'basemap-layer', type: 'raster', source: 'basemap', minzoom: 0, maxzoom: 19 }]
+  }
+};
+
+const INITIAL_VIEW_STATE = {
+  longitude: 119.84,
+  latitude: -0.9,
+  zoom: 9,
+  pitch: 45,
+  bearing: 0
+};
+
+export default function DeckMap({ flyToTarget, layers, theme = 'light', onZoomChange, onPolygonClick }) {
+  const [mapMode, setMapMode] = useState('light');
+
+  useEffect(() => {
+    setMapMode(theme || 'light');
+  }, [theme]);
+
+  const currentStyle = MAP_STYLES[mapMode] || MAP_STYLES.light;
+  const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+  const [tooltip, setTooltip] = useState(null);
+  const tooltipRef = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (flyToTarget) {
+      const newZoom = 13.5;
+      setViewState(prev => ({
+        ...prev,
+        longitude: flyToTarget.lon,
+        latitude: flyToTarget.lat,
+        zoom: newZoom,
+        transitionDuration: 1500,
+        transitionInterpolator: new FlyToInterpolator()
+      }));
+      if (onZoomChange) onZoomChange(newZoom);
+    }
+  }, [flyToTarget]);
+
+  const onHover = useCallback((info) => {
+    if (info.object && (info.object.count !== undefined || info.object.desa !== undefined)) {
+      setTooltip({
+        x: info.x,
+        y: info.y,
+        object: info.object
+      });
+    } else {
+      setTooltip(null);
+    }
+  }, []);
+
+  const handleClick = useCallback((info) => {
+    if (info && info.object && onPolygonClick) {
+      onPolygonClick(info.object);
+    }
+  }, [onPolygonClick]);
+
+  const getTooltipStyle = () => {
+    if (!tooltip || !tooltipRef.current || !containerRef.current) return { display: 'none' };
+
+    const container = containerRef.current.getBoundingClientRect();
+    const ttRect = tooltipRef.current.getBoundingClientRect();
+    const pad = 12;
+
+    let left = tooltip.x + pad;
+    let top = tooltip.y + pad;
+
+    if (left + ttRect.width > container.width) {
+      left = tooltip.x - ttRect.width - pad;
+    }
+    if (top + ttRect.height > container.height) {
+      top = tooltip.y - ttRect.height - pad;
+    }
+    left = Math.max(pad, Math.min(left, container.width - ttRect.width - pad));
+    top = Math.max(pad, Math.min(top, container.height - ttRect.height - pad));
+
+    return {
+      position: 'absolute',
+      left: `${left}px`,
+      top: `${top}px`,
+      pointerEvents: 'none',
+      zIndex: 20,
+    };
+  };
+
+  const obj = tooltip?.object;
+  const item = obj?.itemized_logistics;
+
+  return (
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div style={{
+        position: 'absolute',
+        top: '12px',
+        right: '12px',
+        zIndex: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(8px)',
+        padding: '4px',
+        borderRadius: '4px',
+        border: '1px solid #CBD5E1',
+        boxShadow: '0 2px 8px rgba(15, 23, 42, 0.12)',
+        display: 'flex',
+        gap: '4px'
+      }}>
+        <button
+          onClick={() => setMapMode('light')}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: mapMode === 'light' ? '#2563EB' : 'transparent',
+            color: mapMode === 'light' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          Peta Terang
+        </button>
+        <button
+          onClick={() => setMapMode('satellite')}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: mapMode === 'satellite' ? '#2563EB' : 'transparent',
+            color: mapMode === 'satellite' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          Satelit Resolusi Tinggi
+        </button>
+        <button
+          onClick={() => setMapMode('street')}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: mapMode === 'street' ? '#2563EB' : 'transparent',
+            color: mapMode === 'street' ? '#FFFFFF' : '#475569',
+            transition: 'all 0.15s ease'
+          }}
+        >
+          Peta Topografi
+        </button>
+      </div>
+
+      <DeckGL
+        viewState={viewState}
+        onViewStateChange={({ viewState }) => {
+          const minLng = 94.0, maxLng = 141.0;
+          const minLat = -11.0, maxLat = 6.0;
+          viewState.longitude = Math.max(minLng, Math.min(maxLng, viewState.longitude));
+          viewState.latitude = Math.max(minLat, Math.min(maxLat, viewState.latitude));
+          setViewState(viewState);
+          if (onZoomChange) onZoomChange(viewState.zoom);
+        }}
+        controller={true}
+        layers={layers}
+        onHover={onHover}
+        onClick={handleClick}
+        getTooltip={() => null}
+      >
+        <Map key={mapMode} mapStyle={currentStyle} />
+      </DeckGL>
+
+      {tooltip && obj && (
+        <div ref={tooltipRef} className="custom-tooltip" style={getTooltipStyle()}>
+          <div className="tt-header-row">
+            <span className="tt-type">{(obj.disaster_type || 'Bencana Alam').toUpperCase()}</span>
+            {obj.priority_label && (
+              <span className={`tt-priority-tag ${(obj.priority_label || '').toLowerCase()}`}>
+                Prioritas {obj.priority_label}
+              </span>
+            )}
+          </div>
+          <div className="tt-divider" />
+          <div className="tt-row">
+            <span className="tt-label">Desa / Posko</span>
+            <span className="tt-val" style={{ fontWeight: 700 }}>{obj.desa ? `Desa ${obj.desa}` : 'Zona Kerusakan Spasial'}</span>
+          </div>
+          {(obj.kecamatan || obj.adm3) && (
+            <div className="tt-row">
+              <span className="tt-label">Kecamatan</span>
+              <span className="tt-val">{obj.kecamatan || obj.adm3}</span>
+            </div>
+          )}
+          {(obj.kabupaten || obj.adm2) && (
+            <div className="tt-row">
+              <span className="tt-label">Kab / Kota</span>
+              <span className="tt-val" style={{ color: 'var(--p-main)', fontWeight: 600 }}>{obj.kabupaten || obj.adm2}</span>
+            </div>
+          )}
+          {(obj.provinsi || obj.adm1 || obj.province) && (
+            <div className="tt-row">
+              <span className="tt-label">Provinsi</span>
+              <span className="tt-val">{obj.provinsi || obj.adm1 || obj.province}</span>
+            </div>
+          )}
+          <div className="tt-row">
+            <span className="tt-label">Kerusakan Fisik</span>
+            <span className="tt-val">{obj.count || 1} KK ({obj.count || 1} unit)</span>
+          </div>
+          <div className="tt-row">
+            <span className="tt-label">Est. Terdampak</span>
+            <span className="tt-val">{formatInt(Math.max(obj.population || 0, (obj.count || 1) * 4))} jiwa (4 jiwa/KK)</span>
+          </div>
+          {obj.priority_score !== undefined && (
+            <div className="tt-row">
+              <span className="tt-label">Skor Urgensi SDSS</span>
+              <span className="tt-val" style={{ color: 'var(--accent-emergency)' }}>{obj.priority_pct ? `${obj.priority_pct}%` : `${Math.round(Number(obj.priority_score) * 100)}%`}</span>
+            </div>
+          )}
+          <div className="tt-hint">Klik untuk melihat detail item logistik</div>
+        </div>
+      )}
+    </div>
+  );
+}

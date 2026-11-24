@@ -1,0 +1,416 @@
+
+
+Pengembangan Spatial Decision Support System (SDSS) Berbasis CNN dan Analisis Spasial untuk Prioritisasi Alokasi Logistik Pangan Pasca-Bencana di Indonesia 
+
+
+
+
+
+
+
+JASON LEE 
+2702751580 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROGRAM STUDI MAGISTER MANAJEMEN SISTEM INFORMASI
+BINUS GRADUATE PROGRAM
+UNIVERSITAS BINA NUSANTARA
+JAKARTA 
+TAHUN 2026
+
+
+Pengembangan Spatial Decision Support System (SDSS) Berbasis CNN dan Analisis Spasial untuk Prioritisasi Alokasi Logistik Pangan Pasca-Bencana di Indonesia
+
+
+
+
+
+
+JASON LEE
+2702751580
+
+
+
+
+
+
+
+
+
+
+Tesis 
+Sebagai Salah Satu Syarat untuk Memperoleh Gelar 
+Magister Manajemen Sistem Informasi
+pada 
+
+
+
+
+
+
+
+PRORGRAM STUDI MAGISTER MANAJEMEN SISTEM INFORMASI
+BINUS GRADUATE PROGRAM 
+UNIVERSITAS BINA NUSANTARA
+JAKARTA 
+TAHUN 2026
+
+
+HALAMAN PERNYATAAN 
+Saya, Jason Lee, 2702751580 menyatakan dengan sebenar-benarnya bahwa tesis saya berjudul Pengembangan Spatial Decision Support System (SDSS) Berbasis CNN dan Analisis Spasial untuk Prioritisasi Alokasi Logistik Pangan Pasca-Bencana di Indonesia adalah merupakan gagasan dan hasil penelitian saya sendiri dengan bimbingan Dosen Pembimbing. 
+Saya juga menyatakan dengan sebenarnya bahwa isi tesis ini tidak merupakan jiplakan dan bukan pula dari karya orang lain, kecuali kutipan dari literatur dan atau hasil wawancara tertulis yang saya acu dan telah saya sebutkan di Daftar Acuan. 
+Demikian pernyataan ini saya buat dengan sebenarnya dan saya bersedia menerima sanksi apabila ternyata saya ini tidak benar. 
+
+I, Jason Lee, 2702751580 truly acknowledge that my thesis with title Development of a Spatial Decision Support System (SDSS) Based on CNN and Spatial Analysis for Post-Disaster Food Logistics Allocation Prioritization in Indonesia is my concept and project result with guidance from supervisor.
+I, also truly acknowledge that content of this thesis is not copied and not from another people work, except my citation from literature or written interview result and already write in reference list and bibliography list.
+That’s my acknowledge were truly made and if in reality this acknowledge weren’t true, I am willing sanction.
+
+
+Jakarta, 22 April 2026
+
+Yang menyatakan 
+
+
+
+Jason Lee
+2702751580
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dibimbing oleh: 
+
+PERNYATAAN 
+STATEMENT
+Dengan ini saya, 
+
+Memberikan kepada Universitas Bina Nusantara hak non-eksklusif untuk menyimpan, memperbanyak, dan menyebarluaskan tesis karya saya, secara keseluruhan atau hanya sebagian atau hanya ringkasannya saja, dalam bentuk format tercetak dan atau elektronik.
+
+Menyatakan bahwa saya, akan mempertahankan hak exclusive saya, untuk menggunakan seluruh atau sebagian isi tesis saya, guna pengembangan karya di masa depan, misalnya bentuk artikel, buku, perangkat lunak, ataupun sistem informasi.
+
+Hereby grant to my school, Bina Nusantara University, the non-exclusive right to archive, reproduce, and distribute my thesis, in whole or in part, whether in the form of printed and electronic formats.
+
+I acknowledge that I retain exclusive rights of my thesis by using all or part of it in the future work or outputs, such as article, book, software, and information system.
+
+Jakarta, xx Januari 20xx
+
+
+
+Jason Lee
+2702751580
+
+PRAKATA
+	Prakata berisi ucapan terima kasih kepada pihak-pihak yang membantu penyelesaian tesis ini. Ucapan terima kasih dapat disampaikan kepada kedua orang tua, dosen pembimbing dan pihak lain yang berperan terselesainya tesis ini. Di akhir prakata juga disampaikan bahwa penulis menerima semua saran untuk penyempurnaan tesis ini. 
+
+Jakarta, xx Januari 20xx
+
+
+
+Jason Lee
+2702751580
+
+Abstrak 
+Abstrak penelitian berisi satu kalimat pendahuluan, satu kalimat pernyataan tujuan, satu/dua kalimat metode yang digunakan, satu atau dua hasil utama penelitian dan satu kalimat simpulan. Abstrak perlu ditulis 200-250 kata. 
+
+Kata Kunci: Kata kunci 1, Kata kunci 2, Kata kunci 3, Kata kunci 4, Kata kunci 5 
+
+Abstract 
+Abstract in English.
+
+DAFTAR ISI
+HALAMAN PERNYATAAN	iii
+PERNYATAAN	v
+PRAKATA	vi
+Abstrak	vii
+DAFTAR ISI	viii
+DAFTAR TABEL	ix
+DAFTAR GAMBAR	ix
+DAFTAR LAMPIRAN	ix
+BAB I  PENDAHULUAN	10
+1.1.	Latar Belakang	10
+1.2.	Perumusan Masalah	13
+1.3.	Tujuan Penelitian	14
+1.4.	Manfaat Penelitian	14
+1.4.1.	Manfaat Teoritis	14
+1.4.2.	Manfaat Praktis	15
+1.5.	Kontribusi Penelitian	15
+1.6.	Ruang Lingkup Penelitian	16
+1.6.1.	Batasan Objek Penelitian	16
+1.6.2.	Batasan Data dan Metodologi	16
+BAB II  TINJAUAN PUSTAKA	16
+2.1.	Kerangka Teoritis	16
+2.1.1.	Manajamen Bencana dan Logistik Kemanusiaan	17
+2.1.2.	Spatial Decision Support System (SDSS)	18
+2.1.3.	Convolutional Neural Network (CNN)	19
+2.1.4.	Arsitektur ResNet50-UNet	20
+2.1.5.	Fungsi Loss: Dice Loss & Weighted Dice Loss	21
+2.1.6.	Geographic Information System (GIS)	22
+2.1.7.	Google Earth Engine (GEE)	22
+2.1.8.	Metrik Evaluasi	24
+2.2.	Penelitian Terdahulu & Gap Analysis	25
+BAB III  METODOLOGI PENELITIAN	27
+3.1.	Kerangka Berpikir	27
+3.2.	Alur Penelitian	30
+3.3.	Tahapan Penelitian	32
+3.3.1.	Business Understanding	32
+3.3.2.	Data Understanding	33
+3.3.3.	Data Preparation	34
+3.3.4.	Modelling	35
+3.3.5.	Evaluation	37
+3.3.6.	Spatial Integration & Visualization	38
+DAFTAR PUSTAKA	40
+RIWAYAT HIDUP	42
+
+
+
+DAFTAR TABEL 
+Tabel 1.1. Data Kejadian Bencana di Indonesia per tanggal 8 September 2025	11
+Tabel 2.1. Gap Analysis	25
+
+
+
+
+DAFTAR GAMBAR
+Gambar 2.1. Indonesia GIS Mapping	22
+Gambar 3.1. Kerangka Berpikir Sistem SDSS	28
+Gambar 3.2. Alur Penelitian (CRISP-DM)	32
+Gambar 3.3. Arsitektur ResNet50-UNet	36
+
+DAFTAR LAMPIRAN 
+Lampiran 1. Judul lampiran 1	43
+Lampiran 2. Judul lampiran 2	44
+
+
+
+BAB I
+ PENDAHULUAN
+Latar Belakang
+Kepulauan Indonesia secara geografis terletak pada titik pertemuan lempeng tektonik besar dunia, yaitu Lempeng Eurasia, Lempeng Indo-Australia, dan Lempeng Pasifik, sehingga menjadikannya wilayah yang hidup dalam zona Ring of Fire dengan risiko intensitas aktivitas vulkanik dan seismik (adanya getaran bumi atau gempa) tertinggi di dunia . Kondisi geografis ini, dikombinasikan dengan posisi tropis yang membuatnya rentan terhadap fenomena hidrometeorologi atau pengaruh cuaca yang ekstrem, menempatkan Indonesia sebagai salah satu negara dengan tingkat kerentanan bencana tertinggi secara global. Data historis menunjukkan tren kenaikan kejadian bencana hidrometeorologi dan geologi yang signifikan setiap tahunnya, sebuah tren yang diperparah oleh perubahan iklim global yang terus berlangsung .
+Namun, permasalahan fundamental dalam penanggulangan bencana di Indonesia saat ini bukan lagi sekadar pada frekuensi kejadiannya, melainkan pada latensi atau keterlambatan informasi pasca-bencana yang menghambat respons tanggap darurat yang efektif . Setiap jam yang terbuang dalam proses pengumpulan dan pengolahan data kerusakan secara langsung berkorelasi dengan meningkatnya risiko jiwa bagi para korban yang menunggu bantuan. Data terkini menunjukkan gambaran yang memprihatinkan mengenai skala permasalahan ini.
+Data Kejadian Bencana di Indonesia per tanggal 8 September 2025 menunjukkan bahwa dalam satu periode pencatatan saja, telah terjadi 251 kejadian bencana dengan total 127.577 warga terdampak, 1.366 rumah rusak ringan, 301 rumah rusak sedang, 336 rumah rusak berat, serta 74 korban jiwa. Bencana kebakaran hutan mendominasi kejadian dengan 110 insiden, sementara banjir menjadi bencana dengan dampak paling luas yang mempengaruhi 	70.127 warga. Kekeringan juga menjadi perhatian serius dengan 44.414 warga yang terdampak dari hanya 15 kejadian tercatat yang bisa dilihat pada Tabel 1.1. 
+
+Tabel 1.1. Data Kejadian Bencana di Indonesia per tanggal 8 September 2025
+Dalam manajemen logistik bencana, fase 72 jam pertama pasca-bencana dikenal sebagai Golden Time, yaitu periode kritis di mana keputusan distribusi bantuan harus dilakukan dengan presisi tinggi dan cepat serta tepat sasaran . Namun, metode penilaian kerusakan yang saat ini masih dominan digunakan oleh Badan Nasional Penanggulangan Bencana (BNPB) adalah Initial Damage Assessment (IDA) yang  masih sangat bergantung pada survei lapangan manual dengan mobilisasi tim verifikasi ke lokasi bencana, pelaporan birokrasi berjenjang melalui Badan Penanggulangan Bencana Daerah (BPBD) kabupaten hingga provinsi, serta kompilasi data yang memakan waktu berhari-hari hingga berminggu-minggu .
+Proses manual ini memiliki kelemahan yang bersifat fundamental dan sistematik. Pertama, bersifat lambat dan tidak dapat mengimbangi dinamika waktu yang mensyaratkan data tersedia dalam hitungan jam, bukan hari. Kedua, survei manual bersifat subjektif karena tergantung pada penilaian individual petugas yang dapat berbeda-beda. Ketiga, proses ini membahayakan personel yang harus memasuki zona merah yang belum stabil pasca-bencana. Keempat, data yang dihasilkan seringkali tidak konsisten dan sulit diintegrasikan secara spasial . Dampak dari kesenjangan waktu atau time lag antara kejadian bencana dan tersedianya data kerusakan adalah munculnya "blind spot" pada logistik pangan, yaitu kondisi di mana pemangku kepentingan terpaksa mengambil keputusan alokasi sumber daya berdasarkan informasi yang tidak lengkap, tidak akurat, atau bahkan tidak optimal .
+Fenomena yang kerap terjadi sebagai konsekuensi dari blind spot logistik pangan ini adalah clustering bantuan, yaitu penumpukan bantuan di lokasi yang mudah diakses, yang tren di media sosial, atau memiliki akses jalan yang baik. Sementara itu, daerah-daerah terisolir dengan tingkat kerusakan yang justru lebih parah tidak terdeteksi dan tidak mendapatkan bantuan yang memadai . Fenomena ini bukan hanya persoalan inefisiensi logistik semata, tetapi merupakan kegagalan sistematik yang secara langsung berkontribusi pada peningkatan angka korban jiwa yang dapat dicegah lebih awal .
+Kemajuan pesat pada bidang kecerdasan buatan (Artificial Intelligence atau AI), khusus pada segi Deep Learning (DL), telah membuka peluang yang revolusioner untuk memecahkan pada masalah ini . Convolutional Neural Network (CNN) telah terbukti mampu mengekstraksi pola kerusakan struktural dari data visual citra satelit dengan tingkat akurasi yang kompetitif, dan berpotensi mendukung proses identifikasi kerusakan secara lebih cepat dibandingkan metode inspeksi manual dalam kondisi bencana skala besar (Ahatsi & Olanrewaju, 2025). Kemampuan CNN untuk memproses ribuan citra secara batch dalam waktu yang cukup cepat, yang membutuhkan waktu berhari-hari jika dilakukan secara manual, menjadikannya kandidat teknologi yang sangat relevan untuk mengatasi tantangan Golden Time .
+Namun, deteksi kerusakan berbasis AI saja tidak cukup sebagai solusi yang komprehensif. Data kerusakan yang dihasilkan model AI perlu diintegrasikan ke dalam kerangka pengambilan keputusan yang dapat dipahami dan ditindaklanjuti oleh para pemangku kepentingan non-teknis, seperti koordinator distribusi pangan BNPB dan Badan Pangan Nasional (Bapanas). Penelitian ini mengintegrasikan hasil deteksi tersebut dengan analisis spasial Geographic Information System (GIS) untuk menjadi jembatan antara output teknis model AI dengan kebutuhan operasional manajemen bencana bencana . Integrasi antara AI dan GIS dalam sebuah Spatial Decision Support System (SDSS) merepresentasikan lompatan struktural dari manajemen distribusi pangan pasca-bencana yang reaktif-manual menuju sistem yang proaktif dan berbasis data kerusakan spasial.
+Penelitian ini hadir untuk secara spesifik menjawab celah solusi tersebut. Dengan mengembangkan model CNN berbasis arsitektur ResNet50-UNet yang dilatih pada dataset xView2, penelitian ini bertujuan mengotomatisasi proses IDA berbasis citra satelit pasca-bencana. Hasil deteksi kemudian diintegrasikan dengan analisis spasial GIS untuk menghasilkan Peta Prioritas Alokasi Logistik yang objektif, terukur, dan dapat diproduksi yang dapat mendukung proses identifikasi kerusakan secara lebih cepat dibandingkan metode manual, sehingga mengubah struktural respons bencana dari yang bergantung pada penilaian manual birokrasi menjadi sistem yang didukung oleh kecerdasan buatan berbasis data . 
+Perumusan Masalah 
+Berdasarkan latar belakang dan analisis kesenjangan di atas, berikut merupakan rumusan masalah:
+Bagaimana merancang dan melatih model segmentasi kerusakan bangunan berbasis ResNet50-UNet yang mencapai nilai IoU (Intersection over Union) dan F1-Score memadai pada dataset xView2 multi-disaster?
+Bagaimana mengintegrasikan hasil segmentasi model CNN ke dalam lingkungan GIS untuk menghasilkan visualisasi spasial Peta Prioritas Distribusi Pangan yang dapat dipahami dan ditindaklanjuti oleh pemangku kepentingan?
+Bagaimana mengevaluasi kinerja model segmentasi dan potensi pengurangan latensi informasi yang dicapai oleh sistem SDSS dibandingkan proses IDA manual pada fase tanggap darurat bencana?
+Tujuan Penelitian 
+Berdasarkan rumusan masalah, maka tujuan penelitian ini, sebagai berikut:
+Untuk berhasil mengembangkan dan memvalidasi secara teknis model CNN (ResNet50-Unet) yang mencapai nilai  dan  untuk segmentasi kerusakan pasca-bencana.
+Untuk membangun pipeline integrasi yang secara otomatis mengonversi keluaran model CNN berupa binary mask menjadi menjadi data vektor spasial (Peta Kerusakan GIS) yang menggabungkan informasi densitas kerusakan dengan data demografis dan infrastruktur logistik.
+Menganalisis secara kuantitatif potensi pengurangan latensi informasi sistem SDSS otomatis dibandingkan proses IDA manual, berdasarkan perbandingan waktu pemrosesan pipeline terhadap durasi IDA konvensional dari literatur dan SOP (Standar Operasional Prosedur) BNPB dalam manajemen bencana.
+Manfaat Penelitian 
+Manfaat Teoritis
+Secara akademis, penelitian ini berkontribusi pada pengembangan tubuh pengetahuan (body of knowledge) di persimpangan tiga disiplin ilmu: DL, sistem informasi geografis, dan manajemen logistik pangan kemanusiaan. Penelitian ini menyumbangkan bukti empiris mengenai efektivitas arsitektur ResNet50-UNet pada tugas segmentasi semantik kerusakan bangunan skala multi-disaster, yang masih relatif terbatas dalam literatur yang ada. Selain itu, penelitian ini menawarkan kerangka konseptual yang dapat direplikasi untuk mengintegrasikan output model AI ke dalam SDSS manajemen bencana, menjembatani kesenjangan antara kinerja teknis model (akurasi piksel) dengan dampak operasionalnya pada kecepatan dan ketepatan pengambilan keputusan distribusi logistik pangan pasca-bencana.
+Manfaat Praktis
+Dari perspektif praktis, sistem SDSS yang dikembangkan dalam penelitian ini dirancang untuk secara langsung menjawab kebutuhan operasional lembaga manajemen bencana seperti BNPB, BPBD, dan mitra kemanusiaan. Sistem ini menyediakan komponen penilaian kerusakan otomatis yang dapat mengurangi secara drastis waktu yang dibutuhkan untuk menghasilkan data kerusakan komprehensif dari hitungan hari menjadi hitungan jam, memungkinkan alokasi sumber daya logistik pangan yang lebih cepat, lebih tepat sasaran, dan lebih berbasis bukti data kerusakan. Bagi komunitas peneliti, model yang dikembangkan dan metodologi pipeline yang didokumentasikan dalam penelitian ini dapat menjadi fondasi bagi penelitian lanjutan dalam pengembangan sistem respons bencana otomatis yang lebih canggih di Indonesia.
+Kontribusi Penelitian 
+Penelitian ini memberikan kontribusi pada pengembangan ilmu pengetahuan dan praktik manajemen bencana berbasis teknologi melalui empat kontribusi utama yang saling terintegrasi, sebagai berikut:
+Pengembangan pipeline SDSS berbasis segmentasi kerusakan bangunan: penelitian ini mengembangkan sistem SDSS end-to-end yang mengotomatisasi seluruh proses dari akuisisi citra satelit pasca-bencana hingga peta prioritas alokasi logistik pangan, dengan model segmentasi ResNet50-UNet sebagai komponen inti.
+Integrasi hasil segmentasi CNN dengan data spasial administratif: penelitian ini memberikan kerangka teknis yang dapat direproduksi untuk mengonversi binary mask kerusakan menjadi vektor spasial GeoJSON yang dapat di-overlay dengan batas administrasi desa, data demografi BPS, dan infrastruktur logistik BNPB dalam satu lingkungan GIS terpadu.
+Penyusunan skor prioritas logistik pangan pasca-bencana: penelitian ini mengajukan formula prioritisasi alokasi berbasis pembobotan dengan banyak kriteria (densitas kerusakan, jumlah jiwa terdampak, dan jarak ke gudang logistik) yang menghasilkan ranking distribusi pangan per unit administratif yang dapat langsung dioperasionalkan oleh BNPB dan Bapanas .
+Evaluasi potensi pengurangan latensi informasi: penelitian ini mengukur secara kuantitatif potensi efisiensi waktu yang dihasilkan oleh sistem SDSS otomatis dibandingkan proses IDA manual berbasis SOP BNPB, memberikan bukti empiris tentang nilai operasional sistem yang dikembangkan bagi manajemen bencana di Indonesia .
+Ruang Lingkup Penelitian
+Batasan Objek Penelitian
+	Penelitian ini secara spesifik berfokus pada pengembangan dan validasi model segmentasi semantik kerusakan bangunan citra satelit. Kategori kerusakan yang menjadi fokus adalah binary semantic segmentation, yang sesuai dengan kebutuhan prioritas alokasi bantuan pangan darurat, di mana area dengan kerusakan tertinggi mendapatkan prioritas yang tinggi. Penelitian ini tidak mencakup pemodelan geologi atau iklim untuk prediksi bencana ke depan maupun penilaian kerusakan infrastruktur non-bangunan seperti jalan dan jembatan secara terperinci.
+Batasan Data dan Metodologi
+Input utama penelitian adalah gambar citra satelit dari dataset publik yang mencakup berbagai jenis bencana, termasuk kebakaran, banjir, angin topan, dan gempa bumi. Penggunaan dataset ini dipilih untuk memastikan presisi penelitian dan menghindari bias akuisis data. Metodologi penelitian secara ketat mengikuti enam fase CRISP-DM (Cross-Industry Standard Process for Data Mining) yang telah diadaptasi untuk konteks analisis spasial, meliputi Business Understanding, Data Understanding, Data Preparation, Modelling, Evaluation, dan Spatial Integration & Vizualization. Pendekatan teknis inti menggunakan arsitektur CNN dengan transfer learning berbasis ResNet50, dikombinasikan dengan decoder Unet, serta lingkungan GIS untuk pemrosesan dan visualisasi data spasial.
+
+BAB II
+ TINJAUAN PUSTAKA
+Kerangka Teoritis
+Penelitian ini dibangun di atas dua pilar utama yang saling melengkapi. Pilar pertama adalah kerangka kerja Sistem Informasi untuk manajemen bencana yang mencakup teori tentang logistik pangan, sistem pendukung keputusan spasial, dan dinamika respons darurat. Pilar kedua merupakan kerangka kerja teknis yang meliputi AI, khususnya DL berbasis CNN, serta metodologi analisis spasial menggunakan GIS.
+Manajamen Bencana dan Logistik Kemanusiaan
+	Manajemen bencana memandang siklus penanggulangan bencana sebagai proses yang berkelanjutan dan terstruktur, yang dari empat fase utama: mitigasi, kesiapsiagaan, respons, dan pemulihan . Dari keempat fase tersebut, fase respons merupakan fase di mana kecepatan pengambilan keputusan memiliki dampak langsung yang paling besar terhadap keselamatan. Dalam fase ini, kecepatan informasi atau velocity menjadi variable penting yang menentukan efektivitas keseluruhan operasi.
+	Pergeseran paradigma yang sedang berlangsung dalam ilmu manajemen bencana saat ini merupakan transisi dari model respons yang sepenuhnya reaktif dan bergantung pada mobilisasi sumber daya menuju model yang mengintegrasikan sistem informasi cerdas dan analitik data real-time  secara jelas menyatakan bahwa kemampuan algoritma ML untuk memproses data lapangan yang bersifat kompleks, beragam, dan masif dalam waktu singkat menjadikannya komponen yang penting dalam arsitektur sistem manajemen bencana saat ini.
+	Fase 72 jam pertama setelah bencana, atau dikenal sebagai Golden Time, adalah periode krusial di mana keputusan logistik menentukan tingkat keselamatan jiwa para korban . Penelitian Kumari et al. (2025) memperkuat pemahaman ini dengan menunjukkan bahwa probabilitas penyelamatan korban yang terjebak dalam reruntuhan bangunan menurun secara eksponensial setiap 12 jam yang berlalu. Keterlambatan informasi pada fase Golden Time ini sering menyebabkan misalokasi, yaitu kesalahan distribusi pangan dan logistik darurat, di mana stok pangan yang terbatas tidak diarahkan ke area dengan kebutuhan pangan terbesar, memperparah risiko kelaparan dan kekurangan gizi pada korban bencana .
+	Konsep humanitarian supply chain atau rantai pasok kemanusiaan dalam konteks bencana memiliki karakteristik unik yang membedakannya dari rantai pasok komersial konvensional. Atieh (2025) mengidentifikasi tiga karakteristik utama: ketidakpastian permintaan pangan yang ekstrem karena jumlah korban dan skala kerusakan tergantung pada tingkat keparahan bencana yang tidak dapat diprediksi dengan presisi; urgensi waktu yang tidak dapat dikompromikan karena keterlambatan distribusi pangan berarti ancaman malnutrisi dan kelaparan bagi korban; dan kompleksitas koordinasi multi-aktor antara BNPB, Bapanas, Kemensos, TNI, LSM internasional, dan relawan lokal. Ketiga karakteristik inilah yang menjadikan SDSS berbasis AI yang dapat menghasilkan peta prioritas distribusi pangan bukan sekadar alat bantu, melainkan kebutuhan fundamental dalam manajemen rantai pasok pangan pasca-bencana .
+	Ahatsi & Olanrewaju (2025) mengkaji penerapan AI dan Big Data Analytics dalam rantai pasok kemanusiaan, menemukan bahwa integrasi teknologi AI tidak hanya meningkatkan kecepatan respons, tetapi juga meningkatkan objektivitas dan konsistensi pengambilan keputusan logistik bencana. Sistem berbasis AI berpotensi mengurangi subjektivitas human bias yang sering muncul dalam penilaian manual, di mana keputusan dapat dipengaruhi oleh faktor-faktor non-teknis seperti kedekatan geografis, tekanan media, atau kapasitas negosiasi pihak-pihak tertentu .
+Spatial Decision Support System (SDSS)
+SDSS merupakan sistem lanjutan dari Decision Support System (DSS) konvensional yang mengintegrasikan data spasial atau geografis ke dalam kerangka analisis dan pengambilan keputusan . Jika DSS berfokus pada analisis data tabular dan statistik untuk mendukung pengambilan keputusan, SDSS menambahkan lapisan analisis spasial yang memungkinkan pemahaman tentang di mana suatu fenomena terjadi, bagaimana distribusinya secara geografis, dan bagaimana hubungan spasial antar fenomena yang berbeda memengaruhi pengambilan keputusan.
+	Dalam konteks pasca-bencana, SDSS berperan sebagai sistem transformasi informasi yang mengubah data mentah berupa citra satelit menjadi rekomendasi kebijakan distribusi pangan yang spasial, kuantitatif, dan siap untuk ditindaklanjuti di lapangan untuk bagian logistik. Sebuah SDSS yang efektif untuk manajemen bencana setidaknya harus mencakup tiga komponen inti, sebagai berikut:
+Subsistem akuisisi dan pemrosesan data yang mampu mengintegrasikan berbagai sumber data beragam.
+Subsistem analisis berbasis model yang mengolah data menjadi aspek penting untuk menilai situasi.
+Subsistem visualisasi dan presentasi yang mengkomunikasikan hasil analisis dalam format yang dapat dipahami oleh pengambil keputusan.
+	Penggunaan metode komputasi berbasis AI dalam SDSS bertujuan untuk menghilangkan subjektivitas manusia atau human bias dalam proses penilaian kerusakan. Sistem yang diusulkan dalam penelitian ini dirancang untuk memberikan penilaian kerusakan yang konsisten, objektif, dan terukur, yang kemudian menjadi dasar kalkulasi kebutuhan logistik di setiap titik koordinat terdampak.
+Convolutional Neural Network (CNN)
+	CNN merupakan arsitektur jaringan saraf tiruan yang telah menjadi standar industri yang dominan dalam pengolahan dan analisis data visual digital . Perbedaan fundamental CNN dibandingkan arsitektur lainnya terletak pada mekanisme konvolusi yang memungkinkan ekstraksi fitur secara otomatis dan hierarkis langsung dari piksel input gambar tanpa memerlukan rekayasa fitur manual yang memakan waktu dan riset yang mendalam.
+	Mekanisme utama dari CNN adalah operasi konvolusi, yang secara matematis dapat di sebagai berikut. Diberikan matriks input gambar I dengan dimensi (H x W x C) dan kernel konvolusi K dengan dimensi (k x k x C), output feature map S pada posisi spasial (i, j) dihitung sebagai:
+
+Dimana:
+I: Matriks input image.
+K: Matriks kernel (bobot yang dipelajari).
+(m, n): Dimensi spasial kernel.
+Setelah operasi konvolusi, fungsi aktivasi non-linear seperti Rectified Linear Unit (ReLU) diterapkan pada setiap elemen feature map untuk memperkenalkan non-linear yang memungkinkan jaringan mempelajari fungsi yang kompleks: f (x) = max(0, x). Tanpa activation function non-linear, jaringan yang terdiri dari banyak lapisan konvolusi tetap hanya akan mampu memberikan transformasi linear, tidak peduli berapa banyak lapisan yang ditambahkan. Operasi pooling kemudian digunakan untuk mengurangi dimensi spasial feature map, menghasilkan representasi yang lebih invariant terhadap translasi kecil pada input dan secara signifikan mengurangi beban komputasi pada lapisan-lapisan berikutnya.
+	Kemampuan CNN untuk secara otomatis mengekstraksi dan mempelajari hierarki fitur visual dari data training menjadikannya metode yang paling robust untuk menangani variasi visual yang tinggi dalam kasus multi-disaster. Satu model CNN yang dilatih dengan benar dapat mengenali pola kerusakan dari berbagai jenis bencana, mulai dari runtuhnya struktur bangunan akibat gempa bumi, permukiman terendam banjir, hingga bekas kebakaran, tanpa memerlukan rekalibrasi alogritma secara eksplisit untuk setiap jenis bencana.
+Arsitektur ResNet50-UNet
+Untuk memperoleh lokasi kerusakan yang presisi, pada penelitian ini tidak menggunakan klasifikasi gambar konvensional yang hanya menghasilkan label untuk keseluruhan gambar, melainkan mengadopsi teknik Segmentasi Semantik. Teknik ini beroperasi dengan mengklasifikasikan setiap piksel individu dalam gambar ke dalam kategori semantik yang telah ditentukan, dalam hal ini area “rusak” atau “tidak rusak”, menghasilkan output berupa peta biner dengan resolusi yang identik dengan gambar input.
+	Arsitektur yang digunakan dalam penelitian ini adalah hibrida ResNet50-UNet, yang menggabungkan kekuatan arsitektur encoder ResNet50 sebagai feature extractor dengan kekuatan arsitektur decoder UNet untuk rekonstruksi mask segmentasi resolusi penuh. ResNet50 dipilih sebagai encoder karena kemampuannya mengatasi masalah vanishing gradient melalui mekanisme residual connection, memungkinkan pelatihan jaringan  yang sangat dalam secara efektif. UNet awalnya dikembangkan untuk segmentasi gambar medis biomedis, namun telah terbukti sangat efektif untuk pemetaan objek pada citra satelit resolusi tinggi .
+	Disini kuncinya ada pada inovasi dari arsitektur UNet dengan mekanisme skip connection yang menghubungkan setiap lapisan decoder yang bersesuaian pada resolusi yang sama. Secara matematis, operasi penggabungan fitur pada setiap level decoder dapat di formulasikan sebagai:
+	Dimana Xdec adalah feature map dari jalur decoder yang mengandung informasi konteks semantic resolusi rendah, Xenc adalah feature map dari jalur encoder yang mengandung informasi lokasi spasial resolusi tinggi, dan Upsample adalah operasi upsampling bilinear atau transposed convolution yang mengembalikan dimensi spasial. Mekanisme ini secara fundamental memecahkan dilemma trade-off klasik dalam segmentasi gambar antara presisi lokasi spasial dan kekayaan informasi semantic, dengan memungkinkan decoder untuk secara bersamaan mengakses informasi dari kedua dimensi tersebut.
+Fungsi Loss: Dice Loss & Weighted Dice Loss
+Pemilihan fungsi loss merupakan aspek penting dalam pelatihan model segmentasi semantik, khususnya pada dataset yang tidak seimbang (class imbalance) yang cukup ekstrem. Fungsi loss standar seperti Binart Cross-Entropy (BCE) cenderung mengahasilkan model yang bias terhadap kelas mayoritas, sehingga model gagal mendeteksi piksel kerusakan yang jumlahnya kecil namun krusial secara operasional .
+Dice loss ini diturunkan langsung dari metrik evaluasi Dice Coefficient (juga dikenal sebagai F1-Score pada level piksel) yang mengukur overlap antara prediksi model dan ground truth. Secara matematis, Dice Loss didefinisikan sebagai:
+	Di mana P adalah himpunan piksel yang diprediksi sebagai kerusakan, G adalah himpunan piksel ground truth kerusakan sesungguhnya, dan ε adalah konstanta kecil (Laplace Smoothing) untuk mencegah pembagian dengan nol . Keunggulan utama Dice Loss dibandingkan BCE adalah sifatnya yang secara bawaan lebih robust terhadap imbalance class, karena penelitian ini menggunakan varian yang lebih kuat yaitu Weighted Binary Cross-Entropy Dice Loss, yang meruspakan kombinasi berbobot antara BCE dan Dice Loss:
+Di mana  adalah Weighted Binary Cross-Entropy dengan bobot pos_weigth = 15 untuk kelas kerusakan guna memberikan penalti 15 kali lebih besar pada false negative (kegagalan mendeteksi are kerusakan yang aslinya ada).  adalah Dice Loss standar, dan α adalah koefisien pembobot antar kedua loss. Kombinasi ini digunakan pada fase fine-tuning (Phase 2) pelatihan model, sementara pada Phase 1 digunaka kombinasi Focal Loss dan Dice Loss. Focal Loss itu sendiri merupakan modifikasi dari BCE yang mengurangi bobot loss pada contoh yang mudah diklasifikasikan dan meningkatkan fokus pada contoh yang sulit, dengan formula: 
+Dimana γ adalah parameter focusing yang mengontrol tingkat penekanan pada sampel yang kompleks .
+Geographic Information System (GIS)
+
+Gambar 2.1. Indonesia GIS Mapping
+Hasil Prediksi dari model AI hanyalah berupa data visual yang perlu diterjemahkan konteks spasial. GIS berperan sebagai lingkungan integrasi yang mengubah hasil deteksi kerusakan menjadi data vektor (koordinat dan wilayah) bisa dilihat pada Gambar 2.1. GIS memungkinkan penggabungan hasil analisis AI dengan data demografi dan logistik, sehingga menghasilkan visualisasi peta prioritas yang dapat dipahami oleh pemangku kepentingan untuk pengambilan keputusan pengiriman bantuan logistik pangan .
+Google Earth Engine (GEE)
+GEE adalah platform komputasi geospasial berbasis cloud yang dikembangkan oleh Google dan menyediakan akses terhadap arsip data citra satelit multi-temporal berskala petabyte secara gratis untuk keperluan akademis dan penelitian . Dalam konteks penelitian ini, GEE berperan sebagai upstream data pipeline yang menyediakan dan memproses citra satelit pasca-bencana sebelum diteruskan sebagai input ke model CNN ResNet50-Unet untuk deteksi kerusakan bangunan.
+	Keunggulan utama GEE yang relevan dengan penelitian ini adalah kemampuannya mengakses koleksi citra dari berbagai sensor satelit secara langsung tanpa unduhan, termasuk citra Sentinel-2 SR (Surface Reflectance) dengan resolusi spasial 10 meter pada band visible dan near-infrared, serta citra Landast 8/9 (USGS/NASA) dengan resolusi 30 meter. Pada fase respons bencana, GEE memungkinkan akuisisi citra post-disaster terbaru dari suati wilayah hanya dalam hitungan menit melalui Application Programming Interface (API) berbasis Python, yang secara signifikan mengurangi latensi perolehan data dibandingkan proses unduhan konvensional .
+	Dalam pipeline yang dibangun pada penelitian ini, GEE menjalankan tiga fungsi utama sebagai data provider untuk model AI.
+GEE melakukan image collection filtering, yaitu penyaringan koleksi citra berdasarkan tanggal kejadian bencana, batas wilayah terdampak, dan persentase tutupan awan (maksimum 10%) untuk memastikan kualitas citra yang memadai.
+GEE menjalankan preprocessing otomatis yang mencakup koreksi atmosferik menggunakan algoritma Surface Reflectance, kompositing median mosaic untuk menghilangkan artefak awan residual, dan normalisasi nilai piksel ke rentang [0, 1].
+GEE mengekspor tile-tile citra berukuran 256x256 piksel dalam format GeoTIFF dengan sistem koordinat WGS-84 yang siap diproses oleh model CNN .
+Integrasi GEE dengan model CNN dilakukan melalui Earth Engine Python API yang memungkinkan otomatisasi penuh proses dari pemilihan citra hingga ekspor data. Keluaran GEE berupa citra multi-band GeoTIFF kemudian diproses melalui pipeline processing yang sama dengan dataset xView2, yaitu normalisasi, tilling, dan konversi ke format tensor, sebelum diteruskan ke model ResNet50-Unet untuk inferensi.
+Perlu dicatat bahwa terdapat potensi domain shift antara citra xView2 (resolusi sub-meter, berbagai sensor komersial) dan Sentinel-2 SR dari GEE (resolusi 10 meter). Pada implementasi operasional, preprocessing normalisasi tambahan dan validasi perfoma model pada citra Sentinel-2 SR diperlukan sebelum deployment penuh untuk memastikan kinerja model tidak terdegradasi secara signifikan akibat perbedaan resolusi dan karakteristik sensor .
+Metrik Evaluasi
+Evaluasi kinerja model segmentasi semantik dalam konteks deteksi kerusakan bangunan memerlukan serangkaian metrik yang lebih menyeluruh dibandingkan sebatas akurasi global, mengingat imbalance class yang cukup besar antara piksel kerusakan dan non-kerusakan pada dataset bencana. Penggunaan hanya satu metrik tunggal dapat memberikan gambaran yang menyesatkan mengenai kemampuan model .
+Accuracy
+Accuracy adalah metrik paling intuitif yang mengukur persentase piksel yang diklasifikasikan dengan benar oleh model terhadap total keseluruhan piksel gambar mendefinisikan akurasi sebagai:
+Precision
+Precesion mengukur tingkat kepercayaan prediksi positif model, dimana seberapa presisi model dapat memprediksi sesuai actual:
+Recall
+Recall (Sensitivitas) mengukut kemampuan model dalam menemukan seluruh area kerusakan yang ada :
+F1-Score
+F1-Score adalah rata-rata harmonis dari Precision dan Recall. Metrik ini sangat krusial dalam konteks deteksi bencana untuk memastikan bahwa model tidak bias ke satu kelas saja. Nilai F1-Score yang tinggi (mendekati 1) menunjukkan keseimbangan optimal antara ketepatan dan kelengkapan deteksi :
+Intersection over Union (IoU)
+IoU, atau dikenal juga sebagai Jaccard Index, adalah metrik paling ketat untuk mengevaluasi kualitas segmentasi geometris. Metrik ini mengukur persentase tumpang tindih (overlap) antara area prediksi model (A) dengan area kerusakan sebenarnya atau Ground Truth (B) :
+Penelitian Terdahulu & Gap Analysis
+Untuk memposisikan kontribusi penelitian ini, dilakukan tinjauan terhadap penelitian-penelitian sebelumnya yang relevan. Perbandingan disajikan dalam Tabel 2.1.
+Tabel 2.1. Gap Analysis
+
+
+BAB III
+ METODOLOGI PENELITIAN
+Kerangka Berpikir
+Penelitian ini didasarkan pada kerangka berpikir yang mengintegrasikan pematauan bencana secara otomatis, kecerdasan buatan berbasis Deep Learning, dan analisis spasial berbasis GIS ke dalam satu pipeline terpadu yang berakhir pada sistem pendukung keputusan distribusi pangan pasca-bencana. Kerangka berpikir ini dirancang untuk menjawab tantangan latensi informasi pada fase Golde Time, yaitu 72 jam pertama pasca-bencana yang selama ini menjadi hambatan sistematik dalam efektivitas respons kemanusiaan di Indonesia .
+
+Gambar 3.1. Kerangka Berpikir Sistem SDSS
+Penjelasan alur kerangka berpikir pada Gambar 3.1:
+BMKG API: Kerangka berpikir diawali dari integrasi sistem dengan BMKG API sebagai sumber data pemantauan geofisika dan hidrometeorologi secara real-time.
+Scheduler: Disini sebagai otomisasi untuk menjalankan prosess polling terhadap BMKG API setiap 30 menit untuk memantau parameter-parameter indikator bencana.
+GEE Downloader: Sinyal detektsi dari BMKG API sekaligus pemicu untuk proses “Trigger Scan” yang mengaktifkan GEE Downloader. Komponen ini mengambil citra Sentinel-2 SR terbaru dari wilayah koordinat bencana melalui GEE API, serta mengunduh data tutupan lahan Dynamic World sebagai konteks spasial tambahan untuk membantu model membedakan area terbangun .
+ResNet50-UNet (Deteksi Kerusakan): Citra yang telah diproses kemudian dimasukkan ke model yang telah dilatih untuk melakukan segmentasi semantic kerusakan bangunan dengan memproses tile citra berukuran  piksel secara batch dan menghasilkan probability map per piksel.
+Integrasi Spasial (Spatial Join): File JSON hasil deteksi kerusakan kemudian diproses Bersama data Batas Desa (*.shp) yaitu Shapefile batas administrasi tingkat kelurahan dari Humdata COD-AB-IDN melalui operasi Spatial Join .
+Estimasi Logistik Pangan: Hasil agregasi spasial per desa menjadi dasar kalkulasi estimasi logistic pangan menggunakan standar kebutuhan pangan BNPB. Estimasi jumlah pengungsi terdampak per desa dikalkulasi berdasarkan densitas dikalikan kepadatan penduduk Badan Pusat Statistik (BPS) Indonesia.
+Output: Seluruh output kalkulasi diteruskan ke Backend yang memberikan endpoint untuk dikonsumsi oleh Dahsboard berbasis DeckMap + Map. Dashboard menyajikan visualisasi peta interaktif berisi heatmap pada intensitas kerusakan serta priotitas distribusi pangan per desa.
+Alur Penelitian
+Penelitian ini mengikuti metodologi Cross-Industry Standard Process for Data Mining (CRISP-DM) yang telah diadaptasi untuk menyediakan dimensi analisis spasial dan pipeline integrasi sistem yang menjadi komponen utama dalam penelitian ini. CRISP-DM dipilih sebagai metodologi karena sifatnya yang iteratif, memungkinkan evaluasi dan penyempurnaan di setiap fase berdasarkan temuan pada fase berikutnya, serta telah terbukti efektif dalam penelitian yang menggabungkan ML dengan analisis data kompleks .
+
+Gambar 3.2. Alur Penelitian (CRISP-DM)
+Adaptasi CRISP-DM dalam penelitian ini terdiri dari enam fase yang saling berurutan dan membentuk siklus penelitian yang sistematis yang bisa dilihat pada Gambar 3.2.
+Tahapan Penelitian
+Business Understanding
+Fase ini betujuan untuk memastikan seluruh pengembangan teknis yang dilakukan memiliki relevansi terhadap permasalahan operasional manajemen bencana yang ingin diselesaikan. Pada fase ini dilakukan analisis mendalam terhadap proses IDA yang berjalan saat ini di BNPB, identifikasi stakeholder utama berserta kebutuhan informasi masing-masing, serta penetapan kriteria keberhasilan yang mengintegrasikan perspektif teknis dan operasional .
+Objektif utama yang di tetapkan adalah membangung pipeline otomatis dari deteksi bencana hingga peta prioritas distribusi pangan yang dapat dijalakan dalam waktu kurang dari dua jam pasca tersedianya citra satelit, dibandingkan dengan proses IDA manual yang membutuhkan empat hari hingga satu minggu. Kriteria keberhasilan teknis yand ditetapkan adalah nilai akurasi model yang diberikan dapat diterima dengan baik. Kriteria keberhasilan opersional adalah pipeline harus mampu menghasilkan peta prioritas distribusi pangan dalam format yang dapat langsung dibaca oleh koordinator logistik BNPB dan Bapanas, dengan estimasi kuantitas kebutuhan pangan per unit administratif yang terukut dan dapat diaudit .
+Identifikasi stakeholder menghasilkan tiga kelompok utama sistem, sebagai berikut:
+Koordinator logistik BNPB dan Bapanas yang membutuhkan peta prioritas dan estimasi kuantitas pangan dalam pola yang dapat langsung ditindaklanjuti
+Tim dari BNPB yang membutuhkan data kerusakan spasial dalam format yang bisa digunakan dalam GIS untuk analisis lanjutan
+Manajemen BNPB yang membutuhkan ringkasan eksekutif situasi bencana dalam format dashboard yang dapat dipahami tanpa keahlian teknis .
+Data Understanding
+Fase ini membangun pemahaman menyeluruh mengenai karakteristik semua sumber data yang digunakan dalam penelitian ini. Dataset utama adalah xView2 Challenge Dataset yang menyediakan lebih dari 22.000 pasangan citra satelit resolusi sub-meter mencakup 19 jenis bencana alam dari berbagai wilayah geografis di seluruh dunia, dengan anotasi ground truth dalam format GeoJSON yang telah diverifikasi oleh para ahli .
+Dataset xView2 dalam implementasi pada penelitian ini menggunakan seluruh pasangan citra yang memiliki file target yang sesuai, kemudian dibagi secara otomatis dengan proporsi 85% data training, dan 15% validation, dengan pembagian menggunakan fungsi train_test_split (random_state=42). Seluruh pasangan citra yang valid digunakan tanpa pembatasan jenis bencana, mencakup berbagai kategori seperti kebakaran hutan, banjir, angin topan, dan gempa bumi yang tersedia dalam dataset xView2. Pembagian dilakukan pada level citra (bukan level tile) untuk mencegah data leakage antar subset training dan validation.
+Eksplorasi awal dataset menunjukkan distribusi kelas yang imbalance, dengan piksel kerusakan terdiri dari kerusakan dan non-kerusakan. Pada pemahaman distribusi ini menjadi landasan bagi pemilihan strategi fungsi loss dan teknik oversampling yang tepat pada fase Data Preparation . Data pendukung spasial yang digunakan mencakup:
+Citra Sentinel-2 SR dari GEE sebagai sumber citra operasional pasca-bencana untuk validasi sistem.
+Data tutupan lahan Dynamic World untuk konteks spasial tambahan.
+Shapefile batas administrasi Indonesia (COD-AB-IDN) dari Humdata untuk agregasi spasial tingkat desa atau kelurahan.
+Data kepadatan penduduk dari BPS untuk kalkulasi estimasi populasi yang terdampak.
+Selain dataset xView2, penelitian ini juga menggunakan data dari BMKG API sebagai sumber data pemantauan bencana secara real-time. BMKG API menyediakan data parameter geofisika dan hidrometeorologi yang diperbarui secara berkala, mencakup data gempa bumi (magnitudo, kedalaman, koordinat episenter), data cuaca ekstrem (kecepatan angin, curah hujan), dan peringatan dini bencana. Dalam konteks penelitian ini, BMKG API berfungsi sebagai pemicu otomatis (trigger) yang mengaktifkan pipeline akuisisi citra satelit melalui GEE ketika parameter bencana melampaui ambang batas yang telah dikonfigurasi. Eksplorasi terhadap struktur dan format respons BMKG API dilakukan untuk memahami skema data, frekuensi pembaruan, serta parameter-parameter yang relevan sebagai indikator kejadian bencana yang memerlukan respons distribusi pangan darurat .
+Data Preparation
+Fase ini merupakan fase intensif secara komputasi yang menentukan kualitas data untuk melatih model. Proses dimulai dengan image tilling, yaitu memecah citra satelit berukuran besar (umumnya  piksel atau lebih) menjadi tile berukuran  piksel menggunakan operasi sliding window tanpa tindih (stride=256). Ukuran tile  dipilih sebagai titik temu optimal antara kebutuhan konteks spasial yang cukup untuk mendeteksi pola kerusakan bangunan dan efisiensi penggunaan resource komputasi yang tersedia selama proses training .
+Proses mask generation mengonversi anotasi ground truth dalam format poligon GeoJSON menjadi gambar binary mask dua dimensi dengan resolusi yang identik dengan tile citra satelit. Piksel bernilai 1 merepresentasikan area kerusakan bangunan (damaged class) dan piksel bernilai 0 merepresentasikan area non-kerusakan atau latar belakang (no-damage class) .
+Mengingat rasio imbalance class yang cukup tinggi, diterapkan strategi oversampling berbasis tingkat kerusakan. Tile dengan rasio piksel kerusakan di atas 5% (high damage) diduplikasi tiga kali dalam daftar training, sementara tile dengan rasio kerusakan antara 1% hingga 5% (medium damage) diduplikasi dua kali. Angka duplikasi ini ditentukan berdasarkan keputusan heuristik awal yang mempertimbangkan rasio imbalance class yang ditemukan pada tahap eksplorasi dataset, di mana piksel kerusakan hanya menyumbang sebagian kecil dari total piksel. Strategi ini bersifat terbuka untuk evaluasi dan penyesuaian berdasarkan hasil training awal. Strategi ini bertujuan meningkatkan representasi sampel positif tanpa memperkenalkan data sintetis baru yang berpotensi tidak realistis .
+Data augmentation diterapkan secara online selama proses training menggunakan libary Albumentations. Transformasi yang diterapkan mencakup: horizontal flip (probabilitas 0,5), vertical flip (probabilitas 0,5), dan rotasi 90 derajat satu, dua, atau tiga kali (probabilitas 0,5 masing-masing). Seluruh transformasi diterapkan secara sinkron antara citra satelit dan mask ground truth yang bersesuaian untuk menjaga integritas label. Citra dinormalisasi ke rentang [0, 1] menggunakan nilai maksimum piksel 255 sebelum dimasukkan ke model .
+Modelling
+Arsitektur ResNet50-UNet dipilih berdasarkan tiga justifikasi secara akademik, sebagai berikut:
+ResNet50 mengatasai masalah vanishing gradient melalui residual connection sehingga lebih stabil dibanding U-Net standar untuk jaringan encoder yang dalam.
+Decoder UNet dengan skip connection terbukti unggul untuk segmentasi resolusi tinggi pada citra satelit dibanding DeepLabV3+ yang lebih optimal untuk natural image segmentation.
+Kombinasi keduanya memberikan keseimbangan antara akurasi segmentasi dan efisiensi komputasi yang sesuai untuk pipeline semi real-time. Penelitian Weber & Iglesias (2022) dan Li et al. (2022) mengkonfirmasi efektivitas kombinasi arsitektur encoder Resnet dengan decoder UNet untuk deteksi kerusakan bangunan dari citra resolusi tinggi.
+Arsitektur model yang digunakan adalah ResNet50-UNet, sebuah hibrida yang memanfaatkan bobot pre-trained ResNet50 dari dataset ImageNet sebagai encoder melalui pendekatan transfer learning, dikombinasikan dengan decoder empat-level yang mengimplementasikan mekanisme skip connection dari arsitektur UNet. Pelatihan dilaksanakan dalam dua fase yang berurutan .
+
+Gambar 3.3. Arsitektur ResNet50-UNet
+Phase 1: Frozen Encoder
+Pada fase ini, lapisan encoder ResNet50 level awal (conv1, conv2, conv3) dibekukan (frozen) sehingga bobotnya tidak diperbarui selama backpropagation, dan hanya lapisan conv4, conv5, serta seluruh decoder yang dilatih. Pendekatan ini didasarkan pada prinsip transfer learning bahwa lapisan awal CNN yang telah dilatih pada ImageNet telah mengembangkan kemampuan ekstraksi fitur visual dasar yang bersifat generik dan dapat digunakan langsung untuk domain citra satelit bisa di lihat pada Gambar 3.3. Fungsi loss yang digunakan pada Phase 1 adalah Combined Loss yang merupakan penjumlahan dari Focal Loss (alpha=0,75, gamma=2) dan Dice Loss, dengan optimizer Adam pada learning rate . Fase ini berjalan selama maksimal 50% dari total epoch yang dikonfigurasi .
+Phase 2: Fine-Tuning
+Seluruh lapisan model termasuk encoder diaktifkan untuk pelatihan dengan learning rate yang diturunkan menjadi  (sepersepuluh dari learning rate ), optimizer Adam, batch size = 8, maksimal epochs = 15, fungsi loss diubah menjadi Weighted Binary Cross-Entropy Dice Loss dengan pos_weight=15 untuk memberikan penalti  lebih besar pada false negative (kegagalan mendeteksi area kerusakan yang sesungguhnya ada), merefleksikan pentingnya minimisasi false negative dalam konteks distribusi pangan bencana di mana area kerusakan yang tidak terdeteksi berarti kelalaian pengiriman bantuan .
+Callback yang digunakan selama pelatihan ini dari phase 1 sampai 2 mencakup: 
+ModelCheckpoint kedua yang menyimpan checkpoint setiap akhir epoch dalam format *.h5 per epoch untuk keperluan resume training.
+ReduceLROnPlateau yang secara otomatis mengurangi learning rate sebesar 50% jika val_loss tidak membaik selama 3 epoch berturut-turut dengan .
+EarlyStopping yang menghentikan training jika val_dice_coef tidak membaik selama 5 epoch berturut-turut dengan restore_best_weight =True.
+SaveHistoryCallback, yaitu callback kustom yang menyimpan seluruh history metrik pelatihan ke file JSON (checkpoints/training_history.json) setelah setiap epoch untuk keperluan monitoring dan analisis kurva pembelajaran .
+Evaluation
+Fase ini melakukan penelitian secara menyeluruh terhadap kinerja model menggunakan validation set yang sepenuhnya terpisah dari data training. Evaluasi dilakukan pada level piksel menggunakan kelima metrik, yaitu Accuracy, Precision, Recall, F1-Score, serta Area Under Curve-Operating Characteristic Curve (AUC-ROC) sebagai metrik tambahan untuk mengukur kemampuan diskriminasi model secara keseluruhan pada berbagai nilai threshold keputusan .
+Analisis threshold dilakukan secara sistematis pada rentang 0,05 hingga 0,95 dengan interval 0,05. Kriteria pemilihan threshold final adalah nilai F1-Score tertinggi, dengan pertimbangan bahwa konteksi bencana recall diprioritaskan karena false negative (area kerusakan tidaka terdeteksi) berarti kelalaian distribusi bantuan pangan. Untuk setiap nilai threshold, dikalkulasi IoU, F1-Score, Precision, dan Recall, kemudian divisualisasikan dalam bentuk grafik. Evaluasi penelitian ini dibagi tiga bagian, yaitu:
+Evaluasi model AI: IoU, F1-Score/Dice, Precision, Recall, dan AUC-ROC.
+Evaluasi pipeline spasial: keberhasilan konversi binary mask ke peta vektor dan akurasi agregasi spasial per desa.
+Evaluasi operasional: estimasi pengurangan latensi berdasarkan perbandingan durasi pipeline otomatis dibandingkan rata-rata durasi IDA manual dari literatur (3-7) hari dan SOP BNPB.
+Selain evaluasi kuantitatif berbasi metrik, dilakukan juga evaluasi kualitatif melalui visualisasi Confusion Matrix pada level piksel untuk memahami distribusi kesalahan prediksi, kurva Precision-Recall dengan nilai Average Precision (AP), kurva ROC, serta visualisasi perbandingan ground truth dengan prediksi model pada sampel validation set dan overlay heatmap prediksi kerusakan pada citra satelit asli .
+Spatial Integration & Visualization
+Fase ini memberikan gambaran output teknis model AI menjadi informasi yang dapat ditindaklanjuti secara operasional oleh koordinator logistik di lapangan. Secara keseluruhan, pipeline integrasi spasial mengikuti alur berurutan: 
+Binary mask hasil inferensi model di georeferencing menggunakan metadata GeoTIFF dari GEE.
+Piksel kerusakan dikonversi menjadi titik koordinat GeoJSON. 
+GeoJSON di spatial join dengan shapefile batas administrasi desa.
+Densitas kerusakan diagregasi per unit desa dan dikombinasikan dengan data demografi untuk menghitung skor prioritas. 
+Seluruh output diteruskan ke backend untuk divisualisasikan pada dashboard interaktif sebagai peta prioritas distribusi pangan. 
+Pipeline integrasi spasial dibangun menggunakan library Python GDAL, Rasterio, GeoPandas, dan Shapely .
+Langkah pertama adalah georeferencing, yaitu penyelarasan koordinat geografis antara output binary mask prediksi kerusakan dari model dengan citra satelit referensi metadata geolokasi yang tersimpan dalam header file GeoTIFF dari GEE.
+Piksel yang teridentifikasi sebagai kerusakan dikonversi menjadi titik-titik koordinat geografis (Damage Points) dalam sistem proyeksi WGS-84, kemudian disimpan dalam format GeoJSON dengan atribut skor rata-rata konfidensial dari piksel pembentuknya .
+Kalkulasi estimasi logistik pangan menggunakan standar BNPB dihitung sebagai berikut:
+
+
+
+Skor prioritas distribusi pangan dikalkulasi sebagai kombinasi weighted dari densitas kerusakan (bobot 0,4), jumlah jiwa terdampak(bobot 0,3), dan jarak ke gudang logistik/kantor BNPB terdekat (bobot 0,3). Pembobotan ini ditetapkan berdasarkan pendekatan expert judgement dengan pertimbangan bahwa densitas kerusakan merupakan indikator paling langsung dari kebutuhan darurat, dan dapat diperkuat dengan metode AHP (Analytic Hierarchy Process) pada penelitian lanjutan untuk mendapatkan bobot yang lebih tervalidasi secara akademik .
+Seluruh output termasuk GeoJSON titik kerusakan, shapefile prioritas, dan tabel estimasi kebutuhan pangan diteruskan ke Backend untuk dikelola alur data dan membuat sebuah endpoint yang bisa digunakan. Dashboard berbasis DeckGL dan MaLibre GL mengonsumsi endpoint yang dibuat sebelumnya untuk menyajikan visualisasi peta interaktif dengan lapisan heatmap intensitas kerusakan, peta prioritas distribusi pangan, dan tabel ranking kebutuhan prioritas .
+DAFTAR PUSTAKA 
+
+
+RIWAYAT HIDUP 
+
+Saya Jason Lee, dilahirkan di Jakarta, pada 21 Oktober 2004. Saat ini, saya bekerja sebagai Junior Laboratory Assistant pada Universitas Bina Nusantara, di kota Bekasi, sejak 2023– sekarang.
+
+Saya saat ini berkesempatan melanjutkan pendidikan jenjang S2 di Program Studi Manajemen Sistem Informasi, Universitas Bina Nusantara. Selama mengikuti perkuliahan baik jenjang S1 maupun S2, saya aktif mengikuti beberapa kegiatan akademik dan pengembangan diri. Saya berpartisipasi dalam beberapa konferensi internasional, yaitu ICORIS 2025, ICIMCIS 2025, dan ISIBER 2026, yang seluruhnya dilaksanakan secara online. Saya dapat dihubungi melalui email di jason.lee002@binus.ac.id.
+
+LAMPIRAN 
+Lampiran 1. Judul lampiran 1 
+
+Lampiran 2. Judul lampiran 2 

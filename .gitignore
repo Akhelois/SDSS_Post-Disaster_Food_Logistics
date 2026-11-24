@@ -1,0 +1,41 @@
+/venv/
+/.vscode/
+/__pycache__/
+/training/
+/backend/__pycache__/
+/backend/model/checkpoints_copy/
+/backend/model/backup/
+/backend/model/checkpoints/
+/backend/model/*.h5
+/agent/
+/train/
+*.parquet
+*.pyc
+__pycache__/
+**/__pycache__/
+# Machine Learning Models
+backend/model/**/*.keras
+backend/model/**/*.h5
+backend/model/**/*.pkl
+
+# Model files directly inside model folder
+backend/model/*.keras
+backend/model/*.h5
+backend/model/*.pkl
+
+# Local machine learning models
+backend/model/**/*.keras
+backend/model/**/*.h5
+backend/model/**/*.pkl
+backend/model/*.keras
+backend/model/*.h5
+backend/model/*.pkl
+
+# Local model checkpoints and backups
+backend/model/checkpoints/
+backend/model/checkpoints_copy/
+backend/model/backup/
+
+# Large local shapefile
+backend/data/batas_desa/IDN_Final_WGS84.shp
+backend/data/batas_desa/IDN_Final_WGS84.dbf

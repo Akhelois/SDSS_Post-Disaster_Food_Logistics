@@ -1,0 +1,238 @@
+.left-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  background: rgba(10, 15, 35, 0.95);
+  border-right: 1px solid rgba(96, 165, 250, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+}
+
+.sidebar-title {
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(96, 165, 250, 0.1);
+  position: sticky;
+  top: 0;
+  background: rgba(10, 15, 35, 0.95);
+  z-index: 10;
+}
+
+.sidebar-title h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+}
+
+/* Layers container */
+.layers-container {
+  flex: 1;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.layer-category {
+  border-bottom: 1px solid rgba(96, 165, 250, 0.08);
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.category-header:hover {
+  background: rgba(96, 165, 250, 0.08);
+  color: var(--accent-color-light);
+}
+
+.category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--accent-color-light);
+}
+
+.category-title {
+  flex: 1;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  opacity: 0.6;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 8px;
+  background: rgba(20, 30, 60, 0.3);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.layer-item {
+  position: relative;
+}
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(20, 30, 60, 0.4);
+  border: 1px solid rgba(96, 165, 250, 0.1);
+  border-radius: 6px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.layer-toggle:hover {
+  background: rgba(96, 165, 250, 0.1);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.toggle-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(96, 165, 250, 0.2);
+  border-radius: 4px;
+  color: var(--accent-color-light);
+  flex-shrink: 0;
+}
+
+.layer-label {
+  flex: 1;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.layer-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
+  transition: box-shadow 0.2s ease;
+}
+
+.layer-toggle:hover .layer-color {
+  box-shadow: 0 0 12px currentColor;
+}
+
+/* Sidebar stats */
+.sidebar-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid rgba(96, 165, 250, 0.1);
+  margin-top: auto;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(96, 165, 250, 0.08) 100%
+  );
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-color-light);
+}
+
+/* Scrollbar */
+.left-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.left-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.2);
+  border-radius: 3px;
+}
+
+.left-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.4);
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+  .left-sidebar {
+    width: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .left-sidebar {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+  }
+
+  .left-sidebar.open {
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,132 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --nav-bg-1: #0A101D;
+  --nav-bg-2: #0E172A;
+  --nav-bg-3: #121F38;
+  --accent-emergency: #EA580C;
+  --accent-emergency-hover: #C2410C;
+  --accent-crimson: #E11D48;
+  --accent-ember: #F59E0B;
+
+  --p-dark: #172554;
+  --p-main: #2563EB;
+  --p-light: #60A5FA;
+  --p-pale: #EFF6FF;
+  --p-soft: #DBEAFE;
+
+  --warn-dark: #78350F;
+  --warn-main: #D97706;
+  --warn-light: #FBBF24;
+  --warn-pale: #FFFBEB;
+
+  --dang-dark: #881337;
+  --dang-main: #E11D48;
+  --dang-light: #FB7185;
+  --dang-pale: #FFF1F2;
+
+  --safe-dark: #064E3B;
+  --safe-main: #059669;
+  --safe-light: #34D399;
+  --safe-pale: #ECFDF5;
+
+  --info-dark: #164E63;
+  --info-main: #0891B2;
+  --info-light: #67E8F9;
+  --info-pale: #ECFEFF;
+
+  --bg: #F0F4F8;
+  --surf: #FFFFFF;
+  --surf2: #F8FAFC;
+  --surf3: #E2E8F0;
+  --bord: #CBD5E1;
+  --bord2: #94A3B8;
+  --tp: #0F172A;
+  --ts: #334155;
+  --td: #64748B;
+  --subtle: #CBD5E1;
+
+  --topbar-h: 52px;
+  --statusbar-h: 26px;
+  --sidebar-lw: 290px;
+  --sidebar-rw: 320px;
+  --metric-h: 70px;
+
+  --fn: 'DM Sans', system-ui, sans-serif;
+  --mono: 'Space Mono', 'Courier New', monospace;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 4px 6px rgba(15, 23, 42, 0.12);
+  --shadow-xl: 0 10px 15px rgba(15, 23, 42, 0.15);
+
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-pill: 0px;
+
+  --t-fast: 0.12s ease;
+  --t-med: 0.22s ease;
+  --t-slow: 0.4s ease;
+}
+
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--fn);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--tp);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--p-main);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--fn);
+  border: none;
+  background: none;
+  border-radius: 0;
+}
+
+input, select, textarea {
+  font-family: var(--fn);
+  outline: none;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--subtle);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--td);
+}
